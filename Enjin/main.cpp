@@ -1,0 +1,106 @@
+﻿#include "Input.h"
+#include"Mouse.h"
+#include "WinApp.h"
+#include"DirectXCommon.h"
+#include "ObjectFBX.h"
+#include "Object3d.h"
+#include"Sprite.h"
+#include "DebugText.h"
+#include"Audio.h"
+#include"GameScene.h"
+#include"FbxLoader.h"
+//#include"fbxsdk.h"
+
+//# Windowsアプリでのエントリーポイント(main関数)
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+{
+	//FbxManager* fbxManager = FbxManager::Create();
+#pragma region WindowsAPI初期化処理
+
+	//ポインタ置き場
+	WinApp* winApp = nullptr;
+	DirectXCommon* dxCommon = nullptr;
+	Input* input = nullptr;
+	Mouse* mouse = nullptr;
+	Audio* audio = nullptr;
+	DebugText debugText;
+	Sprite* sprite = nullptr;
+	GameScene* gameScene = nullptr;
+
+	winApp = new WinApp();
+	winApp->Initialize();
+	//DirectXの初期化
+	dxCommon = new DirectXCommon();
+	dxCommon->Initislize(winApp);
+
+	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
+	//3dオブジェクト静的初期化
+	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
+
+	//入力の初期化
+	input = Input::GetInstance();
+	if (!input->Initialize(winApp->GetHInstance(), winApp->GetHwnd())) {
+		assert(0);
+		return 1;
+	}
+
+	mouse = Mouse::GetInstance();
+	if (!mouse->Initialize(winApp->GetHInstance(), winApp->GetHwnd())) {
+		assert(0);
+		return 1;
+	}
+
+
+	//音声の初期化
+	audio = new Audio();
+	audio->Initialize();
+
+	gameScene = new GameScene();
+
+
+	//スプライト静的初期化
+	Sprite::StaticInitialize(dxCommon->GetDev(), winApp->window_width, winApp->window_height);
+
+
+	gameScene->Initialize(dxCommon, input, audio,mouse);
+
+
+	while (true)  //ゲームループ
+	{
+#pragma region ウィンドウメッセージ処理
+		//windowsのメッセージ処理
+		if (winApp->ProcessMessage())
+		{
+			//ゲームループを抜ける
+			break;
+		}
+		input->Update();
+		mouse->Update();
+
+		gameScene->Update(winApp);
+
+		dxCommon->PreDraw();
+
+		gameScene->Draw();
+
+		dxCommon->PostDraw();
+	}
+	gameScene->Delete();
+	//DirectXの解放
+	delete dxCommon;
+	// XAudio2解放
+	delete audio;
+	// 音声データ解放
+	//SoundUnload(&soundData1);
+	FbxLoader::GetInstance()->Finalize();
+#pragma region WindowsAPI後始末
+	//ウィンドウクラスを登録解除
+	winApp->Finalize();
+
+	//WindowsAPI解放
+	delete winApp;
+#pragma endregion WindowsAPI後始末
+
+	return 0;
+}
+
