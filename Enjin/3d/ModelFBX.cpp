@@ -1,11 +1,17 @@
 #include "ModelFBX.h"
 
+ModelFBX::~ModelFBX()
+{
+	//FBXシーンの解放
+	fbxScene->Destroy();
+}
+
 void ModelFBX::CreateBuffers(ID3D12Device* device)
 {
 	HRESULT result;
 	//頂点データ全体のサイズ
 	UINT sizeVB=
-		static_cast<UINT>(sizeof(VertexPosNormalUv)*
+		static_cast<UINT>(sizeof(VertexPosNormalUvSkin)*
 		vertices.size());
 	//頂点バッファ生成
 	result = device->CreateCommittedResource(
@@ -16,7 +22,7 @@ void ModelFBX::CreateBuffers(ID3D12Device* device)
 		nullptr,
 		IID_PPV_ARGS(&vertBuff));
 	//頂点バッファへデータ転送
-	VertexPosNormalUv* vertMap = nullptr;
+	VertexPosNormalUvSkin* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	if (SUCCEEDED(result)) {
 		std::copy(vertices.begin(), vertices.end(),

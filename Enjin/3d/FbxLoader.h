@@ -54,6 +54,10 @@ public:
 	/// <returns>インスタンス</returns>
 	static FbxLoader* GetInstance();
 
+	static void ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxMatrix& src);
+
+	void ParseSkin(ModelFBX* model, FbxMesh* fbxMesh);
+
 	//サブ関数
 	/****************/
 	//頂点座標読み取り
