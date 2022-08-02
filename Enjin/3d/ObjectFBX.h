@@ -2,6 +2,7 @@
 
 #include"ModelFBX.h"
 #include"Camera.h"
+#include"FbxLoader.h"
 
 #include<Windows.h>
 #include<wrl.h>
@@ -65,18 +66,31 @@ public://メンバ関数
 	/// <param name="model">モデル</param>
 	void SetModel(ModelFBX* model) { this->model = model; }
 
-	/// <summary>
-	/// 座標のセット
-	/// </summary>
-	/// <param name="model">座標</param>
-	void SetPosition(XMFLOAT3 position) { this->position = position; }
-
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+
+
+	/// <summary>
+	/// アニメーション開始
+	/// </summary>
+	void PlayAnimation();
+
+public://定数
+	//ボーンの最大数
+	static const int MAX_BONES = 32;
+
+	//定数バッファ用データ構造体(スキニング)
+	struct ConstBufferDataSkin
+	{
+		XMMATRIX bones[MAX_BONES];
+	};
+
+
 
 protected://メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource>constBuffTransform;
-
+	//定数バッファ(スキン)
+	ComPtr<ID3D12Resource>constBuffSkin;
 private://メンバ変数
 	//ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
@@ -88,5 +102,16 @@ private://メンバ変数
 	XMMATRIX matWorld;
 	//モデル
 	ModelFBX* model = nullptr;
+
+	//1フレームの時間
+	FbxTime frameTime;
+	//アニメーション開始時間
+	FbxTime startTime;
+	//アニメーション終了時間
+	FbxTime endTime;
+	//現在時間(アニメーション)
+	FbxTime currentTime;
+	//アニメーション再生中
+	bool isPlay = false;
 };
 

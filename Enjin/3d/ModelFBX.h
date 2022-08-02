@@ -7,6 +7,7 @@
 #include<d3d12.h>
 #include<d3dx12.h>
 #include<fbxsdk.h>
+
 #pragma once
 
 struct Node
@@ -55,13 +56,10 @@ private://エイリアス
 	using string = std::string;
 	template<class T>using vector = std::vector<T>;
 
-	
-
 
 public://定数
 	//ボーンインデックスの最大数
 	static const int MAX_BONE_INDICES = 4;
-
 
 public://サブクラス
 	//頂点データ構造体
@@ -73,21 +71,6 @@ public://サブクラス
 		UINT boneIndex[MAX_BONE_INDICES];//ボーン 番号
 		float boneWeight[MAX_BONE_INDICES];//ボーン　重み
 	};
-	//メッシュを持つノード
-	Node* meshNode = nullptr;
-	//頂点データ配列
-	std::vector<VertexPosNormalUvSkin>vertices;
-	//頂点インデックス配列
-	std::vector<unsigned short>indices;
-
-	//アンビエント係数
-	DirectX::XMFLOAT3 ambient = { 1,1,1, };
-	//ディフューズ係数
-	DirectX::XMFLOAT3 diffuse = { 1,1,1, };
-	//テクスチャメタデータ
-	DirectX::TexMetadata metadata = {};
-	//スクラッチイメージ
-	DirectX::ScratchImage scratchImg = {};
 
 	//ボーン構造体
 	struct Bone
@@ -104,10 +87,30 @@ public://サブクラス
 			this->name = name;
 		}
 	};
+	//メッシュを持つノード
+	Node* meshNode = nullptr;
+	//頂点データ配列
+	std::vector<VertexPosNormalUvSkin>vertices;
+	//頂点インデックス配列
+	std::vector<unsigned short>indices;
+
+
+
+
+	//アンビエント係数
+	DirectX::XMFLOAT3 ambient = { 1,1,1, };
+	//ディフューズ係数
+	DirectX::XMFLOAT3 diffuse = { 1,1,1, };
+	//テクスチャメタデータ
+	DirectX::TexMetadata metadata = {};
+	//スクラッチイメージ
+	DirectX::ScratchImage scratchImg = {};
+
 
 	//getter
 	std::vector<Bone>& GetBones() { return bones; }
 	FbxScene* GetFbxScene() { return fbxScene; }
+
 
 public://メンバ関数
 
@@ -121,7 +124,6 @@ public://メンバ関数
 
 	//モデルの変形行列取得
 	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }
-
 
 
 private://メンバ変数
@@ -143,5 +145,7 @@ private://メンバ変数
 	std::vector<Bone>bones;
 	//FBXシーン
 	FbxScene* fbxScene = nullptr;
+
+
 };
 

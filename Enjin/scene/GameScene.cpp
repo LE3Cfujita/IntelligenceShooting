@@ -14,8 +14,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	ObjectFBX::SetCamera(camera);
 	ObjectFBX::CreateGraphicsPipeline();
 
-	camera->SetTarget({ 0,20,0 });
-	camera->SetDistance(100.0f);
+	camera->SetTarget({ 0,3,0 });
+	camera->SetDistance(10.0f);
 
 
 	//デバッグテキスト用のテクスチャ読み込み
@@ -35,12 +35,13 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	//audio->SoundPlayWave("Alarm01.wav", true);
 
 	
-	model = FbxLoader::GetInstance()->LoadModelFromFile("cube");
+	model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
 	object = new ObjectFBX;
 	object->Initialize();
 	object->SetModel(model);
-	object->SetPosition({ 0,15,15 });
+	object->PlayAnimation();
+	//object->SetPosition({ 0,15,15 });
 
 	//OBJからモデルデータを読み込む
 	modelGround = Model::LoadFormOBJ("ground");
@@ -81,7 +82,7 @@ void GameScene::Draw()
 	Object3d::PreDraw(dxCommon->GetCmdList());
 
 	//3Dオブジェクトの描画
-	ground->Draw();
+	//ground->Draw();
 	
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();

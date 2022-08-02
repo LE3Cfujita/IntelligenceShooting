@@ -56,7 +56,6 @@ public:
 
 	static void ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxMatrix& src);
 
-	void ParseSkin(ModelFBX* model, FbxMesh* fbxMesh);
 
 	//サブ関数
 	/****************/
@@ -68,6 +67,10 @@ public:
 	void ParseMaterial(ModelFBX* model, FbxNode* fbxNode);
 	//テクスチャ読み込み
 	void LoadTexture(ModelFBX* model, const std::string& fullpash);
+
+	//スキニング情報の読み取り
+	void ParseSkin(ModelFBX* model, FbxMesh* fbxMesh);
+
 	/****************/
 
 	//ディレクトリを含んだファイルパスからファイル名を抽出する
