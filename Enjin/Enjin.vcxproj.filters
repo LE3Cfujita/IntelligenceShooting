@@ -37,6 +37,9 @@
     <Filter Include="camera">
       <UniqueIdentifier>{5ec877a4-34e9-4e04-938e-41de334c0f35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="player">
+      <UniqueIdentifier>{274a770b-5227-4e63-a3d7-97a93018a295}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

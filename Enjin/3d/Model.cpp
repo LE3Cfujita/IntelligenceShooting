@@ -202,7 +202,6 @@ void Model::LoadFormOBJInternal(const std::string& modelname)
 	const string filename = modelname + ".obj";
 	const string directoryPath = "Resources/" + modelname + "/";
 
-	HRESULT result;
 	// ファイルストリーム
 	std::ifstream file;
 	// .objファイルを開く
@@ -211,6 +210,8 @@ void Model::LoadFormOBJInternal(const std::string& modelname)
 	if (file.fail()) {
 		assert(0);
 	}
+
+	
 
 	vector<XMFLOAT3> positions;	// 頂点座標
 	vector<XMFLOAT3> normals;	// 法線ベクトル

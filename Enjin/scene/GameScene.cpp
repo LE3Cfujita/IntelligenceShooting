@@ -45,16 +45,20 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 
 	//OBJからモデルデータを読み込む
 	modelGround = Model::LoadFormOBJ("ground");
-
 	//3Dオブジェクト生成
 	ground = Object3d::Create();
-
-
-
 	//オブジェクトにモデルを紐付ける
 	ground->SetModel(modelGround);
 	//3Dオブジェクトの位置を指定
 	ground->SetPosition({ -5,0,-5 });
+
+	//OBJからモデルデータを読み込む
+	modelPlayer = Model::LoadFormOBJ("player");
+	//3Dオブジェクト生成
+	player = Object3d::Create();
+	//オブジェクトにモデルを紐付ける
+	ground->SetModel(modelPlayer);
+
 }
 
 void GameScene::Update(WinApp* winApp)
@@ -68,6 +72,7 @@ void GameScene::Update(WinApp* winApp)
 	camera->Update();
 	ground->Update();
 	object->Update();
+	player->Update();
 }
 
 void GameScene::Draw()
@@ -75,14 +80,15 @@ void GameScene::Draw()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
 
-	object->Draw(cmdList);
+	//object->Draw(cmdList);
 
 
 	//3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
 
 	//3Dオブジェクトの描画
-	//ground->Draw();
+	ground->Draw();
+	player->Draw();
 	
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
@@ -118,15 +124,16 @@ void GameScene::Text()
 void GameScene::Delete()
 {
 	delete ground;
-	delete object3d_2;
+	delete player;
 	delete object3d_3;
 	//スプライト解放
 	delete sprite;
 	//3Dモデル解放
 	delete modelGround;
-	delete model_2;
+	delete modelPlayer;
 
 	delete model;
 	delete object;
+	delete player;
 
 }

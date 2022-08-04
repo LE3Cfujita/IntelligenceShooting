@@ -174,12 +174,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

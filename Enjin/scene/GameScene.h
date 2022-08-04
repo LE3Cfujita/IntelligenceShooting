@@ -55,16 +55,20 @@ private:
 	Sprite* sprite = nullptr;
 	DebugCamera* camera = nullptr;
 
+
+	//FBX宣言
 	ModelFBX* model = nullptr;
 
 	ObjectFBX* object = nullptr;
 
+
+	//Obj宣言
 	Model* modelGround = nullptr;
-	ModelFBX* model_2 = nullptr;
+	Model* modelPlayer = nullptr;
 
 	//3Dオブジェクト生成
 	Object3d* ground = nullptr;
-	Object3d* object3d_2 = nullptr;
+	Object3d* player = nullptr;
 	Object3d* object3d_3 = nullptr;
 
 
