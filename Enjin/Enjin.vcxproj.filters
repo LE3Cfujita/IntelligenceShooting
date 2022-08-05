@@ -84,6 +84,12 @@
     <ClCompile Include="input\Mouse.cpp">
       <Filter>input</Filter>
     </ClCompile>
+    <ClCompile Include="3d\Material.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Mesh.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
     <ClCompile Include="3d\Object3d.cpp">
       <Filter>3d</Filter>
     </ClCompile>
@@ -131,11 +137,20 @@
     <ClInclude Include="input\Mouse.h">
       <Filter>input</Filter>
     </ClInclude>
+    <ClInclude Include="3d\Material.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Mesh.h">
+      <Filter>3d</Filter>
+    </ClInclude>
     <ClInclude Include="3d\Object3d.h">
       <Filter>3d</Filter>
     </ClInclude>
     <ClInclude Include="3d\Model.h">
       <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="base\SafeDelete.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

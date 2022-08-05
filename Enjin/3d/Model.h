@@ -1,142 +1,98 @@
-#pragma once
-#include <d3d12.h>
-#include <wrl.h>
-#include <vector>
-#include<Windows.h>
-#include <cassert>
-#include <d3dx12.h>
+ï»¿#pragma once
+
 #include <string>
-#include <DirectXTex.h>
-using namespace std;
-using namespace DirectX;
-//3Dƒ‚ƒfƒ‹
+#include <vector>
+#include <unordered_map>
+#include "Mesh.h"
+
+/// <summary>
+/// ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿
+/// </summary>
 class Model
 {
-private: // ƒGƒCƒŠƒAƒX
-	// Microsoft::WRL::‚ğÈ—ª
+private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::ã‚’çœç•¥
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
 
-public://Ã“Iƒƒ“ƒoŠÖ”
-	//OBJƒtƒ@ƒCƒ‹‚©‚ç3Dƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş
-	static Model* LoadFormOBJ(const std::string& modelname);
+private:
+	static const std::string baseDirectory;
 
-
-	/// <summary>
-/// •`‰æ
-/// </summary>
-///<param name="cmdList">•`‰æƒRƒ}ƒ“ƒhƒŠƒXƒg</param>
-/// ///<param name="rootParamIndexMaterial">ƒ}ƒeƒŠƒAƒ‹—pƒ‹[ƒgƒpƒ‰ƒ[ƒ^”Ô†</param>
-	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial);
-
-	/// <summary>
-/// ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì‰Šú‰»
-/// </summary>
-/// <returns></returns>
-	void InitializeDescriptorHeap();
-
-private://ƒƒ“ƒoŠÖ”
-
-	/// <summary>
-	/// ƒ}ƒeƒŠƒAƒ‹“Ç‚İ‚İ
-	/// </summary>
-	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
-
-
-	/// <summary>
-	/// ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
-	/// </summary>
-	/// <returns>¬”Û</returns>
-	bool LoadTexture(const std::string& directoryPath, const std::string& filename);
-
-	void CreateBuffers();
-
-
-private://”ñŒöŠJ‚Ìƒƒ“ƒoŠÖ”
-	//OBJƒtƒ@ƒCƒ‹‚©‚ç3Dƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş(”ñŒöŠJ)
-	void LoadFormOBJInternal(const std::string& modelname);
-
-
-public: // ƒTƒuƒNƒ‰ƒX
-// ’¸“_ƒf[ƒ^\‘¢‘Ì
-	struct VertexPosNormalUv
-	{
-		DirectX::XMFLOAT3 pos;//xyzÀ•W
-		DirectX::XMFLOAT3 normal; //–@üƒxƒNƒgƒ‹
-		DirectX::XMFLOAT2 uv;	//uvÀ•W
-	};
-	// ƒ}ƒeƒŠƒAƒ‹
-	struct Material
-	{
-		std::string name;	// ƒ}ƒeƒŠƒAƒ‹–¼
-		DirectX::XMFLOAT3 ambient;	// ƒAƒ“ƒrƒGƒ“ƒg‰e‹¿“x
-		DirectX::XMFLOAT3 diffuse;	// ƒfƒBƒtƒ…[ƒY‰e‹¿“x
-		DirectX::XMFLOAT3 specular;	// ƒXƒyƒLƒ…ƒ‰[‰e‹¿“x
-		float alpha;		// ƒAƒ‹ƒtƒ@
-		std::string textureFilename;	// ƒeƒNƒXƒ`ƒƒƒtƒ@ƒCƒ‹–¼
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		Material() {
-			ambient = { 0.3f, 0.3f, 0.3f };
-			diffuse = { 0.0f, 0.0f, 0.0f };
-			specular = { 0.0f, 0.0f, 0.0f };
-			alpha = 1.0f;
-		}
-	};
-
-
-	// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘ÌB1
-	struct ConstBufferDataB1
-	{
-		DirectX::XMFLOAT3 ambient; // ƒAƒ“ƒrƒGƒ“ƒgŒW”
-		float pad1; // ƒpƒfƒBƒ“ƒO
-		DirectX::XMFLOAT3 diffuse; // ƒfƒBƒtƒ…[ƒYŒW”
-		float pad2; // ƒpƒfƒBƒ“ƒO
-		DirectX::XMFLOAT3 specular; // ƒXƒyƒLƒ…ƒ‰[ŒW”
-		float alpha;	// ƒAƒ‹ƒtƒ@
-	};
-
-
-private://Ã“Iƒƒ“ƒo•Ï”
-	//ƒfƒoƒCƒX
+private: // é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ãƒ‡ãƒã‚¤ã‚¹
 	static ID3D12Device* device;
-
-
-	// ƒfƒXƒNƒŠƒvƒ^ƒTƒCƒY
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã‚µã‚¤ã‚º
 	static UINT descriptorHandleIncrementSize;
 
-public://setter
-	static void SetDevice(ID3D12Device* device) { Model::device = device; }
+public: // é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
 
+	/// <summary>
+	/// é™çš„åˆæœŸåŒ–
+	/// </summary>
+	/// <param name="device">ãƒ‡ãƒã‚¤ã‚¹</param>
+	static void StaticInitialize(ID3D12Device* device);
 
-private://ƒƒ“ƒo•Ï”
+	/// <summary>
+	/// OBJãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ¡ãƒƒã‚·ãƒ¥ç”Ÿæˆ
+	/// </summary>
+	/// <param name="modelname">ãƒ¢ãƒ‡ãƒ«å</param>
+	/// <returns>ç”Ÿæˆã•ã‚ŒãŸãƒ¢ãƒ‡ãƒ«</returns>
+	static Model* LoadFormOBJ(const std::string& modelname);
 
-	 // ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@
-	ComPtr<ID3D12Resource> texbuff;
-	// ’¸“_ƒoƒbƒtƒ@
-	 ComPtr<ID3D12Resource> vertBuff;
-	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@
-	 ComPtr<ID3D12Resource> indexBuff;
-	// ƒ}ƒeƒŠƒAƒ‹
-	 Material material;
-	 // ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
-	  ComPtr<ID3D12DescriptorHeap> descHeap;
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	~Model();
 
-	// ’¸“_ƒoƒbƒtƒ@ƒrƒ…[
-	 D3D12_VERTEX_BUFFER_VIEW vbView;
-	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@ƒrƒ…[
-	 D3D12_INDEX_BUFFER_VIEW ibView;
-	// ’¸“_ƒf[ƒ^”z—ñ
-	//static VertexPosNormalUv vertices[vertexCount];
-	 std::vector<VertexPosNormalUv> vertices;
-	// ’¸“_ƒCƒ“ƒfƒbƒNƒX”z—ñ
-	//static unsigned short indices[planeCount * 3];
-	 std::vector<unsigned short> indices;
+	/// <summary>
+	/// åˆæœŸåŒ–
+	/// </summary>
+	/// <param name="modelname">ãƒ¢ãƒ‡ãƒ«å</param>
+	void Initialize(const std::string& modelname);
 
-	 // ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[‚Ìƒnƒ“ƒhƒ‹(CPU)
-	 CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
-	 // ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[‚Ìƒnƒ“ƒhƒ‹(CPU)
-	 CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
+	/// <summary>
+	/// æç”»
+	/// </summary>
+	/// <param name="cmdList">å‘½ä»¤ç™ºè¡Œå…ˆã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
+	void Draw(ID3D12GraphicsCommandList* cmdList);
 
+private: // ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// åå‰
+	std::string name;
+	// ãƒ¡ãƒƒã‚·ãƒ¥ã‚³ãƒ³ãƒ†ãƒŠ
+	std::vector<Mesh*> meshes;
+	// ãƒãƒ†ãƒªã‚¢ãƒ«ã‚³ãƒ³ãƒ†ãƒŠ
+	std::unordered_map<std::string, Material*> materials;
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒãƒ†ãƒªã‚¢ãƒ«
+	Material* defaultMaterial = nullptr;
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
+	ComPtr<ID3D12DescriptorHeap> descHeap;
 
-	 Microsoft::WRL::ComPtr<ID3D12Resource> constBuffB1; // ’è”ƒoƒbƒtƒ@
+private: // ãƒ¡ãƒ³ãƒé–¢æ•°
+	/// <summary>
+	/// ãƒãƒ†ãƒªã‚¢ãƒ«èª­ã¿è¾¼ã¿
+	/// </summary>
+	void LoadMaterial(const std::string& directoryPath, const std::string & filename);
+
+	/// <summary>
+	/// ãƒãƒ†ãƒªã‚¢ãƒ«ç™»éŒ²
+	/// </summary>
+	void AddMaterial(Material* material);
+
+	/// <summary>
+	/// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®ç”Ÿæˆ
+	/// </summary>
+	void CreateDescriptorHeap();
+
+	/// <summary>
+	/// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
+	/// </summary>
+	void LoadTextures();
+
 };
 

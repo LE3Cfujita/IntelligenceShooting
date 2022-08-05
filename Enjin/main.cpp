@@ -3,7 +3,6 @@
 #include "WinApp.h"
 #include"DirectXCommon.h"
 #include "ObjectFBX.h"
-#include "Object3d.h"
 #include"Sprite.h"
 #include "DebugText.h"
 #include"Audio.h"
@@ -34,9 +33,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	dxCommon->Initislize(winApp);
 
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
-	//3dオブジェクト静的初期化
-	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-
+	
 	//入力の初期化
 	input = Input::GetInstance();
 	if (!input->Initialize(winApp->GetHInstance(), winApp->GetHwnd())) {
@@ -55,13 +52,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	audio = new Audio();
 	audio->Initialize();
 
-	gameScene = new GameScene();
-
-
 	//スプライト静的初期化
 	Sprite::StaticInitialize(dxCommon->GetDev(), winApp->window_width, winApp->window_height);
+	//3dオブジェクト静的初期化
+	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 
 
+	gameScene = new GameScene();
 	gameScene->Initialize(dxCommon, input, audio,mouse);
 
 
@@ -85,11 +82,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		dxCommon->PostDraw();
 	}
-	gameScene->Delete();
+	safe_delete(gameScene);
 	//DirectXの解放
-	delete dxCommon;
+	safe_delete(dxCommon);
 	// XAudio2解放
-	delete audio;
+	safe_delete(audio);
 	// 音声データ解放
 	//SoundUnload(&soundData1);
 	FbxLoader::GetInstance()->Finalize();
@@ -98,7 +95,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	winApp->Finalize();
 
 	//WindowsAPI解放
-	delete winApp;
+	safe_delete(winApp);
 #pragma endregion WindowsAPI後始末
 
 	return 0;

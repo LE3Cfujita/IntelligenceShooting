@@ -22,23 +22,25 @@ private: // エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-public: // サブクラス
-	// 頂点データ構造体
-	
+public: // サブクラス	
+
+	// パイプラインセット
+	struct PipelineSet
+	{
+		// ルートシグネチャ
+		ComPtr<ID3D12RootSignature> rootsignature;
+		// パイプラインステートオブジェクト
+		ComPtr<ID3D12PipelineState> pipelinestate;
+	};
 
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0
 	{
-		//XMFLOAT4 color;	// 色 (RGBA)
 		XMMATRIX mat;	// ３Ｄ変換行列
 	};
 
 private: // 定数
-	//static const int division = 50;					// 分割数
-	//static const float radius;				// 底面の半径
-	//static const float prizmHeight;			// 柱の高さ
-	//static const int planeCount = division * 2 + division * 2;		// 面の数
-	//static const int vertexCount = planeCount * 3;		// 頂点数
+
 
 public: // 静的メンバ関数
 	/// <summary>
@@ -49,6 +51,11 @@ public: // 静的メンバ関数
 	/// <param name="window_height">画面高さ</param>
 	/// <returns>成否</returns>
 	static bool StaticInitialize(ID3D12Device* device, int window_width, int window_height);
+
+	/// <summary>
+	/// グラフィックパイプラインの生成
+	/// </summary>
+	static void CreateGraphicsPipeline();
 
 	/// <summary>
 	/// 描画前処理
@@ -92,25 +99,38 @@ public: // 静的メンバ関数
 	static void SetTarget(XMFLOAT3 target);
 
 	/// <summary>
+/// 注視点座標の取得
+/// </summary>
+/// <returns>座標</returns>
+	static const XMFLOAT3& GetUp() { return up; }
+
+	/// <summary>
+	/// 注視点座標の設定
+	/// </summary>
+	/// <param name="position">座標</param>
+	static void SetUp(XMFLOAT3 up);
+
+	/// <summary>
 	/// ベクトルによる移動
 	/// </summary>
 	/// <param name="move">移動量</param>
 	static void CameraMoveVector(XMFLOAT3 move);
 
+	/// <summary>
+	/// ベクトルによる視点移動
+	/// </summary>
+	/// <param name="move">移動量</param>
+	static void CameraMoveEyeVector(XMFLOAT3 move);
+
+	
+
 private: // 静的メンバ変数
 	// デバイス
 	static ID3D12Device* device;
-	// デスクリプタサイズ
-	static UINT descriptorHandleIncrementSize;
 	// コマンドリスト
 	static ID3D12GraphicsCommandList* cmdList;
-	// ルートシグネチャ
-	static ComPtr<ID3D12RootSignature> rootsignature;
-	// パイプラインステートオブジェクト
-	static ComPtr<ID3D12PipelineState> pipelinestate;
-	// デスクリプタヒープ
-	static ComPtr<ID3D12DescriptorHeap> descHeap;
-
+	// テクスチャあり用パイプライン
+	static PipelineSet pipelineSet;
 	// ビュー行列
 	static XMMATRIX matView;
 	// 射影行列
@@ -121,11 +141,12 @@ private: // 静的メンバ変数
 	static XMFLOAT3 target;
 	// 上方向ベクトル
 	static XMFLOAT3 up;
-	
-	static std::vector<unsigned short> indices;
+	// ビルボード行列
+	static XMMATRIX matBillboard;
+	// Y軸回りビルボード行列
+	static XMMATRIX matBillboardY;
 
 private:// 静的メンバ関数
-
 
 	/// <summary>
 	/// カメラ初期化
@@ -133,18 +154,6 @@ private:// 静的メンバ関数
 	/// <param name="window_width">画面横幅</param>
 	/// <param name="window_height">画面縦幅</param>
 	static void InitializeCamera(int window_width, int window_height);
-
-	/// <summary>
-	/// グラフィックパイプライン生成
-	/// </summary>
-	/// <returns>成否</returns>
-	static bool InitializeGraphicsPipeline();
-
-
-	/// <summary>
-	/// モデル作成
-	/// </summary>
-	static void CreateModel();
 
 	/// <summary>
 	/// ビュー行列を更新
@@ -162,6 +171,20 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
+	
+	/// <summary>
+	/// ビュー変換
+	/// </summary>
+	void MatView();
+
+	XMMATRIX GetView() { return view; }
+
+	/// <summary>
+	/// プロジェクション変換
+	/// </summary>
+	void MatProjection(int window_width, int window_height);
+
+	XMMATRIX GetProjection() { return projection; }
 
 	/// <summary>
 	/// 座標の取得
@@ -175,8 +198,21 @@ public: // メンバ関数
 	/// <param name="position">座標</param>
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 
-	//setter
+	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+
+	/// <summary>
+	/// スケールの設定
+	/// </summary>
+	/// <param name="position">スケール</param>
+	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
+
+	/// <summary>
+	/// モデルのセット
+	/// </summary>
+	/// <param name="model">モデル</param>
 	void SetModel(Model* model) { this->model = model; }
+
+	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
@@ -190,9 +226,16 @@ private: // メンバ変数
 	XMFLOAT3 position = { 0,0,0 };
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
+	//ローカルビュー変換変数(持っていくよう)
+	XMMATRIX view;
+	//プロジェクション(持っていくよう)
+	XMMATRIX projection;
+
 	// 親オブジェクト
 	Object3d* parent = nullptr;
-	//モデル
+	// モデル
 	Model* model = nullptr;
+	// ビルボード
+	bool isBillboard = false;
 };
 

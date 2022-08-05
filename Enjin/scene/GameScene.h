@@ -8,8 +8,9 @@
 #include"DirectXCommon.h"
 #include"FbxLoader.h"
 #include"DebugCamera.h"
-
+#include "SafeDelete.h"
 #include <DirectXMath.h>
+
 #pragma once
 class GameScene
 {
@@ -22,6 +23,17 @@ private://エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
+
+	/// <summary>
+	/// コンストクラタ
+	/// </summary>
+	GameScene();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~GameScene();
+
 	void Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, Mouse* mouse);
 
 	void Update(WinApp* winApp);

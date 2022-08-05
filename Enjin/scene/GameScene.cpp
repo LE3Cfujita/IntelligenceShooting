@@ -1,4 +1,26 @@
 #include "GameScene.h"
+#include "Model.h"
+#include <cassert>
+#include <sstream>
+#include <iomanip>
+
+using namespace DirectX;
+
+GameScene::GameScene()
+{
+}
+
+GameScene::~GameScene()
+{
+	safe_delete(player);
+	safe_delete(ground);
+	safe_delete(object3d_3);
+	safe_delete(sprite);
+	safe_delete(modelGround);
+	safe_delete(modelPlayer);
+	safe_delete(model);
+	safe_delete(object);
+}
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,Mouse* mouse)
 {
@@ -57,7 +79,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	//3Dオブジェクト生成
 	player = Object3d::Create();
 	//オブジェクトにモデルを紐付ける
-	ground->SetModel(modelPlayer);
+	player->SetModel(modelPlayer);
+	player->SetPosition({ 0,0,0 });
 
 }
 
@@ -87,7 +110,7 @@ void GameScene::Draw()
 	Object3d::PreDraw(dxCommon->GetCmdList());
 
 	//3Dオブジェクトの描画
-	ground->Draw();
+	//ground->Draw();
 	player->Draw();
 	
 	//3Dオブジェクト描画後処理
@@ -123,17 +146,6 @@ void GameScene::Text()
 
 void GameScene::Delete()
 {
-	delete ground;
-	delete player;
-	delete object3d_3;
-	//スプライト解放
-	delete sprite;
-	//3Dモデル解放
-	delete modelGround;
-	delete modelPlayer;
-
-	delete model;
-	delete object;
-	delete player;
+	
 
 }
