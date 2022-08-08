@@ -12,12 +12,10 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	safe_delete(player);
 	safe_delete(ground);
 	safe_delete(object3d_3);
 	safe_delete(sprite);
 	safe_delete(modelGround);
-	safe_delete(modelPlayer);
 	safe_delete(model);
 	safe_delete(object);
 }
@@ -36,6 +34,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	ObjectFBX::SetCamera(camera);
 	ObjectFBX::CreateGraphicsPipeline();
 
+	//FBX用
 	camera->SetTarget({ 0,3,0 });
 	camera->SetDistance(10.0f);
 
@@ -74,13 +73,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	//3Dオブジェクトの位置を指定
 	ground->SetPosition({ -5,0,-5 });
 
-	//OBJからモデルデータを読み込む
-	modelPlayer = Model::LoadFormOBJ("player");
-	//3Dオブジェクト生成
-	player = Object3d::Create();
-	//オブジェクトにモデルを紐付ける
-	player->SetModel(modelPlayer);
-	player->SetPosition({ 0,0,0 });
+	player = new Player;
+	player->Initialize(input);
+
 
 }
 

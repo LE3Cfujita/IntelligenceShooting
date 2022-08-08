@@ -10,6 +10,7 @@
 #include"DebugCamera.h"
 #include "SafeDelete.h"
 #include <DirectXMath.h>
+#include"Player.h"
 
 #pragma once
 class GameScene
@@ -66,6 +67,7 @@ private:
 	DebugText debugText;
 	Sprite* sprite = nullptr;
 	DebugCamera* camera = nullptr;
+	Player* player = nullptr;
 
 
 	//FBX宣言
@@ -76,13 +78,10 @@ private:
 
 	//Obj宣言
 	Model* modelGround = nullptr;
-	Model* modelPlayer = nullptr;
 
 	//3Dオブジェクト生成
 	Object3d* ground = nullptr;
-	Object3d* player = nullptr;
 	Object3d* object3d_3 = nullptr;
-
 
 
 	//デバックテキスト用
