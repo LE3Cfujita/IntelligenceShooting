@@ -12,10 +12,8 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	safe_delete(ground);
 	safe_delete(object3d_3);
 	safe_delete(sprite);
-	safe_delete(modelGround);
 	safe_delete(model);
 	safe_delete(object);
 }
@@ -64,16 +62,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	object->PlayAnimation();
 	//object->SetPosition({ 0,15,15 });
 
-	//OBJからモデルデータを読み込む
-	modelGround = Model::LoadFormOBJ("ground");
-	//3Dオブジェクト生成
-	ground = Object3d::Create();
-	//オブジェクトにモデルを紐付ける
-	ground->SetModel(modelGround);
-	//3Dオブジェクトの位置を指定
-	ground->SetPosition({ -5,0,-5 });
-
+	
+	enemy = new Enemy;
 	player = new Player;
+	enemy->Initialize();
 	player->Initialize(input);
 
 
@@ -88,7 +80,7 @@ void GameScene::Update(WinApp* winApp)
 
 
 	camera->Update();
-	ground->Update();
+	enemy->Update();
 	object->Update();
 	player->Update();
 }
@@ -105,7 +97,7 @@ void GameScene::Draw()
 	Object3d::PreDraw(dxCommon->GetCmdList());
 
 	//3Dオブジェクトの描画
-	//ground->Draw();
+	enemy->Draw();
 	player->Draw();
 	
 	//3Dオブジェクト描画後処理
@@ -126,17 +118,14 @@ void GameScene::Draw()
 
 void GameScene::Text()
 {
-	sprintf_s(str, "sprite_posX = %d", mouse_pos.x);
+
+	XMFLOAT3 p = player->GetPosition();
+
+	sprintf_s(str, "playerX = %f", p.x);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
 	debugText.Print(str2, 0, 20, 1);
 
-
-
-	sprintf_s(str3, "cursor_posX = %f", cursor_pos.x);
-	debugText.Print(str3, 0, 40, 1);
-	sprintf_s(str4, "cursor_posY = %f", cursor_pos.y);
-	debugText.Print(str4, 0, 60, 1);
 }
 
 void GameScene::Delete()

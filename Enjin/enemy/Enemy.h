@@ -1,11 +1,10 @@
-#include"Model.h"
 #include"Object3d.h"
-#include"Input.h"
+#include"Model.h"
 #include"SafeDelete.h"
-
 #pragma once
-class Player
+class Enemy
 {
+
 private:
 	// DirectX::‚ğÈ—ª
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -14,17 +13,15 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public:
-	Player();
-	~Player();
+	Enemy();
+	~Enemy();
 
 	//‰Šú‰»
-	void Initialize(Input* input);
+	void Initialize();
 
 	void Update();
 
 	void Draw();
-
-	void Move();
 
 
 
@@ -34,15 +31,15 @@ public:
 public:
 	//•Ï”
 	XMFLOAT3 position = { 0,0,-5 };
-	XMFLOAT3 rotation = { 0,-90,0 };
+	XMFLOAT3 rotation = { 0,90,0 };
 
 private://ƒƒ“ƒo•Ï”
 
-	Input* input = nullptr;
+
+	Model* model = nullptr;
+	Object3d* boss = nullptr;
 
 
-	Model* modelPlayer = nullptr;
-	Object3d* player = nullptr;
 
 };
 

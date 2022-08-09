@@ -40,6 +40,9 @@
     <Filter Include="player">
       <UniqueIdentifier>{274a770b-5227-4e63-a3d7-97a93018a295}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{75dcce0f-6a60-4e70-9f96-ee0578344d47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -97,7 +100,10 @@
       <Filter>3d</Filter>
     </ClCompile>
     <ClCompile Include="player\Player.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy\Enemy.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +162,10 @@
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="player\Player.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy\Enemy.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

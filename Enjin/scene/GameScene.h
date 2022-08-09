@@ -11,6 +11,8 @@
 #include "SafeDelete.h"
 #include <DirectXMath.h>
 #include"Player.h"
+#include"Enemy.h"
+
 
 #pragma once
 class GameScene
@@ -68,7 +70,7 @@ private:
 	Sprite* sprite = nullptr;
 	DebugCamera* camera = nullptr;
 	Player* player = nullptr;
-
+	Enemy* enemy = nullptr;
 
 	//FBX宣言
 	ModelFBX* model = nullptr;
@@ -76,11 +78,6 @@ private:
 	ObjectFBX* object = nullptr;
 
 
-	//Obj宣言
-	Model* modelGround = nullptr;
-
-	//3Dオブジェクト生成
-	Object3d* ground = nullptr;
 	Object3d* object3d_3 = nullptr;
 
 

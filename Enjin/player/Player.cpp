@@ -7,6 +7,7 @@ Player::Player()
 Player::~Player()
 {
 	safe_delete(modelPlayer);
+	safe_delete(player);
 }
 
 void Player::Initialize(Input* input)
@@ -21,8 +22,8 @@ void Player::Initialize(Input* input)
 	player->SetModel(modelPlayer);
 
 	player->SetPosition(position);
-	player->SetRotation({ 0,-90,0 });
-	player->SetScale({ 1,1,0.7 });
+	player->SetRotation(rotation);
+	player->SetScale({ 0.5,0.7,0.5 });
 }
 
 void Player::Update()
@@ -42,21 +43,39 @@ void Player::Move()
 {
 	if (input->PushKey(DIK_A) == true)
 	{
-		position.x -= 0.3;
+		if (position.x >= -20)
+		{
+			position.x -= 0.3;
+			rotation.x = 5;
+		}
 	}
-	if (input->PushKey(DIK_D) == true)
+	else if (input->PushKey(DIK_D) == true)
 	{
-		position.x += 0.3;
+		if (position.x <= 20)
+		{
+			position.x += 0.3;
+			rotation.x = -5;
+		}
 	}
-
+	else
+	{
+		rotation.x = 0;
+	}
 	if (input->PushKey(DIK_W) == true)
 	{
-		position.y += 0.3;
+		if (position.y <= 13)
+		{
+			position.y += 0.3;
+		}
 	}
-	if (input->PushKey(DIK_S) == true)
+	else if (input->PushKey(DIK_S) == true)
 	{
-		position.y -= 0.3;
+		if (position.y >= -7)
+		{
+			position.y -= 0.3;
+		}
 	}
 
 	player->SetPosition(position);
+	player->SetRotation(rotation);
 }

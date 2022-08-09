@@ -33,6 +33,7 @@
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="camera\DebugCamera.cpp" />
+    <ClCompile Include="enemy\Enemy.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="main.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\DebugCamera.h" />
+    <ClInclude Include="enemy\Enemy.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="input\Mouse.h" />
     <ClInclude Include="player\Player.h" />
@@ -181,12 +183,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(ProjectDir)enemy;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(ProjectDir)enemy;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
