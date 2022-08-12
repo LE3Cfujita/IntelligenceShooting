@@ -14,7 +14,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	//OBJからモデルデータを読み込む
-	model = Model::LoadFormOBJ("enemy");
+	model = Model::LoadFormOBJ("player");
 	//3Dオブジェクト生成
 	boss = Object3d::Create();
 	//オブジェクトにモデルを紐付ける

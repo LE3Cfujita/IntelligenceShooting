@@ -26,15 +26,31 @@ public:
 
 	void Move();
 
-
+	void Attack();
 
 	//getter
 	XMFLOAT3 GetPosition() { return position; }
 
 public:
+
+#define BULLET_MAX 100
+
 	//変数
 	XMFLOAT3 position = { 0,0,-5 };
 	XMFLOAT3 rotation = { 0,-90,0 };
+
+
+	//攻撃フラグ
+	struct BULLET
+	{
+		int flag = 0;
+
+		XMFLOAT3 position = { 100,100,0 };
+		XMFLOAT3 rotation = { 0,-90,0 };
+	};
+	BULLET b[BULLET_MAX];
+
+	int attackCT = 0;
 
 private://メンバ変数
 
@@ -43,6 +59,9 @@ private://メンバ変数
 
 	Model* modelPlayer = nullptr;
 	Object3d* player = nullptr;
+
+	Model* modelBullet = nullptr;
+	Object3d* bullet[BULLET_MAX];
 
 };
 
