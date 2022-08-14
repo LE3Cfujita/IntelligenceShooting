@@ -30,8 +30,9 @@ public:
 
 public:
 	//•Ï”
-	XMFLOAT3 position = { 0,0,-5 };
+	XMFLOAT3 position = { 0,0,50 };
 	XMFLOAT3 rotation = { 0,90,0 };
+	XMFLOAT3 scale = { 3,3,3 };
 
 private://ƒƒ“ƒo•Ï”
 

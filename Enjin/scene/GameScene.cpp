@@ -63,9 +63,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	//object->SetPosition({ 0,15,15 });
 
 	
-	//enemy = new Enemy;
+	enemy = new Enemy;
 	player = new Player;
-	//enemy->Initialize();
+	enemy->Initialize();
 	player->Initialize(input);
 
 
@@ -80,7 +80,7 @@ void GameScene::Update(WinApp* winApp)
 
 
 	camera->Update();
-	//enemy->Update();
+	enemy->Update();
 	object->Update();
 	player->Update();
 }
@@ -97,7 +97,7 @@ void GameScene::Draw()
 	Object3d::PreDraw(dxCommon->GetCmdList());
 
 	//3Dオブジェクトの描画
-	//enemy->Draw();
+	enemy->Draw();
 	player->Draw();
 	
 	//3Dオブジェクト描画後処理
