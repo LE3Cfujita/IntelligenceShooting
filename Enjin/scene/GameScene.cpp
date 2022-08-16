@@ -80,9 +80,9 @@ void GameScene::Update(WinApp* winApp)
 
 
 	camera->Update();
-	enemy->Update();
 	object->Update();
 	player->Update();
+	enemy->Update();
 }
 
 void GameScene::Draw()

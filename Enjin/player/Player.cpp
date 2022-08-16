@@ -17,6 +17,7 @@ void Player::Initialize(Input* input)
 	//OBJからモデルデータを読み込む
 	modelPlayer = Model::LoadFormOBJ("player");
 	modelBullet = Model::LoadFormOBJ("bullet");
+	modelAim = Model::LoadFormOBJ("aim");
 	//3Dオブジェクト生成
 	player = Object3d::Create();
 	//オブジェクトにモデルを紐付ける
@@ -27,15 +28,23 @@ void Player::Initialize(Input* input)
 	player->SetScale({ 0.5,0.7,0.5 });
 
 
-
+	//弾
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet[i] = Object3d::Create();
 		bullet[i]->SetModel(modelBullet);
 		bullet[i]->SetPosition(b[i].position);
 		bullet[i]->SetRotation(b[i].rotation);
-		bullet[i]->SetScale({ 0.3,0.3,0.3 });
+		bullet[i]->SetScale({ 0.7,0.7,0.7 });
 	}
+	//照準
+	aim = Object3d::Create();
+	aim->SetModel(modelAim);
+	rock.position.z = 30;
+	aim->SetPosition(rock.position);
+	aim->SetRotation(rock.rotation);
+	aim->SetScale({ 1,1,1 });
+
 
 }
 
@@ -50,6 +59,7 @@ void Player::Update()
 	{
 		bullet[i]->Update();
 	}
+	aim->Update();
 }
 
 void Player::Draw()
@@ -63,6 +73,7 @@ void Player::Draw()
 			bullet[i]->Draw();
 		}
 	}
+	aim->Draw();
 }
 
 void Player::Move()
@@ -102,8 +113,13 @@ void Player::Move()
 		}
 	}
 
+	rock.position.x = position.x;
+	rock.position.y = position.y;
+
+
 	player->SetPosition(position);
 	player->SetRotation(rotation);
+	aim->SetPosition(rock.position);
 }
 
 void Player::Attack()

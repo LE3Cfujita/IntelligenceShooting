@@ -52,6 +52,13 @@ public:
 
 	int attackCT = 0;
 
+	struct AIM
+	{
+		XMFLOAT3 position = { 0,0,0 };
+		XMFLOAT3 rotation = { 0,90,0 };
+	};
+	AIM rock;
+
 private://ƒƒ“ƒo•Ï”
 
 	Input* input = nullptr;
@@ -62,6 +69,9 @@ private://ƒƒ“ƒo•Ï”
 
 	Model* modelBullet = nullptr;
 	Object3d* bullet[BULLET_MAX];
+
+	Model* modelAim = nullptr;
+	Object3d* aim = nullptr;
 
 };
 
