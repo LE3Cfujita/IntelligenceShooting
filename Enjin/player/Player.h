@@ -59,6 +59,7 @@ public:
 	};
 	AIM rock;
 
+
 private://ƒƒ“ƒo•Ï”
 
 	Input* input = nullptr;

@@ -65,7 +65,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	
 	enemy = new Enemy;
 	player = new Player;
-	enemy->Initialize();
+	enemy->Initialize(player);
 	player->Initialize(input);
 
 
@@ -121,7 +121,9 @@ void GameScene::Text()
 
 	XMFLOAT3 p = player->GetPosition();
 
-	sprintf_s(str, "playerX = %f", p.x);
+	int flag = enemy->GetCount();
+
+	sprintf_s(str, "flag = %d", flag);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
 	debugText.Print(str2, 0, 20, 1);
