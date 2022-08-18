@@ -121,9 +121,9 @@ void GameScene::Text()
 
 	XMFLOAT3 p = player->GetPosition();
 
-	int flag = enemy->GetCount();
+	XMFLOAT3 flag = enemy->GetPosition();
 
-	sprintf_s(str, "flag = %d", flag);
+	sprintf_s(str, "flag = %f", flag.z);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
 	debugText.Print(str2, 0, 20, 1);

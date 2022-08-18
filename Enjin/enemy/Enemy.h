@@ -32,8 +32,12 @@ public:
 	void Attack2();
 	void Attack2Move();
 
+	//’e–‹UŒ‚
+	void Attack3();
+	void Attack3Move();
+
 	//getter
-	XMFLOAT3 GetPosition() { return enemy.position; }
+	XMFLOAT3 GetPosition() { return enemy.rotation; }
 
 	int GetCount() { return b.flag; }
 
@@ -49,8 +53,10 @@ public:
 		int attackFlag2 = 0;//’e–‹
 		int attackFlag3 = 0;//“Ëi
 
+		int ct = 180;//“ËiUŒ‚‚ÌƒN[ƒ‹ƒ^ƒCƒ€	
+
 		int barrageTime = 0;
-		
+		int rotCount = 0;
 	};
 	ENEMY enemy;
 
