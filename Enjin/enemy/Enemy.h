@@ -28,6 +28,9 @@ public:
 	void Attack1();
 	void Attack1Move();
 
+	//’e–‹UŒ‚
+	void Attack2();
+	void Attack2Move();
 
 	//getter
 	XMFLOAT3 GetPosition() { return enemy.position; }
@@ -42,12 +45,16 @@ public:
 		XMFLOAT3 rotation = { 0,180,0 };
 		XMFLOAT3 scale = { 3,3,3 };
 
-		int attackFlag = 0;
+		int attackFlag = 0;//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
+		int attackFlag2 = 0;//’e–‹
+		int attackFlag3 = 0;//“Ëi
 
+		int barrageTime = 0;
 		
 	};
 	ENEMY enemy;
 
+#define BULLET_MAX 50
 	//UŒ‚ƒtƒ‰ƒO
 	struct BULLET
 	{
@@ -63,8 +70,11 @@ public:
 		float L = 0;
 
 		float speed = 3;
+		
+		XMFLOAT3 direction = { 0,0,0 };
 	};
-	BULLET b;
+	BULLET b;//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
+	BULLET barrage[BULLET_MAX];//’e–‹
 
 	XMFLOAT3 pPosition = { 0,0,0 };
 
@@ -78,8 +88,13 @@ private://ƒƒ“ƒo•Ï”
 	Model* modelBoss = nullptr;
 	Object3d* boss = nullptr;
 
+	//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
 	Model* modelBullet = nullptr;
 	Object3d* bullet = nullptr;
+
+
+	//’e–‹
+	Object3d* bulletBarrage[BULLET_MAX];
 
 	Player* player = nullptr;
 

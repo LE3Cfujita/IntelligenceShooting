@@ -2,7 +2,7 @@
 
 Enemy::Enemy()
 {
-	
+
 }
 
 Enemy::~Enemy()
@@ -33,29 +33,58 @@ void Enemy::Initialize(Player* player)
 	bullet->SetRotation(b.rotation);
 	bullet->SetScale({ 0.7,0.7,0.7 });
 
+	for (int i = 0; i < BULLET_MAX; i++)
+	{
+		bulletBarrage[i] = Object3d::Create();
+		bulletBarrage[i]->SetModel(modelBullet);
+		bulletBarrage[i]->SetPosition(barrage[i].position);
+		bulletBarrage[i]->SetRotation(barrage[i].rotation);
+		bulletBarrage[i]->SetScale({ 0.7,0.7,0.7 });
+	}
+
 }
 
 void Enemy::Update()
 {
 	pPosition = player->GetPosition();
+
 	if (pPosition.x <= -5)
 	{
 		Attack1();
 	}
+	else if (pPosition.x >= 5)
+	{
+		Attack2();
+	}
 	Attack1Move();
+	Attack2Move();
 	boss->Update();
 	bullet->Update();
+	for (int i = 0; i < BULLET_MAX; i++)
+	{
+		bulletBarrage[i]->Update();
+	}
 }
 
 void Enemy::Draw()
 {
 	boss->Draw();
-	bullet->Draw();
+	if (b.flag == 1)
+	{
+		bullet->Draw();
+	}
+	for (int i = 0; i < BULLET_MAX; i++)
+	{
+		if (barrage[i].flag == 1)
+		{
+			bulletBarrage[i]->Draw();
+		}
+	}
 }
 
 void Enemy::Attack1()
 {
-	if (b.flag == 0)
+	if (enemy.attackFlag == 0 && b.flag == 0)
 	{
 		enemy.attackFlag = 1;
 		b.position = enemy.position;
@@ -73,7 +102,7 @@ void Enemy::Attack1Move()
 	if (enemy.attackFlag == 1)
 	{
 		homingTime++;
-		if (homingTime >= 30)
+		if (homingTime >= 20)
 		{
 			homingTime = 0;
 			homingCount = 1;
@@ -94,14 +123,79 @@ void Enemy::Attack1Move()
 		b.position.y += (b.dy / b.L) * b.speed;
 		b.position.z += (b.dz / b.L) * b.speed;
 
-		if (pPosition.z + -10 >= b.position.z)
-		{
-			enemy.attackFlag = 0;
-			b.flag = 0;
+		
 
+	}
+	if (pPosition.z - 10 > b.position.z)
+	{
+		enemy.attackFlag = 0;
+		b.flag = 0;
+		b.position.z = 100;
+	}
+	bullet->SetPosition(b.position);
+}
+
+void Enemy::Attack2()
+{
+	if (enemy.attackFlag2 == 0)
+	{
+		enemy.attackFlag2 = 1;
+	}
+	if (enemy.attackFlag2 == 1)
+	{
+
+		if (enemy.barrageTime == 0)
+		{
+			enemy.barrageTime = 1;
+			for (int i = 0; i < BULLET_MAX; i++)
+			{
+				if (barrage[i].flag == 0)
+				{
+					barrage[i].flag = 1;
+					barrage[i].position = enemy.position;
+					float move = 0.1;
+					barrage[i].direction.x = (rand() % 10+1)* -move;
+
+					int direction = rand() % 2;
+					if (direction == 1)
+					{
+						move = -0.05;
+					}
+					barrage[i].direction.y = (rand() % 10)* move;
+
+					break;
+				}
+			}
 		}
+		else
+		{
+			enemy.barrageTime++;
+			if (enemy.barrageTime >= 2)
+			{
+				enemy.barrageTime = 0;
+			}
+		}
+	}
+}
+
+void Enemy::Attack2Move()
+{
+	for (int i = 0; i < BULLET_MAX; i++)
+	{
+		if (barrage[i].flag == 1)
+		{
+			barrage[i].position.x -= barrage[i].direction.x;
+			barrage[i].position.y -= barrage[i].direction.y;
+			barrage[i].position.z -= barrage[i].speed;
+		}
+		if (pPosition.z - 10 >= barrage[i].position.z)
+		{
+			enemy.attackFlag2 = 0;
+			barrage[i].flag = 0;
+			barrage[i].position.z = 100;
+		}
+		bulletBarrage[i]->SetPosition(barrage[i].position);
 
 	}
 
-	bullet->SetPosition(b.position);
 }
