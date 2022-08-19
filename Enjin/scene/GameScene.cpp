@@ -23,7 +23,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	this->dxCommon = dxCommon;
 	this->input = input;
 	this->audio = audio;
-
+	this->mouse = mouse;
 
 	// ƒJƒƒ‰¶¬
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input,mouse);
@@ -66,8 +66,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	enemy = new Enemy;
 	player = new Player;
 	enemy->Initialize(player);
-	player->Initialize(input);
-
+	player->Initialize(input,mouse);
+	ShowCursor(FALSE);
 
 }
 
@@ -83,6 +83,7 @@ void GameScene::Update(WinApp* winApp)
 	object->Update();
 	player->Update();
 	enemy->Update();
+	mouse->Update();
 }
 
 void GameScene::Draw()
@@ -121,9 +122,9 @@ void GameScene::Text()
 
 	XMFLOAT3 p = player->GetPosition();
 
-	XMFLOAT3 flag = enemy->GetPosition();
+	float flag = enemy->GetCount();
 
-	sprintf_s(str, "flag = %f", flag.z);
+	sprintf_s(str, "flag = %f", flag);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
 	debugText.Print(str2, 0, 20, 1);

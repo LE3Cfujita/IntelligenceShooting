@@ -10,9 +10,10 @@ Player::~Player()
 	safe_delete(player);
 }
 
-void Player::Initialize(Input* input)
+void Player::Initialize(Input* input, Mouse* mouse)
 {
 	this->input = input;
+	this->mouse = mouse;
 
 	//OBJからモデルデータを読み込む
 	modelPlayer = Model::LoadFormOBJ("player");
@@ -113,8 +114,10 @@ void Player::Move()
 		}
 	}
 
-	rock.position.x = position.x;
-	rock.position.y = position.y;
+	XMFLOAT2 mouseM{ mouse->GetMouseVelocityX() ,mouse->GetMouseVelocityY() };
+
+	rock.position.x += mouseM.x / 12;
+	rock.position.y -= mouseM.y / 12;
 
 
 	player->SetPosition(position);

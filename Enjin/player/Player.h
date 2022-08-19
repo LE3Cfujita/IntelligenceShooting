@@ -2,6 +2,7 @@
 #include"Object3d.h"
 #include"Input.h"
 #include"SafeDelete.h"
+#include"Mouse.h"
 
 #pragma once
 class Player
@@ -18,7 +19,7 @@ public:
 	~Player();
 
 	//‰Šú‰»
-	void Initialize(Input* input);
+	void Initialize(Input* input, Mouse* mouse);
 
 	void Update();
 
@@ -30,6 +31,8 @@ public:
 
 	//getter
 	XMFLOAT3 GetPosition() { return position; }
+
+	XMFLOAT3 GetAimPosition() { return rock.position; }
 
 public:
 
@@ -63,7 +66,7 @@ public:
 private://ƒƒ“ƒo•Ï”
 
 	Input* input = nullptr;
-
+	Mouse* mouse = nullptr;
 
 	Model* modelPlayer = nullptr;
 	Object3d* player = nullptr;

@@ -24,6 +24,8 @@ public:
 
 	void Draw();
 
+	void Move();
+
 	//狙って撃ってくる攻撃
 	void Attack1();
 	void Attack1Move();
@@ -39,7 +41,7 @@ public:
 	//getter
 	XMFLOAT3 GetPosition() { return enemy.rotation; }
 
-	int GetCount() { return b.flag; }
+	int GetCount() { return enemy.attackFlag3; }
 
 public:
 	struct ENEMY
@@ -53,10 +55,15 @@ public:
 		int attackFlag2 = 0;//弾幕
 		int attackFlag3 = 0;//突進
 
-		int ct = 180;//突進攻撃のクールタイム	
+		int ct = 300;//突進攻撃のクールタイム	
 
 		int barrageTime = 0;
 		int rotCount = 0;
+
+		float speed = 0.3;
+
+		int directionX = 0;
+		int directionY = 0;
 	};
 	ENEMY enemy;
 

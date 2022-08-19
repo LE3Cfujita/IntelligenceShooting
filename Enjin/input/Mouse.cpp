@@ -111,3 +111,13 @@ Mouse::MouseMove Mouse::GetMouseMove()
 	tmp.lZ = mouseState.lZ;
 	return tmp;
 }
+
+float Mouse::GetMouseVelocityX()
+{
+	return mouseState.lX;
+}
+
+float Mouse::GetMouseVelocityY()
+{
+	return mouseState.lY;
+}

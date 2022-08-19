@@ -61,6 +61,9 @@ public: // メンバ関数
 	/// <returns>マウス移動量</returns>
 	MouseMove GetMouseMove();
 
+	float GetMouseVelocityX();
+	float GetMouseVelocityY();
+
 private://メンバ変数
 	ComPtr<IDirectInput8> dinput;
 	ComPtr<IDirectInputDevice8> devMouse;

@@ -41,11 +41,13 @@ void Enemy::Initialize(Player* player)
 		bulletBarrage[i]->SetRotation(barrage[i].rotation);
 		bulletBarrage[i]->SetScale({ 0.7,0.7,0.7 });
 	}
-
+	/*enemy.directionX = rand() % 2;
+	enemy.directionY = rand() % 2;*/
 }
 
 void Enemy::Update()
 {
+	Move();
 	pPosition = player->GetPosition();
 
 	if (pPosition.x < -5)
@@ -90,9 +92,49 @@ void Enemy::Draw()
 	}
 }
 
+void Enemy::Move()
+{
+	if (enemy.directionX == 0)
+	{
+		enemy.position.x += enemy.speed;
+	}
+	if (enemy.directionX == 1)
+	{
+		enemy.position.x -= enemy.speed;
+	}
+	if (enemy.directionY == 0)
+	{
+		enemy.position.y += enemy.speed;
+	}
+	if (enemy.directionY == 1)
+	{
+		enemy.position.y -= enemy.speed;
+	}
+
+
+	if (enemy.position.x >= 80)
+	{
+		enemy.directionX = 1;
+	}
+	if (enemy.position.x <= -80)
+	{
+		enemy.directionX = 0;
+	}
+	if (enemy.position.y >= 60)
+	{
+		enemy.directionY = 1;
+	}
+	if (enemy.position.y <= -55)
+	{
+		enemy.directionY = 0;
+	}
+
+	boss->SetPosition(enemy.position);
+}
+
 void Enemy::Attack1()
 {
-	if (enemy.position.y <= 15)
+	if (enemy.position.y <= 60)
 	{
 		if (enemy.attackFlag == 0 && enemy.attackFlag3 == 0 && b.flag == 0)
 		{
@@ -148,7 +190,7 @@ void Enemy::Attack1Move()
 
 void Enemy::Attack2()
 {
-	if (enemy.position.y <= 15)
+	if (enemy.position.y <= 60)
 	{
 		if (enemy.attackFlag2 == 0 && enemy.attackFlag3 == 0)
 		{
@@ -248,16 +290,12 @@ void Enemy::Attack3Move()
 	{
 
 		enemy.ct--;
-		if (enemy.position.y > 0)
-		{
-			enemy.position.y -= 3;
-		}
 	}
 	if (pPosition.z - 30 >= enemy.position.z)
 	{
-		enemy.position = { 0,210,100 };
+		enemy.position = { 0,120,100 };
 		enemy.rotation = { 0,180,0 };
-		enemy.ct = 180;
+		enemy.ct = 300;
 		enemy.rotCount = 0;
 		enemy.attackFlag3 = 0;
 	}

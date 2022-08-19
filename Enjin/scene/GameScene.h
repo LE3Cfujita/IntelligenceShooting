@@ -14,6 +14,7 @@
 #include"Enemy.h"
 
 
+
 #pragma once
 class GameScene
 {
@@ -71,6 +72,7 @@ private:
 	DebugCamera* camera = nullptr;
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
+	Mouse* mouse = nullptr;
 
 	//FBXêÈåæ
 	ModelFBX* model = nullptr;
