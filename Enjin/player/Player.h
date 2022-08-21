@@ -57,7 +57,7 @@ public:
 
 	struct AIM
 	{
-		XMFLOAT3 position = { 0,0,0 };
+		XMFLOAT3 position = { 0,0,100 };
 		XMFLOAT3 rotation = { 0,90,0 };
 	};
 	AIM rock;

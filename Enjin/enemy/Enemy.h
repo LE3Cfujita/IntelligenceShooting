@@ -60,10 +60,21 @@ public:
 		int barrageTime = 0;
 		int rotCount = 0;
 
-		float speed = 0.3;
+		float speed = 1;
 
 		int directionX = 0;
 		int directionY = 0;
+
+
+		float dx = 0;
+		float dy = 0;
+		float dz = 0;
+		float da = 0;
+		float L = 0;
+
+		int homingTime = 0;
+		int homingCount = 0;
+
 	};
 	ENEMY enemy;
 
@@ -93,6 +104,20 @@ public:
 
 	int homingTime = 0;
 	int homingCount = 0;
+
+	struct AIM
+	{
+		XMFLOAT3 rPosition = { 0,0,0 };
+
+		float dx = 0;
+		float dy = 0;
+		float da = 0;
+		float L = 0;
+
+		int directionCount = 0;
+		int directionTime = 0;
+	};
+	AIM rock;
 
 private://ƒƒ“ƒo•Ï”
 

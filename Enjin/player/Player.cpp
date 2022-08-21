@@ -41,10 +41,10 @@ void Player::Initialize(Input* input, Mouse* mouse)
 	//Æ€
 	aim = Object3d::Create();
 	aim->SetModel(modelAim);
-	rock.position.z = 30;
+	rock.position.z = 80;
 	aim->SetPosition(rock.position);
 	aim->SetRotation(rock.rotation);
-	aim->SetScale({ 1,1,1 });
+	aim->SetScale({ 3,3,3 });
 
 
 }

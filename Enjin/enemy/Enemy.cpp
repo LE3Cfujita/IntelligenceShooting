@@ -39,10 +39,10 @@ void Enemy::Initialize(Player* player)
 		bulletBarrage[i]->SetModel(modelBullet);
 		bulletBarrage[i]->SetPosition(barrage[i].position);
 		bulletBarrage[i]->SetRotation(barrage[i].rotation);
-		bulletBarrage[i]->SetScale({ 0.7,0.7,0.7 });
+		bulletBarrage[i]->SetScale({ 1,1,1 });
 	}
-	/*enemy.directionX = rand() % 2;
-	enemy.directionY = rand() % 2;*/
+	enemy.directionX = rand() % 2;
+	enemy.directionY = rand() % 2;
 }
 
 void Enemy::Update()
@@ -94,6 +94,15 @@ void Enemy::Draw()
 
 void Enemy::Move()
 {
+
+	rock.rPosition = player->GetAimPosition();
+
+	//照準との距離を計算して逃げるような動きを作る
+	rock.dx = enemy.position.x - rock.rPosition.x;
+	rock.dy = enemy.position.y - rock.rPosition.y;
+	rock.da = rock.dx * rock.dx + rock.dy + rock.dy;
+	rock.L = sqrt(rock.da);
+
 	if (enemy.directionX == 0)
 	{
 		enemy.position.x += enemy.speed;
@@ -111,24 +120,70 @@ void Enemy::Move()
 		enemy.position.y -= enemy.speed;
 	}
 
-
-	if (enemy.position.x >= 80)
+	if (rock.directionCount == 1)
 	{
-		enemy.directionX = 1;
-	}
-	if (enemy.position.x <= -80)
-	{
-		enemy.directionX = 0;
-	}
-	if (enemy.position.y >= 60)
-	{
-		enemy.directionY = 1;
-	}
-	if (enemy.position.y <= -55)
-	{
-		enemy.directionY = 0;
+		rock.directionTime++;
+		if (rock.directionTime > 60)
+		{
+			rock.directionTime = 0;
+			rock.directionCount = 0;
+		}
 	}
 
+	if (rock.L <= 6 && rock.directionCount == 0)
+	{
+		if (enemy.position.x < 80 && enemy.position.x <= rock.rPosition.x)
+		{
+			enemy.directionX = 0;
+			rock.directionCount = 1;
+		}
+		else if (enemy.position.x > -80 && enemy.position.x >= rock.rPosition.x)
+		{
+			enemy.directionX = 1;
+			rock.directionCount = 1;
+		}
+		if (enemy.position.y < 60 && enemy.position.y >= rock.rPosition.y);
+		{
+				enemy.directionY = 0;
+				rock.directionCount = 1;
+		}
+		if (enemy.position.y > -55 && enemy.position.y <= rock.rPosition.y)
+		{
+				enemy.directionY = 1;
+				rock.directionCount = 1;
+		}
+	}
+	else
+	{
+		if (enemy.position.x >= 80)
+		{
+			if (enemy.directionX == 0)
+			{
+				enemy.directionX = 1;
+			}
+		}
+		if (enemy.position.x <= -80)
+		{
+			if (enemy.directionX == 1)
+			{
+				enemy.directionX = 0;
+			}
+		}
+		if (enemy.position.y >= 60)
+		{
+			if (enemy.directionY == 0)
+			{
+				enemy.directionY = 1;
+			}
+		}
+		if (enemy.position.y <= -55)
+		{
+			if (enemy.directionY == 1)
+			{
+				enemy.directionY = 0;
+			}
+		}
+	}
 	boss->SetPosition(enemy.position);
 }
 
@@ -209,9 +264,16 @@ void Enemy::Attack2()
 				{
 					barrage[i].flag = 1;
 					barrage[i].position = enemy.position;
-					float move = 0.1;
-					barrage[i].direction.x = (rand() % 10 + 1) * -move;
-
+					float move = 0.2;
+					int directions = rand() % 2;
+					if (directions == 0)
+					{
+						barrage[i].direction.x = (rand() % 10 + 1) * move;
+					}
+					else
+					{
+						barrage[i].direction.x = (rand() % 10 + 1) * -move;
+					}
 					int direction = rand() % 2;
 					if (direction == 1)
 					{
@@ -270,10 +332,32 @@ void Enemy::Attack3Move()
 
 	if (enemy.attackFlag3 == 1)
 	{
+		enemy.homingTime++;
+		if (enemy.homingTime >= 60)
+		{
+			enemy.homingTime = 0;
+			enemy.homingCount = 1;
+		}
+		//カウントが0ならホーミングする
+		if (enemy.homingCount == 0)
+		{
+			enemy.dx = enemy.position.x - pPosition.x;//Xの距離の計算
+			enemy.dy = enemy.position.y - pPosition.y;//Yの距離の計算
+			enemy.dz = enemy.position.z - pPosition.z;//Zの距離の計算
+			//ルートの中の計算
+			enemy.da = enemy.dx * enemy.dx + enemy.dy * enemy.dy + enemy.dz * enemy.dz;
+			enemy.L = sqrt(enemy.da);
+
+		}
+
+
 		if (enemy.rotCount == 0)
 		{
 			enemy.rotation.z -= 8;
-			enemy.position.z += 5;
+			//enemy.position.z += 5;
+			enemy.position.x += (enemy.dx / enemy.L) * 5;
+			enemy.position.y += (enemy.dy / enemy.L) * 5;
+			enemy.position.z += (enemy.dz / enemy.L) * 5;
 
 			if (enemy.rotation.z <= -300)
 			{
@@ -283,7 +367,9 @@ void Enemy::Attack3Move()
 		if (enemy.rotCount == 1)
 		{
 			enemy.rotation.z += 16;
-			enemy.position.z -= 10;
+			enemy.position.x -= (enemy.dx / enemy.L) * 10;
+			enemy.position.y -= (enemy.dy / enemy.L) * 10;
+			enemy.position.z -= (enemy.dz / enemy.L) * 10;
 		}
 	}
 	if (enemy.ct > 0 && enemy.position.z == 100)
@@ -298,6 +384,8 @@ void Enemy::Attack3Move()
 		enemy.ct = 300;
 		enemy.rotCount = 0;
 		enemy.attackFlag3 = 0;
+		enemy.homingCount = 0;
+		enemy.homingTime = 0;
 	}
 
 	boss->SetRotation(enemy.rotation);
