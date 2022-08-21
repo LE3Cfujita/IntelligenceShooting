@@ -43,6 +43,9 @@
     <Filter Include="Enemy">
       <UniqueIdentifier>{75dcce0f-6a60-4e70-9f96-ee0578344d47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{61dbe428-8eb4-4f81-bd57-466dfa8a4956}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -105,6 +108,9 @@
     <ClCompile Include="enemy\Enemy.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Collision\Collision.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\Sprite.h">
@@ -166,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="enemy\Enemy.h">
       <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collision.h">
+      <Filter>Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

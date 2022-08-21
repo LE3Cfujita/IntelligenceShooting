@@ -31,8 +31,12 @@ public:
 
 	void AttackMove();
 
+	void Hit();
+
 	//getter
 	XMFLOAT3 GetPosition() { return position; }
+
+	int GetHP() { return HP; }
 
 	XMFLOAT3 GetAimPosition() { return rock.position; }
 
@@ -44,6 +48,7 @@ public:
 	XMFLOAT3 position = { 0,0,-5 };
 	XMFLOAT3 rotation = { 0,-90,0 };
 
+	int HP = 50;
 
 	//çUåÇÉtÉâÉO
 	struct BULLET

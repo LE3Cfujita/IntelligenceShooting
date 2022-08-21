@@ -12,7 +12,7 @@
 #include <DirectXMath.h>
 #include"Player.h"
 #include"Enemy.h"
-
+#include"Collision.h"
 
 
 #pragma once
@@ -45,8 +45,7 @@ public:
 	void Draw();
 	void Text();
 
-	void Delete();
-
+	void BCollision();
 
 	//マウス座標取得
 	POINT mouse_pos;
@@ -57,6 +56,8 @@ public:
 	XMFLOAT2 spritePos = { 0,0 };
 
 	XMFLOAT2 cursor_pos = { 0,0 };
+
+	XMFLOAT3 barragePosition[BULLET_MAX];
 
 	int count = 0;
 
@@ -73,6 +74,7 @@ private:
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
 	Mouse* mouse = nullptr;
+	Collision* collision = nullptr;
 
 	//FBX宣言
 	ModelFBX* model = nullptr;

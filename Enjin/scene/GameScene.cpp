@@ -77,7 +77,7 @@ void GameScene::Update(WinApp* winApp)
 
 	Text();
 
-
+	BCollision();
 
 	camera->Update();
 	object->Update();
@@ -119,20 +119,44 @@ void GameScene::Draw()
 
 void GameScene::Text()
 {
-
-	XMFLOAT3 p = player->GetPosition();
+	int HP = player->GetHP();
 
 	float flag = enemy->GetCount();
 
-	sprintf_s(str, "flag = %f", flag);
+	sprintf_s(str, "HP = %d", HP);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
 	debugText.Print(str2, 0, 20, 1);
-
 }
 
-void GameScene::Delete()
+void GameScene::BCollision()
 {
+	XMFLOAT3 bPosition = enemy->GetBPosition();
+	XMFLOAT3 pPosition = player->GetPosition();
+
+	if (enemy->GetBFlag() == 1)
+	{
+		if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, bPosition.x, bPosition.y, bPosition.z, 0.5, 0.5))
+		{
+			player->Hit();
+			enemy->BHit();
+		}
+	}
 	
+
+	for (int i = 0; i < BULLET_MAX; i++)
+	{
+		barragePosition[i] = enemy->GetBarragePosition();
+		
+		if (enemy->GetBarrageFlag() == 1)
+		{
+			if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, barragePosition[i].x, barragePosition[i].y, barragePosition[i].z, 2, 2))
+			{
+				player->Hit();
+				enemy->BarrageHit();
+			}
+		}
+		enemy->PlusNumber();
+	}
 
 }

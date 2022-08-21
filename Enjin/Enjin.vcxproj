@@ -33,6 +33,7 @@
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="camera\DebugCamera.cpp" />
+    <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="enemy\Enemy.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\DebugCamera.h" />
+    <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="enemy\Enemy.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="input\Mouse.h" />
@@ -183,12 +185,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(ProjectDir)enemy;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(ProjectDir)enemy;$(ProjectDir)Collision;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(ProjectDir)enemy;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\camera;C:\K020G1172\自作エンジン\Enjin FBX 配布と合成\input;$(ProjectDir)player;$(ProjectDir)enemy;$(ProjectDir)Collision;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

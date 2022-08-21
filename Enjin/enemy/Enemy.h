@@ -38,10 +38,11 @@ public:
 	void Attack3();
 	void Attack3Move();
 
-	//getter
-	XMFLOAT3 GetPosition() { return enemy.rotation; }
+	//’Êí’eƒqƒbƒg
+	void BHit();
+	void BarrageHit();
 
-	int GetCount() { return enemy.attackFlag3; }
+
 
 public:
 	struct ENEMY
@@ -78,13 +79,13 @@ public:
 	};
 	ENEMY enemy;
 
-#define BULLET_MAX 50
+#define BULLET_MAX 100
 	//UŒ‚ƒtƒ‰ƒO
 	struct BULLET
 	{
 		int flag = 0;
 
-		XMFLOAT3 position = { 100,100,0 };
+		XMFLOAT3 position = { 100,100,100 };
 		XMFLOAT3 rotation = { 0,90,0 };
 
 		float dx = 0;
@@ -99,6 +100,10 @@ public:
 	};
 	BULLET b;//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
 	BULLET barrage[BULLET_MAX];//’e–‹
+
+	int barrageNumber = 0;
+
+	void PlusNumber();
 
 	XMFLOAT3 pPosition = { 0,0,0 };
 
@@ -118,6 +123,18 @@ public:
 		int directionTime = 0;
 	};
 	AIM rock;
+
+
+	//getter
+	XMFLOAT3 GetPosition() { return enemy.rotation; }
+
+	XMFLOAT3 GetBPosition() { return b.position; }
+	int GetBFlag() { return b.flag; }
+
+	XMFLOAT3 GetBarragePosition() { return barrage[barrageNumber].position; }
+	int GetBarrageFlag() { return barrage[barrageNumber].flag; }
+
+	int GetCount() { return enemy.attackFlag3; }
 
 private://ƒƒ“ƒo•Ï”
 

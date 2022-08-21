@@ -223,7 +223,6 @@ void Enemy::Attack1Move()
 			b.dz = pPosition.z - b.position.z;//Z‚Ì‹——£‚ÌŒvŽZ
 			//ƒ‹[ƒg‚Ì’†‚ÌŒvŽZ
 			b.da = b.dx * b.dx + b.dy * b.dy + b.dz * b.dz;
-			//da = dx * dx + dy * dy;
 			b.L = sqrt(b.da);
 		}
 		//’e‚ÌˆÚ“®
@@ -275,7 +274,7 @@ void Enemy::Attack2()
 					int direction = rand() % 2;
 					if (direction == 1)
 					{
-						move = -0.05;
+						move = -0.07;
 					}
 					barrage[i].direction.y = (rand() % 10) * move;
 
@@ -388,4 +387,30 @@ void Enemy::Attack3Move()
 
 	boss->SetRotation(enemy.rotation);
 	boss->SetPosition(enemy.position);
+}
+
+void Enemy::BHit()
+{
+	enemy.attackFlag = 0;
+	b.flag = 0;
+	b.position.z = 100;
+	bullet->SetPosition(b.position);
+}
+
+void Enemy::BarrageHit()
+{
+	enemy.attackFlag2 = 0;
+	barrage[barrageNumber].flag = 0;
+	barrage[barrageNumber].position.x = 100;
+	barrage[barrageNumber].position.y = 100;
+	barrage[barrageNumber].position.z = 100;
+}
+
+void Enemy::PlusNumber()
+{
+	barrageNumber += 1;
+	if (barrageNumber > BULLET_MAX)
+	{
+		barrageNumber = 0;
+	}
 }

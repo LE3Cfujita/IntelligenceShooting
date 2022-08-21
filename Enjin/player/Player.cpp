@@ -192,3 +192,8 @@ void Player::AttackMove()
 		bullet[i]->SetPosition(b[i].position);
 	}
 }
+
+void Player::Hit()
+{
+	HP -= 1;
+}
