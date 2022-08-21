@@ -230,10 +230,8 @@ void Enemy::Attack1Move()
 		b.position.x += (b.dx / b.L) * b.speed;
 		b.position.y += (b.dy / b.L) * b.speed;
 		b.position.z += (b.dz / b.L) * b.speed;
-
-
-
 	}
+
 	if (pPosition.z - 10 > b.position.z)
 	{
 		enemy.attackFlag = 0;

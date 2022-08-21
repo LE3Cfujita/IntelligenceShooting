@@ -29,6 +29,8 @@ public:
 
 	void Attack();
 
+	void AttackMove();
+
 	//getter
 	XMFLOAT3 GetPosition() { return position; }
 
@@ -50,6 +52,17 @@ public:
 
 		XMFLOAT3 position = { 100,100,0 };
 		XMFLOAT3 rotation = { 0,-90,0 };
+
+		int homingTime = 0;
+		int homingCount = 0;
+
+		float dx = 0;
+		float dy = 0;
+		float dz = 0;
+		float da = 0;
+		float L = 0;
+		
+		float speed = 3;
 	};
 	BULLET b[BULLET_MAX];
 
@@ -59,6 +72,7 @@ public:
 	{
 		XMFLOAT3 position = { 0,0,100 };
 		XMFLOAT3 rotation = { 0,90,0 };
+
 	};
 	AIM rock;
 

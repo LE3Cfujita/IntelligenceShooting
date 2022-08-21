@@ -54,7 +54,7 @@ void Player::Update()
 
 	Move();
 	Attack();
-
+	AttackMove();
 	player->Update();
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
@@ -151,20 +151,44 @@ void Player::Attack()
 			attackCT = 0;
 		}
 	}
+}
 
-
+void Player::AttackMove()
+{
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
+
 		if (b[i].flag == 1)
 		{
-			b[i].position.z += 1;
+			b[i].homingTime++;
+			if (b[i].homingTime >= 5)
+			{
+				b[i].homingTime = 0;
+				b[i].homingCount = 1;
+			}
+			//カウントが0ならホーミングする
+			if (b[i].homingCount == 0)
+			{
+				b[i].dx = b[i].position.x - rock.position.x;//Xの距離の計算
+				b[i].dy = b[i].position.y - rock.position.y;//Yの距離の計算
+				b[i].dz = b[i].position.z - rock.position.z;//Zの距離の計算
+				//ルートの中の計算
+				b[i].da = b[i].dx * b[i].dx + b[i].dy * b[i].dy + b[i].dz * b[i].dz;
+				//da = dx * dx + dy * dy;
+				b[i].L = sqrt(b[i].da);
+			}
+			//弾の移動
+			b[i].position.x -= (b[i].dx / b[i].L) * b[i].speed;
+			b[i].position.y -= (b[i].dy / b[i].L) * b[i].speed;
+			b[i].position.z -= (b[i].dz / b[i].L) * b[i].speed;
+
 		}
 
-		if (b[i].position.z>=100)
+		if (b[i].position.z >= 100)
 		{
 			b[i].flag = 0;
+			b[i].homingCount = 0;
 		}
 		bullet[i]->SetPosition(b[i].position);
 	}
-
 }
