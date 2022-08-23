@@ -131,7 +131,7 @@ void Player::Attack()
 	{
 		for (int i = 0; i < BULLET_MAX; i++)
 		{
-			if (input->PushKey(DIK_SPACE) == true)
+			if (input->PushKey(DIK_SPACE) == true || mouse->PushMouseLeft() == true)
 			{
 				if (b[i].flag == 0)
 				{
