@@ -121,9 +121,9 @@ void GameScene::Text()
 {
 	int HP = player->GetHP();
 
-	float flag = enemy->GetCount();
+	int flag = enemy->GetHP();
 
-	sprintf_s(str, "HP = %d", HP);
+	sprintf_s(str, "HP = %d", flag);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
 	debugText.Print(str2, 0, 20, 1);
@@ -144,7 +144,7 @@ void GameScene::BCollision()
 	}
 	
 
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < EBULLET_MAX; i++)
 	{
 		barragePosition[i] = enemy->GetBarragePosition();
 		
@@ -157,6 +157,26 @@ void GameScene::BCollision()
 			}
 		}
 		enemy->PlusNumber();
+	}
+	//敵の座標
+	XMFLOAT3 ePosition = enemy->GetPosition();
+	//プレイヤー弾の座標
+	for (int i = 0; i < PBULLET_MAX; i++)
+	{
+		pBPosition[i] = player->GetBPosition();
+		if (enemy->GetHP() != 0)
+		{
+			if (pBPosition[i].z >= 100)
+			{
+				int a = 0;
+			}
+			if (collision->ballToball(ePosition.x, ePosition.y, ePosition.z, pBPosition[i].x, pBPosition[i].y, pBPosition[i].z, 10, 1))
+			{
+				player->PHit();
+				enemy->PHit();
+			}
+		}
+		player->PlusNumber();
 	}
 
 }

@@ -42,6 +42,8 @@ public:
 	void BHit();
 	void BarrageHit();
 
+	//ƒvƒŒƒCƒ„[’eƒqƒbƒg
+	void PHit();
 
 
 public:
@@ -76,10 +78,12 @@ public:
 		int homingTime = 0;
 		int homingCount = 0;
 
+		int HP = 100;
+
 	};
 	ENEMY enemy;
 
-#define BULLET_MAX 100
+#define EBULLET_MAX 100
 	//UŒ‚ƒtƒ‰ƒO
 	struct BULLET
 	{
@@ -99,7 +103,7 @@ public:
 		XMFLOAT3 direction = { 0,0,0 };
 	};
 	BULLET b;//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
-	BULLET barrage[BULLET_MAX];//’e–‹
+	BULLET barrage[EBULLET_MAX];//’e–‹
 
 	int barrageNumber = 0;
 
@@ -126,7 +130,7 @@ public:
 
 
 	//getter
-	XMFLOAT3 GetPosition() { return enemy.rotation; }
+	XMFLOAT3 GetPosition() { return enemy.position; }
 
 	XMFLOAT3 GetBPosition() { return b.position; }
 	int GetBFlag() { return b.flag; }
@@ -135,6 +139,8 @@ public:
 	int GetBarrageFlag() { return barrage[barrageNumber].flag; }
 
 	int GetCount() { return enemy.attackFlag3; }
+
+	int GetHP() { return enemy.HP; }
 
 private://ƒƒ“ƒo•Ï”
 
@@ -149,7 +155,7 @@ private://ƒƒ“ƒo•Ï”
 
 
 	//’e–‹
-	Object3d* bulletBarrage[BULLET_MAX];
+	Object3d* bulletBarrage[EBULLET_MAX];
 
 	Player* player = nullptr;
 

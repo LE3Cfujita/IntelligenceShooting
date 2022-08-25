@@ -31,7 +31,12 @@ public:
 
 	void AttackMove();
 
+	void PlusNumber();
+
+	//“G‚ÌUŒ‚‚ª“–‚½‚Á‚½
 	void Hit();
+	//ƒvƒŒƒCƒ„[‚ÌUŒ‚‚ª“G‚É“–‚½‚Á‚½
+	void PHit();
 
 	//getter
 	XMFLOAT3 GetPosition() { return position; }
@@ -40,9 +45,12 @@ public:
 
 	XMFLOAT3 GetAimPosition() { return rock.position; }
 
+	int GetBFlag() { return b[bulletNumber].flag; };
+	XMFLOAT3 GetBPosition() { return b[bulletNumber].position; };
+
 public:
 
-#define BULLET_MAX 100
+#define PBULLET_MAX 50
 
 	//•Ï”
 	XMFLOAT3 position = { 0,0,-5 };
@@ -69,7 +77,9 @@ public:
 		
 		float speed = 3;
 	};
-	BULLET b[BULLET_MAX];
+	BULLET b[PBULLET_MAX];
+
+	int bulletNumber = 0;
 
 	int attackCT = 0;
 
@@ -91,7 +101,7 @@ private://ƒƒ“ƒo•Ï”
 	Object3d* player = nullptr;
 
 	Model* modelBullet = nullptr;
-	Object3d* bullet[BULLET_MAX];
+	Object3d* bullet[PBULLET_MAX];
 
 	Model* modelAim = nullptr;
 	Object3d* aim = nullptr;

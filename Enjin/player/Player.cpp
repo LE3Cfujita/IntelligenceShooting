@@ -30,7 +30,7 @@ void Player::Initialize(Input* input, Mouse* mouse)
 
 
 	//’e
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < PBULLET_MAX; i++)
 	{
 		bullet[i] = Object3d::Create();
 		bullet[i]->SetModel(modelBullet);
@@ -56,7 +56,7 @@ void Player::Update()
 	Attack();
 	AttackMove();
 	player->Update();
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < PBULLET_MAX; i++)
 	{
 		bullet[i]->Update();
 	}
@@ -67,7 +67,7 @@ void Player::Draw()
 {
 	player->Draw();
 
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < PBULLET_MAX; i++)
 	{
 		if (b[i].flag == 1)
 		{
@@ -129,7 +129,7 @@ void Player::Attack()
 {
 	if (attackCT == 0)
 	{
-		for (int i = 0; i < BULLET_MAX; i++)
+		for (int i = 0; i < PBULLET_MAX; i++)
 		{
 			if (input->PushKey(DIK_SPACE) == true || mouse->PushMouseLeft() == true)
 			{
@@ -155,7 +155,7 @@ void Player::Attack()
 
 void Player::AttackMove()
 {
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < PBULLET_MAX; i++)
 	{
 
 		if (b[i].flag == 1)
@@ -193,7 +193,24 @@ void Player::AttackMove()
 	}
 }
 
+void Player::PlusNumber()
+{
+	bulletNumber += 1;
+	if (bulletNumber > PBULLET_MAX)
+	{
+		bulletNumber = 0;
+	}
+
+}
+
 void Player::Hit()
 {
 	HP -= 1;
+}
+
+void Player::PHit()
+{
+	b[bulletNumber].flag = 0;
+	b[bulletNumber].homingCount = 0;
+	b[bulletNumber].position.x = 1000;
 }

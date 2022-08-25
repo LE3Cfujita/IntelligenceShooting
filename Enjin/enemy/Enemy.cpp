@@ -18,7 +18,7 @@ void Enemy::Initialize(Player* player)
 
 	//OBJからモデルデータを読み込む
 	modelBoss = Model::LoadFormOBJ("enemy");
-	modelBullet = Model::LoadFormOBJ("bullet");
+	modelBullet = Model::LoadFormOBJ("enemyBullet");
 	//3Dオブジェクト生成
 	boss = Object3d::Create();
 	bullet = Object3d::Create();
@@ -33,7 +33,7 @@ void Enemy::Initialize(Player* player)
 	bullet->SetRotation(b.rotation);
 	bullet->SetScale({ 0.7,0.7,0.7 });
 
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < EBULLET_MAX; i++)
 	{
 		bulletBarrage[i] = Object3d::Create();
 		bulletBarrage[i]->SetModel(modelBullet);
@@ -47,7 +47,7 @@ void Enemy::Initialize(Player* player)
 
 void Enemy::Update()
 {
-	Move();
+	//Move();
 	pPosition = player->GetPosition();
 
 	if (pPosition.x < -5)
@@ -70,7 +70,7 @@ void Enemy::Update()
 	Attack3Move();
 	boss->Update();
 	bullet->Update();
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < EBULLET_MAX; i++)
 	{
 		bulletBarrage[i]->Update();
 	}
@@ -83,7 +83,7 @@ void Enemy::Draw()
 	{
 		bullet->Draw();
 	}
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < EBULLET_MAX; i++)
 	{
 		if (barrage[i].flag == 1)
 		{
@@ -255,7 +255,7 @@ void Enemy::Attack2()
 		if (enemy.barrageTime == 0)
 		{
 			enemy.barrageTime = 1;
-			for (int i = 0; i < BULLET_MAX; i++)
+			for (int i = 0; i < EBULLET_MAX; i++)
 			{
 				if (barrage[i].flag == 0)
 				{
@@ -295,7 +295,7 @@ void Enemy::Attack2()
 
 void Enemy::Attack2Move()
 {
-	for (int i = 0; i < BULLET_MAX; i++)
+	for (int i = 0; i < EBULLET_MAX; i++)
 	{
 		if (barrage[i].flag == 1)
 		{
@@ -406,10 +406,15 @@ void Enemy::BarrageHit()
 	barrage[barrageNumber].position.z = 100;
 }
 
+void Enemy::PHit()
+{
+	enemy.HP -= 1;
+}
+
 void Enemy::PlusNumber()
 {
 	barrageNumber += 1;
-	if (barrageNumber > BULLET_MAX)
+	if (barrageNumber > EBULLET_MAX)
 	{
 		barrageNumber = 0;
 	}
