@@ -123,7 +123,7 @@ void GameScene::Text()
 
 	int flag = enemy->GetHP();
 
-	sprintf_s(str, "HP = %d", flag);
+	sprintf_s(str, "HP = %d", HP);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
 	debugText.Print(str2, 0, 20, 1);
@@ -177,6 +177,15 @@ void GameScene::BCollision()
 			}
 		}
 		player->PlusNumber();
+	}
+
+	if (enemy->GetRushCount() == 0)
+	{
+		if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, ePosition.x, ePosition.y, ePosition.z, 1, 3))
+		{
+			player->RushHit();
+			enemy->RushHit();
+		}
 	}
 
 }

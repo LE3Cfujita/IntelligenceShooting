@@ -35,6 +35,8 @@ public:
 
 	//敵の攻撃が当たった時
 	void Hit();
+	//敵の突進攻撃が当たった時
+	void RushHit();
 	//プレイヤーの攻撃が敵に当たった時
 	void PHit();
 

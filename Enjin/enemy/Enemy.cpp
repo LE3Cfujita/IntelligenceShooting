@@ -47,7 +47,10 @@ void Enemy::Initialize(Player* player)
 
 void Enemy::Update()
 {
-	//Move();
+	if (enemy.attackFlag3 == 0)
+	{
+		Move();
+	}
 	pPosition = player->GetPosition();
 
 	if (pPosition.x < -5)
@@ -344,14 +347,12 @@ void Enemy::Attack3Move()
 			//ƒ‹[ƒg‚Ì’†‚ÌŒvŽZ
 			enemy.da = enemy.dx * enemy.dx + enemy.dy * enemy.dy + enemy.dz * enemy.dz;
 			enemy.L = sqrt(enemy.da);
-
 		}
 
 
 		if (enemy.rotCount == 0)
 		{
 			enemy.rotation.z -= 8;
-			//enemy.position.z += 5;
 			enemy.position.x += (enemy.dx / enemy.L) * 5;
 			enemy.position.y += (enemy.dy / enemy.L) * 5;
 			enemy.position.z += (enemy.dz / enemy.L) * 5;
@@ -359,6 +360,7 @@ void Enemy::Attack3Move()
 			if (enemy.rotation.z <= -300)
 			{
 				enemy.rotCount = 1;
+				enemy.homingCount = 0;
 			}
 		}
 		if (enemy.rotCount == 1)
@@ -383,6 +385,7 @@ void Enemy::Attack3Move()
 		enemy.attackFlag3 = 0;
 		enemy.homingCount = 0;
 		enemy.homingTime = 0;
+		enemy.rushCount = 0;
 	}
 
 	boss->SetRotation(enemy.rotation);
@@ -404,6 +407,11 @@ void Enemy::BarrageHit()
 	barrage[barrageNumber].position.x = 100;
 	barrage[barrageNumber].position.y = 100;
 	barrage[barrageNumber].position.z = 100;
+}
+
+void Enemy::RushHit()
+{
+	enemy.rushCount = 1;
 }
 
 void Enemy::PHit()

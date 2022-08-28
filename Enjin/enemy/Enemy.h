@@ -42,6 +42,9 @@ public:
 	void BHit();
 	void BarrageHit();
 
+	//突進攻撃ヒット
+	void RushHit();
+
 	//プレイヤー弾ヒット
 	void PHit();
 
@@ -79,6 +82,8 @@ public:
 		int homingCount = 0;
 
 		int HP = 100;
+
+		int rushCount = 0;
 
 	};
 	ENEMY enemy;
@@ -141,6 +146,8 @@ public:
 	int GetCount() { return enemy.attackFlag3; }
 
 	int GetHP() { return enemy.HP; }
+
+	int GetRushCount() { return enemy.rushCount; }
 
 private://メンバ変数
 

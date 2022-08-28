@@ -208,6 +208,11 @@ void Player::Hit()
 	HP -= 1;
 }
 
+void Player::RushHit()
+{
+	HP -= 10;
+}
+
 void Player::PHit()
 {
 	b[bulletNumber].flag = 0;
