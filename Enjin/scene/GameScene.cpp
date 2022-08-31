@@ -18,7 +18,7 @@ GameScene::~GameScene()
 	safe_delete(object);
 }
 
-void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,Mouse* mouse)
+void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, Mouse* mouse)
 {
 	this->dxCommon = dxCommon;
 	this->input = input;
@@ -26,7 +26,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	this->mouse = mouse;
 
 	// カメラ生成
-	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input,mouse);
+	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input, mouse);
 
 	ObjectFBX::SetDevice(dxCommon->GetDev());
 	ObjectFBX::SetCamera(camera);
@@ -53,7 +53,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 
 	//audio->SoundPlayWave("Alarm01.wav", true);
 
-	
+
 	model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
 	object = new ObjectFBX;
@@ -62,11 +62,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio,M
 	object->PlayAnimation();
 	//object->SetPosition({ 0,15,15 });
 
-	
+
 	enemy = new Enemy;
 	player = new Player;
 	enemy->Initialize(player);
-	player->Initialize(input,mouse);
+	player->Initialize(input, mouse);
 	ShowCursor(FALSE);
 
 }
@@ -79,10 +79,27 @@ void GameScene::Update(WinApp* winApp)
 
 	BCollision();
 
+	switch (scene)
+	{
+	case 0://タイトル
+		break;
+
+	case 1://操作説明など
+		break;
+	case 2://ゲームシーン
+		object->Update();
+		player->Update();
+		enemy->Update();
+		break;
+	case 3://ゲームオーバー
+		break;
+
+	case 4://ゲームクリア
+		break;
+
+	}
+	SceneChange();
 	camera->Update();
-	object->Update();
-	player->Update();
-	enemy->Update();
 	mouse->Update();
 }
 
@@ -97,10 +114,27 @@ void GameScene::Draw()
 	//3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
 
+
+	switch (scene)
+	{
+	case 0://タイトル
+		break;
+
+	case 1://操作説明など
+		break;
+	case 2://ゲームシーン
 	//3Dオブジェクトの描画
-	enemy->Draw();
-	player->Draw();
-	
+		enemy->Draw();
+		player->Draw();
+		break;
+	case 3://ゲームオーバー
+		break;
+
+	case 4://ゲームクリア
+		break;
+
+	}
+
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
@@ -119,11 +153,11 @@ void GameScene::Draw()
 
 void GameScene::Text()
 {
-	int HP = player->GetHP();
+	pHP = player->GetHP();
 
-	int flag = enemy->GetHP();
+	eHP = enemy->GetHP();
 
-	sprintf_s(str, "HP = %d", HP);
+	sprintf_s(str, "HP = %d", pHP);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
 	debugText.Print(str2, 0, 20, 1);
@@ -142,12 +176,12 @@ void GameScene::BCollision()
 			enemy->BHit();
 		}
 	}
-	
+
 
 	for (int i = 0; i < EBULLET_MAX; i++)
 	{
 		barragePosition[i] = enemy->GetBarragePosition();
-		
+
 		if (enemy->GetBarrageFlag() == 1)
 		{
 			if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, barragePosition[i].x, barragePosition[i].y, barragePosition[i].z, 2, 2))
@@ -188,4 +222,19 @@ void GameScene::BCollision()
 		}
 	}
 
+}
+
+void GameScene::SceneChange()
+{
+	if (scene == 2)
+	{
+		if (pHP <= 0)
+		{
+			scene = 3;//ゲームオーバー
+		}
+		if (eHP <= 0)
+		{
+			scene = 4;//ゲームクリア
+		}
+	}
 }

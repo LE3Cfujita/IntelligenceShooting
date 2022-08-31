@@ -47,6 +47,8 @@ public:
 
 	void BCollision();
 
+	void SceneChange();
+
 	//マウス座標取得
 	POINT mouse_pos;
 
@@ -63,6 +65,12 @@ public:
 
 	int count = 0;
 
+	int pHP = 0;
+
+	int eHP = 0;
+
+	//シーン
+	int scene = 2;
 private:
 
 
