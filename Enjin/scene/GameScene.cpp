@@ -43,7 +43,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	debugText.Initialize(debugTextTexNumber);
 
 	// テクスチャ読み込み
-	sprite->LoadTexture(2, L"Resources/lockOn.png");
+	sprite->LoadTexture(2, L"Resources/title.png");
 
 	sprite = Sprite::Create(2, { 100.0f,100.0f }, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
 
@@ -82,8 +82,8 @@ void GameScene::Update(WinApp* winApp)
 	switch (scene)
 	{
 	case 0://タイトル
+		Title();
 		break;
-
 	case 1://操作説明など
 		break;
 	case 2://ゲームシーン
@@ -97,10 +97,35 @@ void GameScene::Update(WinApp* winApp)
 	case 4://ゲームクリア
 		break;
 
+	case 5://オプション
+		break;
 	}
 	SceneChange();
 	camera->Update();
 	mouse->Update();
+}
+
+void GameScene::Title()
+{
+	if (input->TriggerKey(DIK_SPACE))
+	{
+		if (count == 0)
+		{
+			scene = 2;
+		}
+		else
+		{
+			scene = 5;
+		}
+	}
+	if (input->TriggerKey(DIK_UP))
+	{
+		count = 0;
+	}
+	if (input->TriggerKey(DIK_DOWN))
+	{
+		count = 1;
+	}
 }
 
 void GameScene::Draw()
@@ -140,9 +165,20 @@ void GameScene::Draw()
 
 	Sprite::PreDraw(cmdList);
 
-	if (count == 0)
+	switch (scene)
 	{
+	case 0://タイトル
 		sprite->Draw();
+		break;
+	case 1://操作説明など
+		break;
+	case 2://ゲームシーン
+		break;
+	case 3://ゲームオーバー
+		break;
+	case 4://ゲームクリア
+		break;
+
 	}
 	// デバッグテキストの描画
 	debugText.DrawAll(cmdList);

@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	gameScene->Initialize(dxCommon, input, audio,mouse);
 
 
-	while (true)  //ゲームループ
+	while (input->TriggerKey(DIK_ESCAPE) == 0)  //ゲームループ
 	{
 #pragma region ウィンドウメッセージ処理
 		//windowsのメッセージ処理

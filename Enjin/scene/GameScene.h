@@ -42,6 +42,8 @@ public:
 
 	void Update(WinApp* winApp);
 
+	void Title();
+
 	void Draw();
 	void Text();
 
@@ -63,14 +65,7 @@ public:
 
 	XMFLOAT3 pBPosition[PBULLET_MAX];
 
-	int count = 0;
-
-	int pHP = 0;
-
-	int eHP = 0;
-
-	//シーン
-	int scene = 2;
+	
 private:
 
 
@@ -107,5 +102,16 @@ private:
 
 	//デバッグテキスト用のテクスチャ番号を指定
 	const int debugTextTexNumber = 0;
+
+	int count = 0;
+
+	int pHP = 0;
+
+	int eHP = 0;
+
+	//シーン
+	int scene = 0;
+
+	int count = 0;
 };
 
