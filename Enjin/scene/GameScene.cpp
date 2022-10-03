@@ -45,10 +45,29 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	// テクスチャ読み込み
 	sprite->LoadTexture(2, L"Resources/title.png");
 
-	sprite = Sprite::Create(2, { 100.0f,100.0f }, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+	sprite = Sprite::Create(2, { 0.0f,0.0f });
 
-	sprite->SetSize(lockSize);
+	// テクスチャ読み込み
+	yajirusi->LoadTexture(3, L"Resources/yazirusi.png");
 
+	yajirusi = Sprite::Create(3, yajirusiPos);
+
+	// テクスチャ読み込み
+	opsion->LoadTexture(4, L"Resources/BGMSEOpsion.png");
+
+	opsion = Sprite::Create(4, optionPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+	
+	opsion->SetSize({ 720,360 });
+
+	if (!Sprite::LoadTexture(5, L"Resources/number.png")) {
+		assert(0);
+		return;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		spriteNumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
+	}
 	//audio->SoundLoadWave("Alarm01.wav");//テスト
 
 	//audio->SoundPlayWave("Alarm01.wav", true);
@@ -67,7 +86,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	player = new Player;
 	enemy->Initialize(player);
 	player->Initialize(input, mouse);
-	ShowCursor(FALSE);
+
 
 }
 
@@ -75,29 +94,30 @@ void GameScene::Update(WinApp* winApp)
 {
 
 
-	Text();
+	//Text();
 
 	BCollision();
 
-	switch (scene)
+	switch (gameState)
 	{
-	case 0://タイトル
+	case GameState::TITLE://タイトル
 		Title();
 		break;
-	case 1://操作説明など
+	case GameState::OPSTION://操作説明など
+		Option();
 		break;
-	case 2://ゲームシーン
+	case GameState::PLAY://ゲームシーン
+		ShowCursor(FALSE);
 		object->Update();
 		player->Update();
 		enemy->Update();
+
+		SetCursorPos(690, 360);
 		break;
-	case 3://ゲームオーバー
+	case GameState::OVER://ゲームオーバー
 		break;
 
-	case 4://ゲームクリア
-		break;
-
-	case 5://オプション
+	case GameState::CLEA://ゲームクリア
 		break;
 	}
 	SceneChange();
@@ -107,24 +127,60 @@ void GameScene::Update(WinApp* winApp)
 
 void GameScene::Title()
 {
-	if (input->TriggerKey(DIK_SPACE))
+	if (input->TriggerKey(DIK_RETURN))
 	{
 		if (count == 0)
 		{
-			scene = 2;
+			gameState = GameState::PLAY;
 		}
 		else
 		{
-			scene = 5;
+			gameState = GameState::OPSTION;
 		}
 	}
 	if (input->TriggerKey(DIK_UP))
 	{
 		count = 0;
+		yajirusiPos.y = 465.0f;
 	}
 	if (input->TriggerKey(DIK_DOWN))
 	{
 		count = 1;
+		yajirusiPos.y = 600.0f;
+	}
+	yajirusi->SetPosition(yajirusiPos);
+}
+
+void GameScene::Option()
+{
+
+	if (input->TriggerKey(DIK_RETURN))
+	{
+		gameState = GameState::TITLE;
+	}
+}
+
+void GameScene::DrawPercent()
+{
+	//各桁の値を取り出す
+	char eachNumber[3] = {};//各桁の値
+	int number = bgmVolume;//表示する数字
+
+	int keta = 100;//最初の桁
+
+	for (int i = 0; i < 3; i++)
+	{
+		eachNumber[i] = number / keta;//今の桁の値を求める
+		number = number % keta;//次の桁以下の値を取り出す
+		keta = keta / 10;//桁を進める
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		spriteNumber[i]->SetSize({ 64,64 });
+		spriteNumber[i]->SetTextureRect({ (float) ( 32 * eachNumber[i] ), 0, }, { 32,32 });
+		spriteNumber[i]->SetPosition(XMFLOAT2{ numberPos.x + i * 60.0f, numberPos.y });
+		spriteNumber[i]->Draw();
 	}
 }
 
@@ -140,22 +196,22 @@ void GameScene::Draw()
 	Object3d::PreDraw(dxCommon->GetCmdList());
 
 
-	switch (scene)
+	switch (gameState)
 	{
-	case 0://タイトル
+	case GameState::TITLE://タイトル
 		break;
 
-	case 1://操作説明など
+	case GameState::OPSTION://操作説明など
 		break;
-	case 2://ゲームシーン
+	case GameState::PLAY://ゲームシーン
 	//3Dオブジェクトの描画
 		enemy->Draw();
 		player->Draw();
 		break;
-	case 3://ゲームオーバー
+	case GameState::OVER://ゲームオーバー
 		break;
 
-	case 4://ゲームクリア
+	case GameState::CLEA://ゲームクリア
 		break;
 
 	}
@@ -165,18 +221,23 @@ void GameScene::Draw()
 
 	Sprite::PreDraw(cmdList);
 
-	switch (scene)
+	switch (gameState)
 	{
-	case 0://タイトル
+	case GameState::TITLE://タイトル
 		sprite->Draw();
+		yajirusi->Draw();
 		break;
-	case 1://操作説明など
+	case GameState::OPSTION://操作説明など
+		sprite->Draw();
+		opsion->Draw();
+		DrawPercent();
 		break;
-	case 2://ゲームシーン
+	case GameState::PLAY://ゲームシーン
 		break;
-	case 3://ゲームオーバー
+	case GameState::OVER://ゲームオーバー
 		break;
-	case 4://ゲームクリア
+
+	case GameState::CLEA://ゲームクリア
 		break;
 
 	}
@@ -262,15 +323,15 @@ void GameScene::BCollision()
 
 void GameScene::SceneChange()
 {
-	if (scene == 2)
+	if (gameState == GameState::PLAY)
 	{
 		if (pHP <= 0)
 		{
-			scene = 3;//ゲームオーバー
+			gameState == GameState::OVER;//ゲームオーバー
 		}
 		if (eHP <= 0)
 		{
-			scene = 4;//ゲームクリア
+			gameState == GameState::CLEA;//ゲームクリア
 		}
 	}
 }

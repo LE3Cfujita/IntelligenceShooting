@@ -18,6 +18,15 @@
 #pragma once
 class GameScene
 {
+public:
+	enum GameState
+	{
+		TITLE,
+		OPSTION,
+		PLAY,
+		CLEA,
+		OVER
+	};
 private://エイリアス
 //Microsoft::WRL::を省略
 	template<class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -43,6 +52,10 @@ public:
 	void Update(WinApp* winApp);
 
 	void Title();
+
+	void Option();
+
+	void DrawPercent();
 
 	void Draw();
 	void Text();
@@ -89,6 +102,18 @@ private:
 
 	Object3d* object3d_3 = nullptr;
 
+	//矢印
+	Sprite* yajirusi = nullptr;
+
+	XMFLOAT2 yajirusiPos = { 445.0f,465.0f };
+
+	Sprite* opsion = nullptr;
+	XMFLOAT2 optionPos = { 640,360 };
+
+	GameState gameState;
+
+	Sprite* spriteNumber[3];
+	XMFLOAT2 numberPos = { 710,250 };
 
 	//デバックテキスト用
 	char str[100];
@@ -109,9 +134,10 @@ private:
 
 	int eHP = 0;
 
-	//シーン
-	int scene = 0;
+	//BGMの音量パーセント
+	int bgmVolume = 100;
+	//SEの音量パーセント
+	int seVolume = 100;
 
-	int count = 0;
 };
 

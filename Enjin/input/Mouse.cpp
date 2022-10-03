@@ -57,7 +57,6 @@ void Mouse::Update()
 		// ƒ}ƒEƒX‚Ì“ü—Í
 		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 
-		SetCursorPos(690, 360);
 	}
 }
 
