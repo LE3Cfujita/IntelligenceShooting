@@ -50,6 +50,12 @@ public: // メンバ関数
 	bool TriggerMouseLeft();
 
 	/// <summary>
+	/// キーの左ボタントリガーをチェック
+	/// </summary>
+	/// <returns>トリガーか</returns>
+	bool TriggerMouseRight();
+
+	/// <summary>
 	/// キーの中ボタントリガーをチェック
 	/// </summary>
 	/// <returns>トリガーか</returns>
@@ -63,6 +69,8 @@ public: // メンバ関数
 
 	float GetMouseVelocityX();
 	float GetMouseVelocityY();
+
+	void ScreenToClient();//ウィンドウ上の座標に変換
 
 private://メンバ変数
 	ComPtr<IDirectInput8> dinput;

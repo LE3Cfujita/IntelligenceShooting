@@ -93,6 +93,17 @@ bool Mouse::TriggerMouseLeft()
 	return false;
 }
 
+bool Mouse::TriggerMouseRight()
+{
+	// 前回が0で、今回が0でなければトリガー
+	if (!mouseStatePre.rgbButtons[1] && mouseState.rgbButtons[1]) {
+		return true;
+	}
+
+	// トリガーでない
+	return false;
+}
+
 bool Mouse::TriggerMouseMiddle()
 {
 	// 前回が0で、今回が0でなければトリガー
@@ -122,3 +133,9 @@ float Mouse::GetMouseVelocityY()
 {
 	return mouseState.lY;
 }
+
+void Mouse::ScreenToClient()
+{
+	//ScreenToClient(FindWindowA(hwnd))
+}
+

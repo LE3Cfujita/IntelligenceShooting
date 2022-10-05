@@ -53,7 +53,7 @@ public:
 
 	void Title();
 
-	void Option();
+	void Option(WinApp* winApp);
 
 	void DrawPercent();
 
@@ -63,6 +63,10 @@ public:
 	void BCollision();
 
 	void SceneChange();
+
+	void Setting(WinApp* winApp);
+
+	void OptionCollision(XMFLOAT2 pos);
 
 	//マウス座標取得
 	POINT mouse_pos;
@@ -112,8 +116,10 @@ private:
 
 	GameState gameState;
 
-	Sprite* spriteNumber[3];
-	XMFLOAT2 numberPos = { 710,250 };
+	Sprite* spriteBGMNumber[3];
+	Sprite* spriteSENumber[3];
+	XMFLOAT2 bgmNumberPos = { 710,250 };
+	XMFLOAT2 seNumberPos = { 710,335 };
 
 	//デバックテキスト用
 	char str[100];
@@ -140,6 +146,11 @@ private:
 	int seVolume = 100;
 
 
-	float volume = 1.0f;//音量
+	float volumeSize = 0.01;
+
+	//float bgm = 1.0f;//BGM音量
+	//float se = 1.0f;//SE音量
+
+	LPCSTR hwnd;
 };
 

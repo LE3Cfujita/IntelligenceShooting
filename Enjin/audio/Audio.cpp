@@ -22,7 +22,18 @@ bool Audio::Initialize()
         assert(0);
         return false;
     }
-
+    //仮ボイス
+    for (int i = 0; i < HOUSE_NUM; i++)
+    {
+        IXAudio2SubmixVoice* house = nullptr;
+        result = xAudio2->CreateSubmixVoice(&house, 1, 44100,
+            0, 0, 0, 0);
+        if FAILED(result) {
+            assert(0);
+            return false;
+        }
+        houseVoices.push_back(house);
+    }
 
     return true;
 }
@@ -31,7 +42,7 @@ bool Audio::Initialize()
 /// サウンド読み込み
 /// </summary>
 /// <param name="filename"> ファイル名 </param>
-void Audio::SoundLoadWave(const char* filename, float number)
+void Audio::SoundLoadWave(const char* filename, int house)
 {
     // ファイル入力ストリームのインスタンス
     std::ifstream file;
@@ -100,15 +111,20 @@ void Audio::SoundLoadWave(const char* filename, float number)
 
     HRESULT result;
 
+    XAUDIO2_SEND_DESCRIPTOR SFXSend = { 0, houseVoices[house] };
+    XAUDIO2_VOICE_SENDS SFXSendList = { 1, &SFXSend };
+
+
     // 波形フォーマットを元にSourceVoiceの生成
     IXAudio2SourceVoice* pSourceVoice = nullptr;
-    result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundDatas[filename].wfex);
+    result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundDatas[filename].wfex,
+        0, XAUDIO2_DEFAULT_FREQ_RATIO, &voiceCallback, &SFXSendList, NULL);
     assert(SUCCEEDED(result));
 
     // ファイル名で登録
     sourceVoices.emplace(filename, pSourceVoice);
 
-    sourceVoices[filename]->SetVolume(number);
+
 }
 
 /// <summary>
@@ -158,4 +174,5 @@ void Audio::SoundStop(const char* filename)
 
 void Audio::SoundVolume(int number,float volume)
 {
+    houseVoices[number]->SetVolume(volume);
 }

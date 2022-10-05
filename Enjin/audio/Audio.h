@@ -32,6 +32,7 @@ public:
     STDMETHOD_(void, OnVoiceError) (THIS_ void* pBufferContext, HRESULT Error) {};
 
 };
+#define HOUSE_NUM 3
 class Audio
 {
 private: // エイリアス
@@ -78,7 +79,7 @@ public: //メンバ関数
     /// サウンド読み込み(.wav)
     /// </summary>
     /// <param name="filename">ファイル名</param>
-    void SoundLoadWave(const char* filename, float number);
+    void SoundLoadWave(const char* filename, int house);
 
     /// <summary>
     /// 
@@ -106,6 +107,6 @@ private: // メンバ変数
     XAudio2VoiceCallback voiceCallback;
     std::unordered_map<std::string, SoundData> soundDatas;
     std::unordered_map<std::string, IXAudio2SourceVoice*> sourceVoices;
-
+    std::vector<IXAudio2SubmixVoice*> houseVoices;
     const std::string baseDirectory = "Resources/Audio/";
 };

@@ -56,7 +56,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	opsion->LoadTexture(4, L"Resources/BGMSEOpsion.png");
 
 	opsion = Sprite::Create(4, optionPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
-	
+
 	opsion->SetSize({ 720,360 });
 
 	if (!Sprite::LoadTexture(5, L"Resources/number.png")) {
@@ -66,11 +66,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 
 	for (int i = 0; i < 3; i++)
 	{
-		spriteNumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
+		spriteBGMNumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
+		spriteSENumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 	}
 
 
-	audio->SoundLoadWave("Alarm01.wav",volume);//テスト
+	audio->SoundLoadWave("Alarm01.wav", 0);//テスト
+	audio->SoundLoadWave("decisionSE.wav", 1);//テスト
+	audio->SoundVolume(0, bgmVolume * volumeSize);
+	audio->SoundVolume(1, seVolume * volumeSize);
 
 	audio->SoundPlayWave("Alarm01.wav", true);
 
@@ -94,7 +98,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 
 void GameScene::Update(WinApp* winApp)
 {
-
+	winApp->GetHwnd();
 
 	//Text();
 
@@ -106,7 +110,7 @@ void GameScene::Update(WinApp* winApp)
 		Title();
 		break;
 	case GameState::OPSTION://操作説明など
-		Option();
+		Option(winApp);
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
@@ -134,10 +138,12 @@ void GameScene::Title()
 		if (count == 0)
 		{
 			gameState = GameState::PLAY;
+			audio->SoundPlayWave("decisionSE.wav", false);
 		}
 		else
 		{
 			gameState = GameState::OPSTION;
+			audio->SoundPlayWave("decisionSE.wav", false);
 		}
 	}
 	if (input->TriggerKey(DIK_UP))
@@ -153,9 +159,9 @@ void GameScene::Title()
 	yajirusi->SetPosition(yajirusiPos);
 }
 
-void GameScene::Option()
+void GameScene::Option(WinApp* winApp)
 {
-
+	Setting(winApp);
 	if (input->TriggerKey(DIK_RETURN))
 	{
 		gameState = GameState::TITLE;
@@ -164,26 +170,92 @@ void GameScene::Option()
 
 void GameScene::DrawPercent()
 {
+	//BGM
+	/*************************/
 	//各桁の値を取り出す
-	char eachNumber[3] = {};//各桁の値
-	int number = bgmVolume;//表示する数字
+	char eachBGMNumber[3] = {};//各桁の値
+	int bgmNumber = bgmVolume;//表示する数字
 
-	int keta = 100;//最初の桁
-
-	for (int i = 0; i < 3; i++)
+	if (bgmVolume == 100)
 	{
-		eachNumber[i] = number / keta;//今の桁の値を求める
-		number = number % keta;//次の桁以下の値を取り出す
-		keta = keta / 10;//桁を進める
-	}
+		int keta = 100;//最初の桁
+		for (int i = 0; i < 3; i++)
+		{
+			eachBGMNumber[i] = bgmNumber / keta;//今の桁の値を求める
+			bgmNumber = bgmNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
 
-	for (int i = 0; i < 3; i++)
-	{
-		spriteNumber[i]->SetSize({ 64,64 });
-		spriteNumber[i]->SetTextureRect({ (float) ( 32 * eachNumber[i] ), 0, }, { 32,32 });
-		spriteNumber[i]->SetPosition(XMFLOAT2{ numberPos.x + i * 60.0f, numberPos.y });
-		spriteNumber[i]->Draw();
+		for (int i = 0; i < 3; i++)
+		{
+			spriteBGMNumber[i]->SetSize({ 64,64 });
+			spriteBGMNumber[i]->SetTextureRect({ (float)(32 * eachBGMNumber[i]), 0, }, { 32,32 });
+			spriteBGMNumber[i]->SetPosition(XMFLOAT2{ bgmNumberPos.x + i * 60.0f, bgmNumberPos.y });
+			spriteBGMNumber[i]->Draw();
+		}
 	}
+	else
+	{
+		int keta = 10;
+		for (int i = 0; i < 2; i++)
+		{
+			eachBGMNumber[i] = bgmNumber / keta;//今の桁の値を求める
+			bgmNumber = bgmNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
+
+		for (int i = 0; i < 2; i++)
+		{
+			spriteBGMNumber[i]->SetSize({ 64,64 });
+			spriteBGMNumber[i]->SetTextureRect({ (float)(32 * eachBGMNumber[i]), 0, }, { 32,32 });
+			spriteBGMNumber[i]->SetPosition(XMFLOAT2{ bgmNumberPos.x + 60+ i * 60.0f, bgmNumberPos.y });
+			spriteBGMNumber[i]->Draw();
+		}
+	}
+	/**************************/
+	//SE
+	/**************************/
+	//各桁の値を取り出す
+	char eachSENumber[3] = {};//各桁の値
+	int seNumber = seVolume;//表示する数字
+
+	if (seVolume == 100)
+	{
+		int keta = 100;//最初の桁
+		for (int i = 0; i < 3; i++)
+		{
+			eachSENumber[i] = seNumber / keta;//今の桁の値を求める
+			seNumber = seNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			spriteSENumber[i]->SetSize({ 64,64 });
+			spriteSENumber[i]->SetTextureRect({ (float)(32 * eachSENumber[i]), 0, }, { 32,32 });
+			spriteSENumber[i]->SetPosition(XMFLOAT2{ seNumberPos.x + i * 60.0f, seNumberPos.y });
+			spriteSENumber[i]->Draw();
+		}
+	}
+	else
+	{
+		int keta = 10;
+		for (int i = 0; i < 2; i++)
+		{
+			eachSENumber[i] = seNumber / keta;//今の桁の値を求める
+			seNumber = seNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
+
+		for (int i = 0; i < 2; i++)
+		{
+			spriteSENumber[i]->SetSize({ 64,64 });
+			spriteSENumber[i]->SetTextureRect({ (float)(32 * eachSENumber[i]), 0, }, { 32,32 });
+			spriteSENumber[i]->SetPosition(XMFLOAT2{ seNumberPos.x + 60 + i * 60.0f, seNumberPos.y });
+			spriteSENumber[i]->Draw();
+		}
+	}
+	/***************************/
 }
 
 void GameScene::Draw()
@@ -336,4 +408,76 @@ void GameScene::SceneChange()
 			gameState == GameState::CLEA;//ゲームクリア
 		}
 	}
+}
+
+void GameScene::Setting(WinApp* winApp)
+{
+	// マウス座標を取得する
+	POINT p;
+	GetCursorPos(&p);
+	ScreenToClient(winApp->GetHwnd(), &p);
+
+	XMFLOAT2 mousePos = { (float)p.x,(float)p.y };
+	OptionCollision(mousePos);
+	sprintf_s(str, "sprite_posX = %f", mousePos.x);
+	debugText.Print(str, 0, 0, 1);
+	sprintf_s(str2, "sprite_posY = %f", mousePos.y);
+	debugText.Print(str2, 0, 20, 1);
+}
+
+void GameScene::OptionCollision(XMFLOAT2 pos)
+{
+	if (pos.x >= 450 && pos.x <= 950)
+	{
+		if (pos.y >= 245 && pos.y <= 320)
+		{
+			if (mouse->TriggerMouseLeft())
+			{
+				if (bgmVolume != 100)
+				{
+					bgmVolume += 10;
+				}
+				else
+				{
+					bgmVolume = 0;
+				}
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+			
+		}
+		if (pos.y >= 330 && pos.y <= 402)
+		{
+			if (mouse->TriggerMouseLeft())
+			{
+				if (seVolume != 100)
+				{
+					seVolume += 10;
+				}
+				else
+				{
+					seVolume = 0;
+				}
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (pos.y >= 420 && pos.y <= 495)
+		{
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::TITLE;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (mouse->TriggerMouseRight())
+		{
+			gameState = GameState::TITLE;
+			audio->SoundStop("decisionSE.wav");
+			audio->SoundPlayWave("decisionSE.wav", false);
+		}
+	}
+	audio->SoundVolume(0, bgmVolume * volumeSize);
+	audio->SoundVolume(1, seVolume * volumeSize);
 }
