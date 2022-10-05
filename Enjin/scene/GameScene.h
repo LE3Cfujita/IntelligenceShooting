@@ -139,5 +139,7 @@ private:
 	//SEの音量パーセント
 	int seVolume = 100;
 
+
+	float volume = 1.0f;//音量
 };
 

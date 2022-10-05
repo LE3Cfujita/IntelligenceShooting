@@ -68,9 +68,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	{
 		spriteNumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 	}
-	//audio->SoundLoadWave("Alarm01.wav");//テスト
 
-	//audio->SoundPlayWave("Alarm01.wav", true);
+
+	audio->SoundLoadWave("Alarm01.wav",volume);//テスト
+
+	audio->SoundPlayWave("Alarm01.wav", true);
 
 
 	model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");

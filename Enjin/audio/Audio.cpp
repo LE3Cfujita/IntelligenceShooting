@@ -23,6 +23,7 @@ bool Audio::Initialize()
         return false;
     }
 
+
     return true;
 }
 
@@ -30,7 +31,7 @@ bool Audio::Initialize()
 /// サウンド読み込み
 /// </summary>
 /// <param name="filename"> ファイル名 </param>
-void Audio::SoundLoadWave(const char* filename)
+void Audio::SoundLoadWave(const char* filename, float number)
 {
     // ファイル入力ストリームのインスタンス
     std::ifstream file;
@@ -81,6 +82,9 @@ void Audio::SoundLoadWave(const char* filename)
     char* pBuffer = new char[data.size];
     file.read(pBuffer, data.size);
 
+
+
+
     // Waveファイルを閉じる
     file.close();
 
@@ -102,7 +106,9 @@ void Audio::SoundLoadWave(const char* filename)
     assert(SUCCEEDED(result));
 
     // ファイル名で登録
-    pSourceVoices.emplace(filename, pSourceVoice);
+    sourceVoices.emplace(filename, pSourceVoice);
+
+    sourceVoices[filename]->SetVolume(number);
 }
 
 /// <summary>
@@ -112,7 +118,7 @@ void Audio::SoundUnload()
 {
     // バッファのメモリを解放
     soundDatas.clear();
-    pSourceVoices.clear();
+    sourceVoices.clear();
 }
 
 /// <summary>
@@ -136,9 +142,9 @@ void Audio::SoundPlayWave(const char* filename, bool loopFlag)
     }
 
     // 波形データの再生
-    result = pSourceVoices[filename]->FlushSourceBuffers(); //最初から再生する
-    result = pSourceVoices[filename]->SubmitSourceBuffer(&buf);
-    result = pSourceVoices[filename]->Start();
+    result = sourceVoices[filename]->FlushSourceBuffers(); //最初から再生する
+    result = sourceVoices[filename]->SubmitSourceBuffer(&buf);
+    result = sourceVoices[filename]->Start();
 }
 
 /// <summary>
@@ -147,5 +153,9 @@ void Audio::SoundPlayWave(const char* filename, bool loopFlag)
 /// <param name="filename"></param>
 void Audio::SoundStop(const char* filename)
 {
-    pSourceVoices[filename]->Stop();
+    sourceVoices[filename]->Stop();
+}
+
+void Audio::SoundVolume(int number,float volume)
+{
 }

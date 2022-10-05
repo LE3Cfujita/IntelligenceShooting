@@ -32,7 +32,6 @@ public:
     STDMETHOD_(void, OnVoiceError) (THIS_ void* pBufferContext, HRESULT Error) {};
 
 };
-
 class Audio
 {
 private: // エイリアス
@@ -79,7 +78,7 @@ public: //メンバ関数
     /// サウンド読み込み(.wav)
     /// </summary>
     /// <param name="filename">ファイル名</param>
-    void SoundLoadWave(const char* filename);
+    void SoundLoadWave(const char* filename, float number);
 
     /// <summary>
     /// 
@@ -99,12 +98,14 @@ public: //メンバ関数
     /// <param name="filename">ファイル名</param>
     void SoundStop(const char* filename);
 
+    void SoundVolume(int number,float volume);
+
 private: // メンバ変数
     ComPtr<IXAudio2>xAudio2;
     IXAudio2MasteringVoice* masterVoice;
     XAudio2VoiceCallback voiceCallback;
     std::unordered_map<std::string, SoundData> soundDatas;
-    std::unordered_map<std::string, IXAudio2SourceVoice*> pSourceVoices;
+    std::unordered_map<std::string, IXAudio2SourceVoice*> sourceVoices;
 
     const std::string baseDirectory = "Resources/Audio/";
 };
