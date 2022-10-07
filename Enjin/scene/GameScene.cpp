@@ -471,12 +471,12 @@ void GameScene::OptionCollision(XMFLOAT2 pos)
 				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
-		if (mouse->TriggerMouseRight())
-		{
-			gameState = GameState::TITLE;
-			audio->SoundStop("decisionSE.wav");
-			audio->SoundPlayWave("decisionSE.wav", false);
-		}
+	}
+	if (mouse->TriggerMouseRight())
+	{
+		gameState = GameState::TITLE;
+		audio->SoundStop("decisionSE.wav");
+		audio->SoundPlayWave("decisionSE.wav", false);
 	}
 	audio->SoundVolume(0, bgmVolume * volumeSize);
 	audio->SoundVolume(1, seVolume * volumeSize);
