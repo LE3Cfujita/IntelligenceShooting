@@ -78,9 +78,9 @@ public:
 
 	XMFLOAT2 cursor_pos = { 0,0 };
 
-	XMFLOAT3 barragePosition[EBULLET_MAX];
+	XMFLOAT3 barragePosition[BULLET_MAX];
 
-	XMFLOAT3 pBPosition[PBULLET_MAX];
+	XMFLOAT3 pBPosition[BULLET_MAX];
 
 	
 private:

@@ -1,18 +1,8 @@
-#include"Object3d.h"
-#include"Model.h"
-#include"SafeDelete.h"
 #include"Player.h"
+#include"Aim.h"
 #pragma once
-class Enemy
+class Enemy : public GameManager
 {
-
-private:
-	// DirectX::‚ğÈ—ª
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
-
 public:
 	Enemy();
 	~Enemy();
@@ -24,6 +14,18 @@ public:
 
 	void Draw();
 
+	
+
+	//’Êí’eƒqƒbƒg
+	void BHit();
+	void BarrageHit();
+
+	//“ËiUŒ‚ƒqƒbƒg
+	void RushHit();
+
+	//ƒvƒŒƒCƒ„[’eƒqƒbƒg
+	void PHit();
+private:
 	void Move();
 
 	//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚éUŒ‚
@@ -37,58 +39,8 @@ public:
 	//’e–‹UŒ‚
 	void Attack3();
 	void Attack3Move();
-
-	//’Êí’eƒqƒbƒg
-	void BHit();
-	void BarrageHit();
-
-	//“ËiUŒ‚ƒqƒbƒg
-	void RushHit();
-
-	//ƒvƒŒƒCƒ„[’eƒqƒbƒg
-	void PHit();
-
-
 public:
-	struct ENEMY
-	{
-		//•Ï”
-		XMFLOAT3 position = { 0,0,100 };
-		XMFLOAT3 rotation = { 0,180,0 };
-		XMFLOAT3 scale = { 3,3,3 };
 
-		int attackFlag = 0;//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
-		int attackFlag2 = 0;//’e–‹
-		int attackFlag3 = 0;//“Ëi
-
-		int ct = 300;//“ËiUŒ‚‚ÌƒN[ƒ‹ƒ^ƒCƒ€	
-
-		int barrageTime = 0;
-		int rotCount = 0;
-
-		float speed = 1;
-
-		int directionX = 0;
-		int directionY = 0;
-
-
-		float dx = 0;
-		float dy = 0;
-		float dz = 0;
-		float da = 0;
-		float L = 0;
-
-		int homingTime = 0;
-		int homingCount = 0;
-
-		int HP = 100;
-
-		int rushCount = 0;
-
-	};
-	ENEMY enemy;
-
-#define EBULLET_MAX 100
 	//UŒ‚ƒtƒ‰ƒO
 	struct BULLET
 	{
@@ -108,7 +60,7 @@ public:
 		XMFLOAT3 direction = { 0,0,0 };
 	};
 	BULLET b;//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
-	BULLET barrage[EBULLET_MAX];//’e–‹
+	BULLET barrage[BULLET_MAX];//’e–‹
 
 	int barrageNumber = 0;
 
@@ -133,25 +85,14 @@ public:
 	};
 	AIM rock;
 
-
-	//getter
-	XMFLOAT3 GetPosition() { return enemy.position; }
-
 	XMFLOAT3 GetBPosition() { return b.position; }
 	int GetBFlag() { return b.flag; }
 
 	XMFLOAT3 GetBarragePosition() { return barrage[barrageNumber].position; }
 	int GetBarrageFlag() { return barrage[barrageNumber].flag; }
 
-	int GetCount() { return enemy.attackFlag3; }
-
-	int GetHP() { return enemy.HP; }
-
-	int GetRushCount() { return enemy.rushCount; }
 
 private://ƒƒ“ƒo•Ï”
-
-
 
 	Model* modelBoss = nullptr;
 	Object3d* boss = nullptr;
@@ -162,9 +103,10 @@ private://ƒƒ“ƒo•Ï”
 
 
 	//’e–‹
-	Object3d* bulletBarrage[EBULLET_MAX];
+	Object3d* bulletBarrage[BULLET_MAX];
 
 	Player* player = nullptr;
+	Aim* aim = nullptr;
 
 };
 

@@ -10,27 +10,28 @@ Player::~Player()
 	safe_delete(player);
 }
 
-void Player::Initialize(Input* input, Mouse* mouse)
+void Player::Initialize(Input* input,Mouse* mouse)
 {
 	this->input = input;
 	this->mouse = mouse;
 
+	objectMember = OBJECTMEMBER::PLAYER;
+	BaseInitialize(input, audio);
 	//OBJからモデルデータを読み込む
 	modelPlayer = Model::LoadFormOBJ("player");
 	modelBullet = Model::LoadFormOBJ("bullet");
-	modelAim = Model::LoadFormOBJ("aim");
 	//3Dオブジェクト生成
 	player = Object3d::Create();
 	//オブジェクトにモデルを紐付ける
 	player->SetModel(modelPlayer);
 
 	player->SetPosition(position);
+	rotation = { 0,-90,0 };
 	player->SetRotation(rotation);
 	player->SetScale({ 0.5,0.7,0.5 });
 
-
 	//弾
-	for (int i = 0; i < PBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet[i] = Object3d::Create();
 		bullet[i]->SetModel(modelBullet);
@@ -38,13 +39,6 @@ void Player::Initialize(Input* input, Mouse* mouse)
 		bullet[i]->SetRotation(b[i].rotation);
 		bullet[i]->SetScale({ 0.7,0.7,0.7 });
 	}
-	//照準
-	aim = Object3d::Create();
-	aim->SetModel(modelAim);
-	rock.position.z = 80;
-	aim->SetPosition(rock.position);
-	aim->SetRotation(rock.rotation);
-	aim->SetScale({ 3,3,3 });
 
 
 }
@@ -56,25 +50,23 @@ void Player::Update()
 	Attack();
 	AttackMove();
 	player->Update();
-	for (int i = 0; i < PBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet[i]->Update();
 	}
-	aim->Update();
 }
 
 void Player::Draw()
 {
 	player->Draw();
 
-	for (int i = 0; i < PBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		if (b[i].flag == 1)
 		{
 			bullet[i]->Draw();
 		}
 	}
-	aim->Draw();
 }
 
 void Player::Move()
@@ -114,22 +106,15 @@ void Player::Move()
 		}
 	}
 
-	XMFLOAT2 mouseM{ mouse->GetMouseVelocityX() ,mouse->GetMouseVelocityY() };
-
-	rock.position.x += mouseM.x / 12;
-	rock.position.y -= mouseM.y / 12;
-
-
 	player->SetPosition(position);
 	player->SetRotation(rotation);
-	aim->SetPosition(rock.position);
 }
 
 void Player::Attack()
 {
 	if (attackCT == 0)
 	{
-		for (int i = 0; i < PBULLET_MAX; i++)
+		for (int i = 0; i < BULLET_MAX; i++)
 		{
 			if (input->PushKey(DIK_SPACE) == true || mouse->PushMouseLeft() == true)
 			{
@@ -155,7 +140,7 @@ void Player::Attack()
 
 void Player::AttackMove()
 {
-	for (int i = 0; i < PBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 
 		if (b[i].flag == 1)
@@ -169,9 +154,9 @@ void Player::AttackMove()
 			//カウントが0ならホーミングする
 			if (b[i].homingCount == 0)
 			{
-				b[i].dx = b[i].position.x - rock.position.x;//Xの距離の計算
-				b[i].dy = b[i].position.y - rock.position.y;//Yの距離の計算
-				b[i].dz = b[i].position.z - rock.position.z;//Zの距離の計算
+				b[i].dx = b[i].position.x - aim->GetPosition().x;//Xの距離の計算
+				b[i].dy = b[i].position.y - aim->GetPosition().y;//Yの距離の計算
+				b[i].dz = b[i].position.z - aim->GetPosition().z;//Zの距離の計算
 				//ルートの中の計算
 				b[i].da = b[i].dx * b[i].dx + b[i].dy * b[i].dy + b[i].dz * b[i].dz;
 				//da = dx * dx + dy * dy;
@@ -196,7 +181,7 @@ void Player::AttackMove()
 void Player::PlusNumber()
 {
 	bulletNumber += 1;
-	if (bulletNumber > PBULLET_MAX)
+	if (bulletNumber > BULLET_MAX)
 	{
 		bulletNumber = 0;
 	}

@@ -14,7 +14,8 @@ Enemy::~Enemy()
 void Enemy::Initialize(Player* player)
 {
 
-	this->player = player;
+	/*this->player = player;
+	this->aim = aim;*/
 
 	//OBJからモデルデータを読み込む
 	modelBoss = Model::LoadFormOBJ("enemy");
@@ -22,10 +23,17 @@ void Enemy::Initialize(Player* player)
 	//3Dオブジェクト生成
 	boss = Object3d::Create();
 	bullet = Object3d::Create();
+
+	BaseInitialize(input, audio);
+	position = { 0,0,100 };
+	rotation = { 0,180,0 };
+	scale = { 3,3,3 };
+
+
 	//オブジェクトにモデルを紐付ける
 	boss->SetModel(modelBoss);
-	boss->SetPosition(enemy.position);
-	boss->SetRotation(enemy.rotation);
+	boss->SetPosition(position);
+	boss->SetRotation(rotation);
 	boss->SetScale({ 4,4,4 });
 
 	bullet->SetModel(modelBullet);
@@ -33,7 +41,7 @@ void Enemy::Initialize(Player* player)
 	bullet->SetRotation(b.rotation);
 	bullet->SetScale({ 0.7,0.7,0.7 });
 
-	for (int i = 0; i < EBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bulletBarrage[i] = Object3d::Create();
 		bulletBarrage[i]->SetModel(modelBullet);
@@ -41,31 +49,34 @@ void Enemy::Initialize(Player* player)
 		bulletBarrage[i]->SetRotation(barrage[i].rotation);
 		bulletBarrage[i]->SetScale({ 1,1,1 });
 	}
-	enemy.directionX = rand() % 2;
-	enemy.directionY = rand() % 2;
+	directionX = rand() % 2;
+	directionY = rand() % 2;
 }
 
 void Enemy::Update()
 {
-	if (enemy.attackFlag3 == 0)
+	if (attackFlag3 == 0)
 	{
 		Move();
 	}
 	pPosition = player->GetPosition();
 
-	if (pPosition.x < -5)
+	if (position.y <= 60)
 	{
-		Attack1();
-	}
-	else if (pPosition.x > 5)
-	{
-		Attack2();
-	}
-	else
-	{
-		if (enemy.ct == 0)
+		if (pPosition.x < -5)
 		{
-			Attack3();
+			Attack1();
+		}
+		else if (pPosition.x > 5)
+		{
+			Attack2();
+		}
+		else
+		{
+			if (ct == 0)
+			{
+				Attack3();
+			}
 		}
 	}
 	Attack1Move();
@@ -73,7 +84,7 @@ void Enemy::Update()
 	Attack3Move();
 	boss->Update();
 	bullet->Update();
-	for (int i = 0; i < EBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bulletBarrage[i]->Update();
 	}
@@ -86,7 +97,7 @@ void Enemy::Draw()
 	{
 		bullet->Draw();
 	}
-	for (int i = 0; i < EBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		if (barrage[i].flag == 1)
 		{
@@ -98,106 +109,106 @@ void Enemy::Draw()
 void Enemy::Move()
 {
 
-	rock.rPosition = player->GetAimPosition();
+	rock.rPosition = aim->GetPosition();
 
 	//照準との距離を計算して逃げるような動きを作る
-	rock.dx = enemy.position.x - rock.rPosition.x;
-	rock.dy = enemy.position.y - rock.rPosition.y;
+	rock.dx = position.x - rock.rPosition.x;
+	rock.dy = position.y - rock.rPosition.y;
 	rock.da = rock.dx * rock.dx + rock.dy + rock.dy;
 	rock.L = sqrt(rock.da);
 
-	if (enemy.directionX == 0)
+	if (directionX == 0)
 	{
-		enemy.position.x += enemy.speed;
+		position.x += speed;
 	}
-	if (enemy.directionX == 1)
+	if (directionX == 1)
 	{
-		enemy.position.x -= enemy.speed;
+		position.x -= speed;
 	}
-	if (enemy.directionY == 0)
+	if (directionY == 0)
 	{
-		enemy.position.y += enemy.speed;
+		position.y += speed;
 	}
-	if (enemy.directionY == 1)
+	if (directionY == 1)
 	{
-		enemy.position.y -= enemy.speed;
+		position.y -= speed;
 	}
 
 	if (rock.directionCount == 1)
 	{
 		rock.directionTime++;
-		if (rock.directionTime > 60)
+		if (rock.directionTime > 10)
 		{
 			rock.directionTime = 0;
 			rock.directionCount = 0;
 		}
 	}
 
-	if (rock.L <= 6 && rock.directionCount == 0)
+	if (rock.L <= 8 && rock.directionCount == 0)
 	{
-		if (enemy.position.x < 80 && enemy.position.x <= rock.rPosition.x)
+		if (position.x < 80 && position.x <= rock.rPosition.x)
 		{
-			enemy.directionX = 0;
+			directionX = 0;
 			rock.directionCount = 1;
 		}
-		else if (enemy.position.x > -80 && enemy.position.x >= rock.rPosition.x)
+		else if (position.x > -80 && position.x >= rock.rPosition.x)
 		{
-			enemy.directionX = 1;
+			directionX = 1;
 			rock.directionCount = 1;
 		}
-		if (enemy.position.y < 60 && enemy.position.y >= rock.rPosition.y);
+		if (position.y < 60 && position.y >= rock.rPosition.y);
 		{
-				enemy.directionY = 0;
-				rock.directionCount = 1;
+			directionY = 0;
+			rock.directionCount = 1;
 		}
-		if (enemy.position.y > -55 && enemy.position.y <= rock.rPosition.y)
+		if (position.y > -55 && position.y <= rock.rPosition.y)
 		{
-				enemy.directionY = 1;
-				rock.directionCount = 1;
+			directionY = 1;
+			rock.directionCount = 1;
 		}
 	}
 	else
 	{
-		if (enemy.position.x >= 80)
+		if (position.x >= 80)
 		{
-			if (enemy.directionX == 0)
+			if (directionX == 0)
 			{
-				enemy.directionX = 1;
+				directionX = 1;
 			}
 		}
-		if (enemy.position.x <= -80)
+		if (position.x <= -80)
 		{
-			if (enemy.directionX == 1)
+			if (directionX == 1)
 			{
-				enemy.directionX = 0;
+				directionX = 0;
 			}
 		}
-		if (enemy.position.y >= 60)
+		if (position.y >= 60)
 		{
-			if (enemy.directionY == 0)
+			if (directionY == 0)
 			{
-				enemy.directionY = 1;
+				directionY = 1;
 			}
 		}
-		if (enemy.position.y <= -55)
+		if (position.y <= -55)
 		{
-			if (enemy.directionY == 1)
+			if (directionY == 1)
 			{
-				enemy.directionY = 0;
+				directionY = 0;
 			}
 		}
 	}
-	boss->SetPosition(enemy.position);
+	boss->SetPosition(position);
 }
 
 void Enemy::Attack1()
 {
-	if (enemy.position.y <= 60)
+	if (position.y <= 60)
 	{
-		if (enemy.attackFlag == 0 && enemy.attackFlag3 == 0 && b.flag == 0)
+		if (attackFlag == 0 && attackFlag3 == 0 && b.flag == 0)
 		{
-			enemy.attackFlag = 1;
-			b.position = enemy.position;
+			attackFlag = 1;
+			b.position = position;
 			homingCount = 0;
 			b.flag = 1;
 		}
@@ -210,7 +221,7 @@ void Enemy::Attack1()
 
 void Enemy::Attack1Move()
 {
-	if (enemy.attackFlag == 1)
+	if (attackFlag == 1)
 	{
 		homingTime++;
 		if (homingTime >= 20)
@@ -236,7 +247,7 @@ void Enemy::Attack1Move()
 
 	if (pPosition.z - 10 > b.position.z)
 	{
-		enemy.attackFlag = 0;
+		attackFlag = 0;
 		b.flag = 0;
 		b.position.z = 100;
 	}
@@ -245,25 +256,25 @@ void Enemy::Attack1Move()
 
 void Enemy::Attack2()
 {
-	if (enemy.position.y <= 60)
+	if (position.y <= 60)
 	{
-		if (enemy.attackFlag2 == 0 && enemy.attackFlag3 == 0)
+		if (attackFlag2 == 0 && attackFlag3 == 0)
 		{
-			enemy.attackFlag2 = 1;
+			attackFlag2 = 1;
 		}
 	}
-	if (enemy.attackFlag2 == 1)
+	if (attackFlag2 == 1)
 	{
 
-		if (enemy.barrageTime == 0)
+		if (barrageTime == 0)
 		{
-			enemy.barrageTime = 1;
-			for (int i = 0; i < EBULLET_MAX; i++)
+			barrageTime = 1;
+			for (int i = 0; i < BULLET_MAX; i++)
 			{
 				if (barrage[i].flag == 0)
 				{
 					barrage[i].flag = 1;
-					barrage[i].position = enemy.position;
+					barrage[i].position = position;
 					float move = 0.2;
 					int directions = rand() % 2;
 					if (directions == 0)
@@ -287,10 +298,10 @@ void Enemy::Attack2()
 		}
 		else
 		{
-			enemy.barrageTime++;
-			if (enemy.barrageTime >= 2)
+			barrageTime++;
+			if (barrageTime >= 2)
 			{
-				enemy.barrageTime = 0;
+				barrageTime = 0;
 			}
 		}
 	}
@@ -298,7 +309,7 @@ void Enemy::Attack2()
 
 void Enemy::Attack2Move()
 {
-	for (int i = 0; i < EBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		if (barrage[i].flag == 1)
 		{
@@ -308,7 +319,7 @@ void Enemy::Attack2Move()
 		}
 		if (pPosition.z - 10 >= barrage[i].position.z)
 		{
-			enemy.attackFlag2 = 0;
+			attackFlag2 = 0;
 			barrage[i].flag = 0;
 			barrage[i].position.z = 100;
 		}
@@ -320,81 +331,80 @@ void Enemy::Attack2Move()
 
 void Enemy::Attack3()
 {
-	if (enemy.attackFlag3 == 0)
+	if (attackFlag3 == 0)
 	{
-		enemy.attackFlag3 = 1;
-		enemy.ct = 60;
+		attackFlag3 = 1;
+		ct = 60;
 	}
 }
 
 void Enemy::Attack3Move()
 {
 
-	if (enemy.attackFlag3 == 1)
+	if (attackFlag3 == 1)
 	{
-		enemy.homingTime++;
-		if (enemy.homingTime >= 60)
+		homingTime++;
+		if (homingTime >= 60)
 		{
-			enemy.homingTime = 0;
-			enemy.homingCount = 1;
+			homingTime = 0;
+			homingCount = 1;
 		}
 		//カウントが0ならホーミングする
-		if (enemy.homingCount == 0)
+		if (homingCount == 0)
 		{
-			enemy.dx = enemy.position.x - pPosition.x;//Xの距離の計算
-			enemy.dy = enemy.position.y - pPosition.y;//Yの距離の計算
-			enemy.dz = enemy.position.z - pPosition.z;//Zの距離の計算
+			dx = position.x - pPosition.x;//Xの距離の計算
+			dy = position.y - pPosition.y;//Yの距離の計算
+			dz = position.z - pPosition.z;//Zの距離の計算
 			//ルートの中の計算
-			enemy.da = enemy.dx * enemy.dx + enemy.dy * enemy.dy + enemy.dz * enemy.dz;
-			enemy.L = sqrt(enemy.da);
+			da = dx * dx + dy * dy + dz * dz;
+			L = sqrt(da);
 		}
 
 
-		if (enemy.rotCount == 0)
+		if (rotCount == 0)
 		{
-			enemy.rotation.z -= 8;
-			enemy.position.x += (enemy.dx / enemy.L) * 5;
-			enemy.position.y += (enemy.dy / enemy.L) * 5;
-			enemy.position.z += (enemy.dz / enemy.L) * 5;
+			rotation.z -= 8;
+			position.x += (dx / L) * 5;
+			position.y += (dy / L) * 5;
+			position.z += (dz / L) * 5;
 
-			if (enemy.rotation.z <= -300)
+			if (rotation.z <= -300)
 			{
-				enemy.rotCount = 1;
-				enemy.homingCount = 0;
+				rotCount = 1;
+				homingCount = 0;
 			}
 		}
-		if (enemy.rotCount == 1)
+		if (rotCount == 1)
 		{
-			enemy.rotation.z += 16;
-			enemy.position.x -= (enemy.dx / enemy.L) * 10;
-			enemy.position.y -= (enemy.dy / enemy.L) * 10;
-			enemy.position.z -= (enemy.dz / enemy.L) * 10;
+			rotation.z += 16;
+			position.x -= (dx / L) * 10;
+			position.y -= (dy / L) * 10;
+			position.z -= (dz / L) * 10;
 		}
 	}
-	if (enemy.ct > 0 && enemy.position.z == 100)
+	if (ct > 0 && position.z == 100)
 	{
-
-		enemy.ct--;
+		ct--;
 	}
-	if (pPosition.z - 30 >= enemy.position.z)
+	if (pPosition.z - 30 >= position.z)
 	{
-		enemy.position = { 0,120,100 };
-		enemy.rotation = { 0,180,0 };
-		enemy.ct = 300;
-		enemy.rotCount = 0;
-		enemy.attackFlag3 = 0;
-		enemy.homingCount = 0;
-		enemy.homingTime = 0;
-		enemy.rushCount = 0;
+		position = { 0,120,100 };
+		rotation = { 0,180,0 };
+		ct = 300;
+		rotCount = 0;
+		attackFlag3 = 0;
+		homingCount = 0;
+		homingTime = 0;
+		rushCount = 0;
 	}
 
-	boss->SetRotation(enemy.rotation);
-	boss->SetPosition(enemy.position);
+	boss->SetRotation(rotation);
+	boss->SetPosition(position);
 }
 
 void Enemy::BHit()
 {
-	enemy.attackFlag = 0;
+	attackFlag = 0;
 	b.flag = 0;
 	b.position.z = 100;
 	bullet->SetPosition(b.position);
@@ -402,7 +412,7 @@ void Enemy::BHit()
 
 void Enemy::BarrageHit()
 {
-	enemy.attackFlag2 = 0;
+	attackFlag2 = 0;
 	barrage[barrageNumber].flag = 0;
 	barrage[barrageNumber].position.x = 100;
 	barrage[barrageNumber].position.y = 100;
@@ -411,18 +421,18 @@ void Enemy::BarrageHit()
 
 void Enemy::RushHit()
 {
-	enemy.rushCount = 1;
+	rushCount = 1;
 }
 
 void Enemy::PHit()
 {
-	enemy.HP -= 1;
+	HP -= 1;
 }
 
 void Enemy::PlusNumber()
 {
 	barrageNumber += 1;
-	if (barrageNumber > EBULLET_MAX)
+	if (barrageNumber > BULLET_MAX)
 	{
 		barrageNumber = 0;
 	}

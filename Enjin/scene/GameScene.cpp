@@ -91,7 +91,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	enemy = new Enemy;
 	player = new Player;
 	enemy->Initialize(player);
-	player->Initialize(input, mouse);
+	player->Initialize(input,mouse);
 
 
 }
@@ -100,7 +100,7 @@ void GameScene::Update(WinApp* winApp)
 {
 	winApp->GetHwnd();
 
-	//Text();
+	Text();
 
 	BCollision();
 
@@ -326,11 +326,11 @@ void GameScene::Text()
 {
 	pHP = player->GetHP();
 
-	eHP = enemy->GetHP();
+	XMFLOAT3 ePos = enemy->GetPosition();
 
 	sprintf_s(str, "HP = %d", pHP);
 	debugText.Print(str, 0, 0, 1);
-	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
+	sprintf_s(str2, "ePosY = %f", ePos.y);
 	debugText.Print(str2, 0, 20, 1);
 }
 
@@ -349,7 +349,7 @@ void GameScene::BCollision()
 	}
 
 
-	for (int i = 0; i < EBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		barragePosition[i] = enemy->GetBarragePosition();
 
@@ -366,7 +366,7 @@ void GameScene::BCollision()
 	//敵の座標
 	XMFLOAT3 ePosition = enemy->GetPosition();
 	//プレイヤー弾の座標
-	for (int i = 0; i < PBULLET_MAX; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		pBPosition[i] = player->GetBPosition();
 		if (enemy->GetHP() != 0)

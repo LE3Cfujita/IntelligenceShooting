@@ -1,29 +1,16 @@
-#include"Model.h"
-#include"Object3d.h"
-#include"Input.h"
-#include"SafeDelete.h"
-#include"Mouse.h"
-
+#include"GameManager.h"
+#include"Aim.h"
 #pragma once
-class Player
+class Player : public GameManager
 {
-private:
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
 
 public:
 	Player();
 	~Player();
-
-	//初期化
-	void Initialize(Input* input, Mouse* mouse);
-
+	void Initialize(Input* input,Mouse*mouse);
 	void Update();
-
 	void Draw();
+
 
 	void Move();
 
@@ -41,24 +28,14 @@ public:
 	void PHit();
 
 	//getter
-	XMFLOAT3 GetPosition() { return position; }
+	
 
-	int GetHP() { return HP; }
-
-	XMFLOAT3 GetAimPosition() { return rock.position; }
+	//XMFLOAT3 GetAimPosition() { return rock.position; }
 
 	int GetBFlag() { return b[bulletNumber].flag; };
 	XMFLOAT3 GetBPosition() { return b[bulletNumber].position; };
 
 public:
-
-#define PBULLET_MAX 50
-
-	//変数
-	XMFLOAT3 position = { 0,0,-5 };
-	XMFLOAT3 rotation = { 0,-90,0 };
-
-	int HP = 50;
 
 	//攻撃フラグ
 	struct BULLET
@@ -79,19 +56,7 @@ public:
 		
 		float speed = 3;
 	};
-	BULLET b[PBULLET_MAX];
-
-	int bulletNumber = 0;
-
-	int attackCT = 0;
-
-	struct AIM
-	{
-		XMFLOAT3 position = { 0,0,100 };
-		XMFLOAT3 rotation = { 0,90,0 };
-
-	};
-	AIM rock;
+	BULLET b[BULLET_MAX];
 
 
 private://メンバ変数
@@ -101,12 +66,10 @@ private://メンバ変数
 
 	Model* modelPlayer = nullptr;
 	Object3d* player = nullptr;
+	Aim* aim = nullptr;
 
 	Model* modelBullet = nullptr;
-	Object3d* bullet[PBULLET_MAX];
-
-	Model* modelAim = nullptr;
-	Object3d* aim = nullptr;
+	Object3d* bullet[BULLET_MAX];
 
 };
 
