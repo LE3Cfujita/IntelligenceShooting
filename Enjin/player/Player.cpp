@@ -161,7 +161,7 @@ void Player::AttackMove()
 		if (b[i].flag == 1)
 		{
 			b[i].homingTime++;
-			if (b[i].homingTime >= 5)
+			if (b[i].homingTime >= 10)
 			{
 				b[i].homingTime = 0;
 				b[i].homingCount = 1;

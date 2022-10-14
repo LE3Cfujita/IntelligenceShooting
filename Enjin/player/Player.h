@@ -58,7 +58,7 @@ public:
 	XMFLOAT3 position = { 0,0,-5 };
 	XMFLOAT3 rotation = { 0,-90,0 };
 
-	int HP = 50;
+	int HP = 10;
 
 	//UŒ‚ƒtƒ‰ƒO
 	struct BULLET

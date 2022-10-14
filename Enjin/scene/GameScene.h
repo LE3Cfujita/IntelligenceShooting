@@ -22,7 +22,8 @@ public:
 	enum GameState
 	{
 		TITLE,
-		OPSTION,
+		OPSTION_SOUND,
+		OPSTION_KEY,
 		PLAY,
 		CLEA,
 		OVER
@@ -53,7 +54,7 @@ public:
 
 	void Title();
 
-	void Option(WinApp* winApp);
+	void Option();
 
 	void DrawPercent();
 
@@ -67,6 +68,7 @@ public:
 	void Setting(WinApp* winApp);
 
 	void OptionCollision(XMFLOAT2 pos);
+	void TitleCollision(XMFLOAT2 pos);
 
 	//マウス座標取得
 	POINT mouse_pos;
@@ -108,18 +110,21 @@ private:
 
 	//矢印
 	Sprite* yajirusi = nullptr;
+	Sprite* yajirusiOp = nullptr;
 
 	XMFLOAT2 yajirusiPos = { 445.0f,465.0f };
 
 	Sprite* opsion = nullptr;
 	XMFLOAT2 optionPos = { 640,360 };
 
+	XMFLOAT2 mousePos = { 0,0 };
+
 	GameState gameState;
 
 	Sprite* spriteBGMNumber[3];
 	Sprite* spriteSENumber[3];
-	XMFLOAT2 bgmNumberPos = { 710,250 };
-	XMFLOAT2 seNumberPos = { 710,335 };
+	XMFLOAT2 bgmNumberPos = { 710,210 };
+	XMFLOAT2 seNumberPos = { 710,290 };
 
 	//デバックテキスト用
 	char str[100];

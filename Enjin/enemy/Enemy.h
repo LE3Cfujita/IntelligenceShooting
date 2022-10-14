@@ -81,7 +81,7 @@ public:
 		int homingTime = 0;
 		int homingCount = 0;
 
-		int HP = 100;
+		int HP = 50;
 
 		int rushCount = 0;
 

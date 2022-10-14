@@ -25,6 +25,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	this->audio = audio;
 	this->mouse = mouse;
 
+	gameState = GameState::TITLE;
+
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input, mouse);
 
@@ -49,8 +51,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 
 	// テクスチャ読み込み
 	yajirusi->LoadTexture(3, L"Resources/yazirusi.png");
+	yajirusiOp->LoadTexture(3, L"Resources/yazirusi.png");
 
 	yajirusi = Sprite::Create(3, yajirusiPos);
+	yajirusiOp = Sprite::Create(3, { 380,250 });
 
 	// テクスチャ読み込み
 	opsion->LoadTexture(4, L"Resources/BGMSEOpsion.png");
@@ -100,7 +104,8 @@ void GameScene::Update(WinApp* winApp)
 {
 	winApp->GetHwnd();
 
-	//Text();
+	Setting(winApp);
+	Text();
 
 	BCollision();
 
@@ -109,14 +114,17 @@ void GameScene::Update(WinApp* winApp)
 	case GameState::TITLE://タイトル
 		Title();
 		break;
-	case GameState::OPSTION://操作説明など
-		Option(winApp);
+	case GameState::OPSTION_SOUND://操作説明など
+		Option();
+		break;
+	case GameState::OPSTION_KEY:
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
 		object->Update();
 		player->Update();
 		enemy->Update();
+		SceneChange();
 
 		SetCursorPos(690, 360);
 		break;
@@ -126,7 +134,6 @@ void GameScene::Update(WinApp* winApp)
 	case GameState::CLEA://ゲームクリア
 		break;
 	}
-	SceneChange();
 	camera->Update();
 	mouse->Update();
 }
@@ -142,7 +149,7 @@ void GameScene::Title()
 		}
 		else
 		{
-			gameState = GameState::OPSTION;
+			gameState = GameState::OPSTION_SOUND;
 			audio->SoundPlayWave("decisionSE.wav", false);
 		}
 	}
@@ -156,12 +163,15 @@ void GameScene::Title()
 		count = 1;
 		yajirusiPos.y = 600.0f;
 	}
+	/*****************/
+	TitleCollision(mousePos);
+
 	yajirusi->SetPosition(yajirusiPos);
 }
 
-void GameScene::Option(WinApp* winApp)
+void GameScene::Option()
 {
-	Setting(winApp);
+	OptionCollision(mousePos);
 	if (input->TriggerKey(DIK_RETURN))
 	{
 		gameState = GameState::TITLE;
@@ -263,8 +273,6 @@ void GameScene::Draw()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
 
-	//object->Draw(cmdList);
-
 
 	//3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
@@ -275,7 +283,7 @@ void GameScene::Draw()
 	case GameState::TITLE://タイトル
 		break;
 
-	case GameState::OPSTION://操作説明など
+	case GameState::OPSTION_SOUND://操作説明など
 		break;
 	case GameState::PLAY://ゲームシーン
 	//3Dオブジェクトの描画
@@ -301,9 +309,11 @@ void GameScene::Draw()
 		sprite->Draw();
 		yajirusi->Draw();
 		break;
-	case GameState::OPSTION://操作説明など
+	case GameState::OPSTION_SOUND://操作説明など
 		sprite->Draw();
+		yajirusi->Draw();
 		opsion->Draw();
+		yajirusiOp->Draw();
 		DrawPercent();
 		break;
 	case GameState::PLAY://ゲームシーン
@@ -328,9 +338,9 @@ void GameScene::Text()
 
 	eHP = enemy->GetHP();
 
-	sprintf_s(str, "HP = %d", pHP);
+	sprintf_s(str, "HP = %f", mousePos.x);
 	debugText.Print(str, 0, 0, 1);
-	sprintf_s(str2, "sprite_posY = %d", mouse_pos.y);
+	sprintf_s(str2, "eHP = %f", mousePos.y);
 	debugText.Print(str2, 0, 20, 1);
 }
 
@@ -397,8 +407,6 @@ void GameScene::BCollision()
 
 void GameScene::SceneChange()
 {
-	if (gameState == GameState::PLAY)
-	{
 		if (pHP <= 0)
 		{
 			gameState == GameState::OVER;//ゲームオーバー
@@ -407,7 +415,6 @@ void GameScene::SceneChange()
 		{
 			gameState == GameState::CLEA;//ゲームクリア
 		}
-	}
 }
 
 void GameScene::Setting(WinApp* winApp)
@@ -417,20 +424,16 @@ void GameScene::Setting(WinApp* winApp)
 	GetCursorPos(&p);
 	ScreenToClient(winApp->GetHwnd(), &p);
 
-	XMFLOAT2 mousePos = { (float)p.x,(float)p.y };
-	OptionCollision(mousePos);
-	sprintf_s(str, "sprite_posX = %f", mousePos.x);
-	debugText.Print(str, 0, 0, 1);
-	sprintf_s(str2, "sprite_posY = %f", mousePos.y);
-	debugText.Print(str2, 0, 20, 1);
+	mousePos = { (float)p.x,(float)p.y };
 }
 
 void GameScene::OptionCollision(XMFLOAT2 pos)
 {
 	if (pos.x >= 450 && pos.x <= 950)
 	{
-		if (pos.y >= 245 && pos.y <= 320)
+		if (pos.y >= 205 && pos.y <= 273)
 		{
+			yajirusiOp->SetPosition({ 380,210 });
 			if (mouse->TriggerMouseLeft())
 			{
 				if (bgmVolume != 100)
@@ -446,8 +449,9 @@ void GameScene::OptionCollision(XMFLOAT2 pos)
 			}
 			
 		}
-		if (pos.y >= 330 && pos.y <= 402)
+		if (pos.y >= 284 && pos.y <= 353)
 		{
+			yajirusiOp->SetPosition({ 380,290 });
 			if (mouse->TriggerMouseLeft())
 			{
 				if (seVolume != 100)
@@ -462,8 +466,19 @@ void GameScene::OptionCollision(XMFLOAT2 pos)
 				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
-		if (pos.y >= 420 && pos.y <= 495)
+		if (pos.y >= 370 && pos.y <= 435)
 		{
+			yajirusiOp->SetPosition({ 380,376 });
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPSTION_KEY;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (pos.y >= 452 && pos.y <= 520)
+		{
+			yajirusiOp->SetPosition({ 380,460 });
 			if (mouse->TriggerMouseLeft())
 			{
 				gameState = GameState::TITLE;
@@ -480,4 +495,31 @@ void GameScene::OptionCollision(XMFLOAT2 pos)
 	}
 	audio->SoundVolume(0, bgmVolume * volumeSize);
 	audio->SoundVolume(1, seVolume * volumeSize);
+}
+
+void GameScene::TitleCollision(XMFLOAT2 pos)
+{
+	if (pos.x >= 480 && pos.x <= 800)
+	{
+		if (pos.y >= 400.0f && pos.y <= 500.0f)
+		{
+			yajirusiPos.y = 465.0f;
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::PLAY;
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (pos.y >= 550.0f && pos.y <= 650.0f)
+		{
+			yajirusiPos.y = 600.0f;
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPSTION_SOUND;
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+	}
+	yajirusi->SetPosition(yajirusiPos);
+
 }
