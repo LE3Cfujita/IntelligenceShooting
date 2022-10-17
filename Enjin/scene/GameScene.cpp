@@ -57,11 +57,18 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	yajirusiOp = Sprite::Create(3, { 380,250 });
 
 	// テクスチャ読み込み
-	opsion->LoadTexture(4, L"Resources/BGMSEOpsion.png");
+	opsion_bgmse->LoadTexture(4, L"Resources/BGMSEOpsion.png");
 
-	opsion = Sprite::Create(4, optionPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+	opsion_bgmse = Sprite::Create(4, optionPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
 
-	opsion->SetSize({ 720,360 });
+	opsion_bgmse->SetSize({ 720,360 });
+
+	opsion_key->LoadTexture(6, L"Resources/OPTION_KEY.png");
+
+	opsion_key = Sprite::Create(6, optionPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+
+	opsion_key->SetSize({ 720,360 });
+
 
 	if (!Sprite::LoadTexture(5, L"Resources/number.png")) {
 		assert(0);
@@ -97,6 +104,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	enemy->Initialize(player);
 	player->Initialize(input, mouse);
 
+	//key->Initialize(input, mouse);
 
 }
 
@@ -115,7 +123,7 @@ void GameScene::Update(WinApp* winApp)
 		Title();
 		break;
 	case GameState::OPSTION_SOUND://操作説明など
-		Option();
+		Option_BGMSE();
 		break;
 	case GameState::OPSTION_KEY:
 		break;
@@ -169,12 +177,21 @@ void GameScene::Title()
 	yajirusi->SetPosition(yajirusiPos);
 }
 
-void GameScene::Option()
+void GameScene::Option_BGMSE()
 {
-	OptionCollision(mousePos);
+	Option_BGMSE_Collision(mousePos);
 	if (input->TriggerKey(DIK_RETURN))
 	{
 		gameState = GameState::TITLE;
+	}
+}
+
+void GameScene::Option_KEY()
+{
+	Option_KEY_Collision(mousePos);
+	if (input->TriggerKey(DIK_RETURN))
+	{
+		gameState = GameState::OPSTION_SOUND;
 	}
 }
 
@@ -285,6 +302,8 @@ void GameScene::Draw()
 
 	case GameState::OPSTION_SOUND://操作説明など
 		break;
+	case GameState::OPSTION_KEY://操作説明など
+		break;
 	case GameState::PLAY://ゲームシーン
 	//3Dオブジェクトの描画
 		enemy->Draw();
@@ -312,9 +331,14 @@ void GameScene::Draw()
 	case GameState::OPSTION_SOUND://操作説明など
 		sprite->Draw();
 		yajirusi->Draw();
-		opsion->Draw();
+		opsion_bgmse->Draw();
 		yajirusiOp->Draw();
 		DrawPercent();
+		break;
+	case GameState::OPSTION_KEY://操作説明など
+		sprite->Draw();
+		yajirusi->Draw();
+		opsion_key->Draw();
 		break;
 	case GameState::PLAY://ゲームシーン
 		break;
@@ -427,7 +451,7 @@ void GameScene::Setting(WinApp* winApp)
 	mousePos = { (float)p.x,(float)p.y };
 }
 
-void GameScene::OptionCollision(XMFLOAT2 pos)
+void GameScene::Option_BGMSE_Collision(XMFLOAT2 pos)
 {
 	if (pos.x >= 450 && pos.x <= 950)
 	{
@@ -495,6 +519,44 @@ void GameScene::OptionCollision(XMFLOAT2 pos)
 	}
 	audio->SoundVolume(0, bgmVolume * volumeSize);
 	audio->SoundVolume(1, seVolume * volumeSize);
+}
+
+void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
+{
+	if (pos.x >= 523 && pos.x <= 610)
+	{
+		//うえ
+		if (pos.y >= 198 && pos.y <= 258)
+		{
+
+		}
+		//ひだり
+		if (pos.y >= 317 && pos.y <= 375)
+		{
+
+		}
+	}
+	if (pos.x >= 845 && pos.x <= 940)
+	{
+
+		//した
+		if (pos.y >= 198 && pos.y <= 258)
+		{
+
+		}
+		//みぎ
+		if (pos.y >= 317 && pos.y <= 375)
+		{
+
+		}
+	}
+	if (pos.x >= 586 && pos.x <= 743)
+	{
+		if (pos.y >= 430 && pos.y <= 490)
+		{
+
+		}
+	}
 }
 
 void GameScene::TitleCollision(XMFLOAT2 pos)

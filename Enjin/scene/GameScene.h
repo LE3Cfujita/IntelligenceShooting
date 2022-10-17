@@ -13,6 +13,7 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"Collision.h"
+#include"OptionKey.h"
 
 
 #pragma once
@@ -54,7 +55,8 @@ public:
 
 	void Title();
 
-	void Option();
+	void Option_BGMSE();
+	void Option_KEY();
 
 	void DrawPercent();
 
@@ -67,7 +69,8 @@ public:
 
 	void Setting(WinApp* winApp);
 
-	void OptionCollision(XMFLOAT2 pos);
+	void Option_BGMSE_Collision(XMFLOAT2 pos);
+	void Option_KEY_Collision(XMFLOAT2 pos);
 	void TitleCollision(XMFLOAT2 pos);
 
 	//マウス座標取得
@@ -99,6 +102,7 @@ private:
 	Enemy* enemy = nullptr;
 	Mouse* mouse = nullptr;
 	Collision* collision = nullptr;
+	OptionKey* key = nullptr;
 
 	//FBX宣言
 	ModelFBX* model = nullptr;
@@ -114,7 +118,8 @@ private:
 
 	XMFLOAT2 yajirusiPos = { 445.0f,465.0f };
 
-	Sprite* opsion = nullptr;
+	Sprite* opsion_bgmse = nullptr;
+	Sprite* opsion_key = nullptr;
 	XMFLOAT2 optionPos = { 640,360 };
 
 	XMFLOAT2 mousePos = { 0,0 };

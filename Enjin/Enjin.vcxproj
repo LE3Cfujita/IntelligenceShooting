@@ -38,6 +38,7 @@
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OptionKey.cpp" />
     <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
   </ItemGroup>
@@ -61,6 +62,7 @@
     <ClInclude Include="enemy\Enemy.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="input\Mouse.h" />
+    <ClInclude Include="OptionKey.h" />
     <ClInclude Include="player\Player.h" />
     <ClInclude Include="scene\GameScene.h" />
   </ItemGroup>

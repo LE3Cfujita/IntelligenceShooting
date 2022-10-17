@@ -111,6 +111,9 @@
     <ClCompile Include="Collision\Collision.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
+    <ClCompile Include="OptionKey.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\Sprite.h">
@@ -175,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="Collision\Collision.h">
       <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionKey.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
