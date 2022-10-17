@@ -14,8 +14,6 @@ GameScene::~GameScene()
 {
 	safe_delete(object3d_3);
 	safe_delete(sprite);
-	safe_delete(model);
-	safe_delete(object);
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, Mouse* mouse)
@@ -29,10 +27,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input, mouse);
-
-	ObjectFBX::SetDevice(dxCommon->GetDev());
-	ObjectFBX::SetCamera(camera);
-	ObjectFBX::CreateGraphicsPipeline();
 
 	//FBX用
 	camera->SetTarget({ 0,3,0 });
@@ -90,15 +84,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	audio->SoundPlayWave("Alarm01.wav", true);
 
 
-	model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-
-	object = new ObjectFBX;
-	object->Initialize();
-	object->SetModel(model);
-	object->PlayAnimation();
-	//object->SetPosition({ 0,15,15 });
-
-
 	enemy = new Enemy;
 	player = new Player;
 	enemy->Initialize(player);
@@ -129,7 +114,6 @@ void GameScene::Update(WinApp* winApp)
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
-		object->Update();
 		player->Update();
 		enemy->Update();
 		SceneChange();

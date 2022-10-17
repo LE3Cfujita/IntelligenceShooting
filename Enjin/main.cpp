@@ -2,18 +2,14 @@
 #include"Mouse.h"
 #include "WinApp.h"
 #include"DirectXCommon.h"
-#include "ObjectFBX.h"
 #include"Sprite.h"
 #include "DebugText.h"
 #include"Audio.h"
 #include"GameScene.h"
-#include"FbxLoader.h"
-//#include"fbxsdk.h"
 
 //# Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	//FbxManager* fbxManager = FbxManager::Create();
 #pragma region WindowsAPI初期化処理
 
 	//ポインタ置き場
@@ -31,8 +27,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//DirectXの初期化
 	dxCommon = new DirectXCommon();
 	dxCommon->Initislize(winApp);
-
-	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
 	
 	//入力の初期化
 	input = Input::GetInstance();
@@ -85,11 +79,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	safe_delete(gameScene);
 	//DirectXの解放
 	safe_delete(dxCommon);
+	// 音声データ解放
+	audio->SoundUnload();
 	// XAudio2解放
 	safe_delete(audio);
-	// 音声データ解放
-	//SoundUnload(&soundData1);
-	FbxLoader::GetInstance()->Finalize();
+
 #pragma region WindowsAPI後始末
 	//ウィンドウクラスを登録解除
 	winApp->Finalize();

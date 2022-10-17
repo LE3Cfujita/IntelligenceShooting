@@ -1,6 +1,6 @@
 #pragma once
 #include"Sprite.h"
-
+#include <string>
 class DebugText
 {
 public: // ’è”‚ÌéŒ¾    

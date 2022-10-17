@@ -1,12 +1,10 @@
 #include "Input.h"
 #include"Mouse.h"
-#include "ObjectFBX.h"
 #include "Object3d.h"
 #include"Sprite.h"
 #include "DebugText.h"
 #include"Audio.h"
 #include"DirectXCommon.h"
-#include"FbxLoader.h"
 #include"DebugCamera.h"
 #include "SafeDelete.h"
 #include <DirectXMath.h>
@@ -104,10 +102,6 @@ private:
 	Collision* collision = nullptr;
 	OptionKey* key = nullptr;
 
-	//FBXêÈåæ
-	ModelFBX* model = nullptr;
-
-	ObjectFBX* object = nullptr;
 
 
 	Object3d* object3d_3 = nullptr;

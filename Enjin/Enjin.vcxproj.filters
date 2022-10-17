@@ -69,15 +69,6 @@
     <ClCompile Include="scene\GameScene.cpp">
       <Filter>scene</Filter>
     </ClCompile>
-    <ClCompile Include="3d\FbxLoader.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\ModelFBX.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\ObjectFBX.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
     <ClCompile Include="camera\Camera.cpp">
       <Filter>camera</Filter>
     </ClCompile>
@@ -133,15 +124,6 @@
     </ClInclude>
     <ClInclude Include="scene\GameScene.h">
       <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\FbxLoader.h">
-      <Filter>3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\ModelFBX.h">
-      <Filter>3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\ObjectFBX.h">
-      <Filter>3d</Filter>
     </ClInclude>
     <ClInclude Include="camera\Camera.h">
       <Filter>camera</Filter>

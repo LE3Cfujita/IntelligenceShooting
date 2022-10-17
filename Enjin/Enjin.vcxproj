@@ -21,13 +21,10 @@
   <ItemGroup>
     <ClCompile Include="2d\DebugText.cpp" />
     <ClCompile Include="2d\Sprite.cpp" />
-    <ClCompile Include="3d\FbxLoader.cpp" />
     <ClCompile Include="3d\Material.cpp" />
     <ClCompile Include="3d\Mesh.cpp" />
     <ClCompile Include="3d\Model.cpp" />
-    <ClCompile Include="3d\ModelFBX.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
-    <ClCompile Include="3d\ObjectFBX.cpp" />
     <ClCompile Include="audio\Audio.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
@@ -45,13 +42,10 @@
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
     <ClInclude Include="2d\Sprite.h" />
-    <ClInclude Include="3d\FbxLoader.h" />
     <ClInclude Include="3d\Material.h" />
     <ClInclude Include="3d\Mesh.h" />
     <ClInclude Include="3d\Model.h" />
-    <ClInclude Include="3d\ModelFBX.h" />
     <ClInclude Include="3d\Object3d.h" />
-    <ClInclude Include="3d\ObjectFBX.h" />
     <ClInclude Include="audio\Audio.h" />
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="base\SafeDelete.h" />
