@@ -63,6 +63,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 
 	opsion_key->SetSize({ 720,360 });
 
+	induction->LoadTexture(7, L"Resources/induction.png");
+
+	induction = Sprite::Create(7, indPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+
+	induction->SetSize({ 720,100 });
 
 	if (!Sprite::LoadTexture(5, L"Resources/number.png")) {
 		assert(0);
@@ -86,10 +91,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 
 	enemy = new Enemy;
 	player = new Player;
+	key = new OptionKey;
+	key->Initialize(input, mouse);
 	enemy->Initialize(player);
-	player->Initialize(input, mouse);
+	player->Initialize(input, mouse, key);
 
-	//key->Initialize(input, mouse);
 
 }
 
@@ -98,7 +104,7 @@ void GameScene::Update(WinApp* winApp)
 	winApp->GetHwnd();
 
 	Setting(winApp);
-	Text();
+	//Text();
 
 	BCollision();
 
@@ -111,6 +117,7 @@ void GameScene::Update(WinApp* winApp)
 		Option_BGMSE();
 		break;
 	case GameState::OPSTION_KEY:
+		Option_KEY();
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
@@ -177,6 +184,58 @@ void GameScene::Option_KEY()
 	{
 		gameState = GameState::OPSTION_SOUND;
 	}
+
+	int left = key->GetLeftDecimal();
+	int right = key->GetRightDecimal();
+	int up = key->GetUpDecimaly();
+	int down = key->GetDownDecimal();
+	int attack = key->GetAttackDecimal();
+
+	if (left != 32)
+	{
+		sprintf_s(str, "%c", left);
+		debugText.Print(str, 555, 320, 3);
+	}
+	else
+	{
+		debugText.Print("SPACE", 555, 320, 2);
+	}
+	if (down != 32)
+	{
+		sprintf_s(str2, "%c", down);
+		debugText.Print(str2, 880, 200, 3);
+	}
+	else
+	{
+		debugText.Print("SPACE", 880, 200, 2);
+	}
+	if ( up != 32 )
+	{
+		sprintf_s(str3, "%c", up);
+		debugText.Print(str3, 555, 200, 3);
+	}
+	else
+	{
+		debugText.Print("SPACE", 555, 200, 2);
+	}
+	if ( right != 32)
+	{
+		sprintf_s(str4, "%c", right);
+		debugText.Print(str4, 880, 320, 3);
+	}
+	else
+	{
+		debugText.Print("SPACE", 880, 320, 2);
+	}
+	if (attack != 32)
+	{
+		sprintf_s(str5, "%c", attack);
+		debugText.Print(str5, 750, 620, 3);
+	}
+	else
+	{
+		debugText.Print("SPACE", 750, 620, 1);
+	}
 }
 
 void GameScene::DrawPercent()
@@ -219,7 +278,7 @@ void GameScene::DrawPercent()
 		{
 			spriteBGMNumber[i]->SetSize({ 64,64 });
 			spriteBGMNumber[i]->SetTextureRect({ (float)(32 * eachBGMNumber[i]), 0, }, { 32,32 });
-			spriteBGMNumber[i]->SetPosition(XMFLOAT2{ bgmNumberPos.x + 60+ i * 60.0f, bgmNumberPos.y });
+			spriteBGMNumber[i]->SetPosition(XMFLOAT2{ bgmNumberPos.x + 60 + i * 60.0f, bgmNumberPos.y });
 			spriteBGMNumber[i]->Draw();
 		}
 	}
@@ -323,6 +382,10 @@ void GameScene::Draw()
 		sprite->Draw();
 		yajirusi->Draw();
 		opsion_key->Draw();
+		if (keyCount != 0)
+		{
+			induction->Draw();
+		}
 		break;
 	case GameState::PLAY://ゲームシーン
 		break;
@@ -389,10 +452,6 @@ void GameScene::BCollision()
 		pBPosition[i] = player->GetBPosition();
 		if (enemy->GetHP() != 0)
 		{
-			if (pBPosition[i].z >= 100)
-			{
-				int a = 0;
-			}
 			if (collision->ballToball(ePosition.x, ePosition.y, ePosition.z, pBPosition[i].x, pBPosition[i].y, pBPosition[i].z, 10, 1))
 			{
 				player->PHit();
@@ -415,14 +474,14 @@ void GameScene::BCollision()
 
 void GameScene::SceneChange()
 {
-		if (pHP <= 0)
-		{
-			gameState == GameState::OVER;//ゲームオーバー
-		}
-		if (eHP <= 0)
-		{
-			gameState == GameState::CLEA;//ゲームクリア
-		}
+	if (pHP <= 0)
+	{
+		gameState == GameState::OVER;//ゲームオーバー
+	}
+	if (eHP <= 0)
+	{
+		gameState == GameState::CLEA;//ゲームクリア
+	}
 }
 
 void GameScene::Setting(WinApp* winApp)
@@ -455,7 +514,7 @@ void GameScene::Option_BGMSE_Collision(XMFLOAT2 pos)
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
 			}
-			
+
 		}
 		if (pos.y >= 284 && pos.y <= 353)
 		{
@@ -512,12 +571,20 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 		//うえ
 		if (pos.y >= 198 && pos.y <= 258)
 		{
-
+			if (mouse->TriggerMouseLeft())
+			{
+				key->SetCount(1);
+				keyCount = 1;
+			}
 		}
 		//ひだり
 		if (pos.y >= 317 && pos.y <= 375)
 		{
-
+			if (mouse->TriggerMouseLeft())
+			{
+				key->SetCount(2);
+				keyCount = 2;
+			}
 		}
 	}
 	if (pos.x >= 845 && pos.x <= 940)
@@ -526,20 +593,57 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 		//した
 		if (pos.y >= 198 && pos.y <= 258)
 		{
-
+			if (mouse->TriggerMouseLeft())
+			{
+				key->SetCount(3);
+				keyCount = 3;
+			}
 		}
 		//みぎ
 		if (pos.y >= 317 && pos.y <= 375)
 		{
-
+			if (mouse->TriggerMouseLeft())
+			{
+				key->SetCount(4);
+				keyCount = 4;
+			}
 		}
 	}
+	//攻撃
 	if (pos.x >= 586 && pos.x <= 743)
 	{
 		if (pos.y >= 430 && pos.y <= 490)
 		{
-
+			if (mouse->TriggerMouseLeft())
+			{
+				key->SetCount(5);
+				keyCount = 5;
+			}
 		}
+	}
+	if (pos.x >= 835 && pos.x <= 1000)
+	{
+		if (pos.y >= 495 && pos.y <= 530)
+		{
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPSTION_SOUND;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+	}
+	if (mouse->TriggerMouseRight())
+	{
+		gameState = GameState::TITLE;
+		audio->SoundStop("decisionSE.wav");
+		audio->SoundPlayWave("decisionSE.wav", false);
+	}
+	if (keyCount != 0)
+	{
+		key->SettingKey();
+		keyCount = key->GetCount();
+		player->GetKey();
 	}
 }
 

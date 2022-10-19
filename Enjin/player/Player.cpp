@@ -10,11 +10,11 @@ Player::~Player()
 	safe_delete(player);
 }
 
-void Player::Initialize(Input* input, Mouse* mouse)
+void Player::Initialize(Input* input, Mouse* mouse, OptionKey* key)
 {
 	this->input = input;
 	this->mouse = mouse;
-
+	this->key = key;
 	//OBJからモデルデータを読み込む
 	modelPlayer = Model::LoadFormOBJ("player");
 	modelBullet = Model::LoadFormOBJ("bullet");
@@ -29,6 +29,7 @@ void Player::Initialize(Input* input, Mouse* mouse)
 	player->SetScale({ 0.5,0.7,0.5 });
 
 
+	GetKey();
 	//弾
 	for (int i = 0; i < PBULLET_MAX; i++)
 	{
@@ -79,7 +80,7 @@ void Player::Draw()
 
 void Player::Move()
 {
-	if (input->PushKey(DIK_A) == true)
+	if (input->PushKey(moveLeft) == true)
 	{
 		if (position.x >= -20)
 		{
@@ -87,7 +88,7 @@ void Player::Move()
 			rotation.x = 5;
 		}
 	}
-	else if (input->PushKey(DIK_D) == true)
+	else if (input->PushKey(moveRight) == true)
 	{
 		if (position.x <= 20)
 		{
@@ -99,14 +100,14 @@ void Player::Move()
 	{
 		rotation.x = 0;
 	}
-	if (input->PushKey(DIK_W) == true)
+	if (input->PushKey(moveUp) == true)
 	{
 		if (position.y <= 13)
 		{
 			position.y += 0.3;
 		}
 	}
-	else if (input->PushKey(DIK_S) == true)
+	else if (input->PushKey(moveDown) == true)
 	{
 		if (position.y >= -7)
 		{
@@ -129,9 +130,9 @@ void Player::Attack()
 {
 	if (attackCT == 0)
 	{
-		for (int i = 0; i < PBULLET_MAX; i++)
+		if (input->PushKey(attackKey) == true || mouse->PushMouseLeft() == true)
 		{
-			if (input->PushKey(DIK_SPACE) == true || mouse->PushMouseLeft() == true)
+			for (int i = 0; i < PBULLET_MAX; i++)
 			{
 				if (b[i].flag == 0)
 				{
@@ -218,4 +219,13 @@ void Player::PHit()
 	b[bulletNumber].flag = 0;
 	b[bulletNumber].homingCount = 0;
 	b[bulletNumber].position.x = 1000;
+}
+
+void Player::GetKey()
+{
+	moveLeft = key->GetLeftKey();
+	moveRight = key->GetRightKey();
+	moveUp = key->GetUpKey();
+	moveDown = key->GetDownKey();
+	attackKey = key->GetAttackKey();
 }

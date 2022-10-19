@@ -3,6 +3,7 @@
 #include"Input.h"
 #include"SafeDelete.h"
 #include"Mouse.h"
+#include"OptionKey.h"
 
 #pragma once
 class Player
@@ -19,7 +20,7 @@ public:
 	~Player();
 
 	//‰Šú‰»
-	void Initialize(Input* input, Mouse* mouse);
+	void Initialize(Input* input, Mouse* mouse,OptionKey*key);
 
 	void Update();
 
@@ -49,6 +50,8 @@ public:
 
 	int GetBFlag() { return b[bulletNumber].flag; };
 	XMFLOAT3 GetBPosition() { return b[bulletNumber].position; };
+
+	void GetKey();
 
 public:
 
@@ -107,6 +110,13 @@ private://ƒƒ“ƒo•Ï”
 
 	Model* modelAim = nullptr;
 	Object3d* aim = nullptr;
+
+	OptionKey* key = nullptr;
+	int moveLeft = 0;
+	int moveRight = 0;
+	int moveUp = 0;
+	int moveDown = 0;
+	int attackKey = 0;
 
 };
 

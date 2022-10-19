@@ -12,7 +12,7 @@
 #include"Enemy.h"
 #include"Collision.h"
 #include"OptionKey.h"
-
+#include <iostream>
 
 #pragma once
 class GameScene
@@ -71,6 +71,7 @@ public:
 	void Option_KEY_Collision(XMFLOAT2 pos);
 	void TitleCollision(XMFLOAT2 pos);
 
+
 	//マウス座標取得
 	POINT mouse_pos;
 
@@ -125,11 +126,15 @@ private:
 	XMFLOAT2 bgmNumberPos = { 710,210 };
 	XMFLOAT2 seNumberPos = { 710,290 };
 
+	Sprite* induction = nullptr;
+	XMFLOAT2 indPos = { 640,120 };
+
 	//デバックテキスト用
 	char str[100];
 	char str2[100];
 	char str3[100];
 	char str4[100];
+	char str5[100];
 
 	//スプライト
 	const int SPRITE_NUM = 10;
@@ -149,6 +154,7 @@ private:
 	//SEの音量パーセント
 	int seVolume = 100;
 
+	int keyCount = 0;
 
 	float volumeSize = 0.01;
 
