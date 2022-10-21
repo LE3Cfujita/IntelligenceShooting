@@ -22,7 +22,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	this->input = input;
 	this->audio = audio;
 	this->mouse = mouse;
-
 	gameState = GameState::TITLE;
 
 	// ƒJƒƒ‰¶¬
@@ -96,7 +95,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	enemy->Initialize(player);
 	player->Initialize(input, mouse, key);
 
-
+	left = key->GetLeftDecimal();
+	right = key->GetRightDecimal();
+	up = key->GetUpDecimaly();
+	down = key->GetDownDecimal();
+	attack = key->GetAttackDecimal();
+	CreateFile();
 }
 
 void GameScene::Update(WinApp* winApp)
@@ -185,11 +189,11 @@ void GameScene::Option_KEY()
 		gameState = GameState::OPSTION_SOUND;
 	}
 
-	int left = key->GetLeftDecimal();
-	int right = key->GetRightDecimal();
-	int up = key->GetUpDecimaly();
-	int down = key->GetDownDecimal();
-	int attack = key->GetAttackDecimal();
+	left = key->GetLeftDecimal();
+	right = key->GetRightDecimal();
+	up = key->GetUpDecimaly();
+	down = key->GetDownDecimal();
+	attack = key->GetAttackDecimal();
 
 	if (left != 32)
 	{
@@ -198,7 +202,7 @@ void GameScene::Option_KEY()
 	}
 	else
 	{
-		debugText.Print("SPACE", 555, 320, 2);
+		debugText.Print("SPACE", 535, 320, 1.5, 3);
 	}
 	if (down != 32)
 	{
@@ -207,34 +211,34 @@ void GameScene::Option_KEY()
 	}
 	else
 	{
-		debugText.Print("SPACE", 880, 200, 2);
+		debugText.Print("SPACE", 860, 200, 1.5, 3);
 	}
-	if ( up != 32 )
+	if (up != 32)
 	{
 		sprintf_s(str3, "%c", up);
 		debugText.Print(str3, 555, 200, 3);
 	}
 	else
 	{
-		debugText.Print("SPACE", 555, 200, 2);
+		debugText.Print("SPACE", 535, 200, 1.5, 3);
 	}
-	if ( right != 32)
+	if (right != 32)
 	{
 		sprintf_s(str4, "%c", right);
 		debugText.Print(str4, 880, 320, 3);
 	}
 	else
 	{
-		debugText.Print("SPACE", 880, 320, 2);
+		debugText.Print("SPACE", 860, 320, 1.5, 3);
 	}
 	if (attack != 32)
 	{
 		sprintf_s(str5, "%c", attack);
-		debugText.Print(str5, 750, 620, 3);
+		debugText.Print(str5, 650, 430, 3);
 	}
 	else
 	{
-		debugText.Print("SPACE", 750, 620, 1);
+		debugText.Print("SPACE", 630, 435, 1.5, 3);
 	}
 }
 
@@ -671,5 +675,20 @@ void GameScene::TitleCollision(XMFLOAT2 pos)
 		}
 	}
 	yajirusi->SetPosition(yajirusiPos);
+
+}
+
+void GameScene::CreateFile()
+{
+	ofstream outputfile("test.txt");
+	outputfile << left;
+	outputfile << "\n";
+	outputfile << right;
+	outputfile << "\n";
+	outputfile << up;
+	outputfile << "\n";
+	outputfile << down;
+	outputfile << "\n";
+	outputfile.close();
 
 }

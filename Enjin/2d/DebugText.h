@@ -15,6 +15,7 @@ public: // ƒƒ“ƒoŠÖ”
 	void Initialize( UINT texnumber);
 
 	void Print(const std::string& text, float x, float y, float scale = 1.0f);
+	void Print(const std::string& text, float x, float y, float scaleX, float scaleY);
 
 	void DrawAll(ID3D12GraphicsCommandList* cmdList);
 

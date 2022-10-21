@@ -47,7 +47,8 @@ void DebugText::Print(const std::string& text, float x, float y, float scale)
 
 		// 座標計算
 		sprites[spriteIndex]->SetPosition({ x + fontWidth * scale * i, y });
-		sprites[spriteIndex]->SetTextureRect({ (float)fontIndexX * fontWidth, (float)fontIndexY * fontHeight }, { (float)fontWidth, (float)fontHeight });
+		sprites[spriteIndex]->SetTextureRect({ (float)fontIndexX * fontWidth, (float)fontIndexY * fontHeight }
+		, { (float)fontWidth, (float)fontHeight });
 		sprites[spriteIndex]->SetSize({ fontWidth * scale, fontHeight * scale });
 
 		// 文字を１つ進める
@@ -55,6 +56,38 @@ void DebugText::Print(const std::string& text, float x, float y, float scale)
 	}
 }
 
+void DebugText::Print(const std::string& text, float x, float y, float scaleX, float scaleY)
+{
+	// 全ての文字について
+	for (int i = 0; i < text.size(); i++)
+	{
+		// 最大文字数超過
+		if (spriteIndex >= maxCharCount) {
+			break;
+		}
+
+		// 1文字取り出す(※ASCIIコードでしか成り立たない)
+		const unsigned char& character = text[i];
+
+		// ASCIIコードの2段分飛ばした番号を計算
+		int fontIndex = character - 32;
+		if (character >= 0x7f) {
+			fontIndex = 0;
+		}
+
+		int fontIndexY = fontIndex / fontLineCount;
+		int fontIndexX = fontIndex % fontLineCount;
+
+		// 座標計算
+		sprites[spriteIndex]->SetPosition({ x + fontWidth * scaleX * i, y });
+		sprites[spriteIndex]->SetTextureRect({ (float)fontIndexX * fontWidth, (float)fontIndexY * fontHeight }
+		, { (float)fontWidth, (float)fontHeight });
+		sprites[spriteIndex]->SetSize({ fontWidth * scaleX, fontHeight * scaleY });
+
+		// 文字を１つ進める
+		spriteIndex++;
+	}
+}
 void DebugText::DrawAll(ID3D12GraphicsCommandList* cmdList)
 {
 	// 全ての文字のスプライトについて

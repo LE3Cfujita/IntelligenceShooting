@@ -13,7 +13,8 @@
 #include"Collision.h"
 #include"OptionKey.h"
 #include <iostream>
-
+#include <fstream>
+#include <string>
 #pragma once
 class GameScene
 {
@@ -71,6 +72,7 @@ public:
 	void Option_KEY_Collision(XMFLOAT2 pos);
 	void TitleCollision(XMFLOAT2 pos);
 
+	void CreateFile();
 
 	//マウス座標取得
 	POINT mouse_pos;
@@ -102,8 +104,7 @@ private:
 	Mouse* mouse = nullptr;
 	Collision* collision = nullptr;
 	OptionKey* key = nullptr;
-
-
+	
 
 	Object3d* object3d_3 = nullptr;
 
@@ -157,6 +158,12 @@ private:
 	int keyCount = 0;
 
 	float volumeSize = 0.01;
+
+	int left = 0;
+	int right = 0;
+	int up = 0;
+	int down = 0;
+	int attack = 0;
 
 	//float bgm = 1.0f;//BGM音量
 	//float se = 1.0f;//SE音量
