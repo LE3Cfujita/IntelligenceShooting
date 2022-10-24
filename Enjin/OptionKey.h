@@ -7,7 +7,7 @@ class OptionKey
 {	//èâä˙âª
 public:
 	void Initialize(Input* input, Mouse* mouse);
-	
+
 
 	void SettingKey();
 
@@ -25,6 +25,12 @@ public:
 	int GetUpDecimaly() { return upDecimal; }
 	int GetDownDecimal() { return downDecimal; }
 	int GetAttackDecimal() { return attackDecimal; }
+
+	void SetLeftDecimal(int left) { leftDecimal = left; }
+	void SetRightDecimal(int right) { rightDecimal = right; }
+	void SetUpDecimaly(int up) { upDecimal = up; }
+	void SetDownDecimal(int down) { downDecimal = down; }
+	void SetAttackDecimal(int attack) { attackDecimal = attack; }
 
 private:
 	Input* input = nullptr;

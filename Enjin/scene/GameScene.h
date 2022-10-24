@@ -15,7 +15,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include<stdio.h>
 #pragma once
+
 class GameScene
 {
 public:
@@ -28,6 +30,16 @@ public:
 		CLEA,
 		OVER
 	};
+
+	typedef struct {
+		int left;
+		int right;
+		int up;
+		int down;
+		int attack;
+	}SaveData;
+	
+	
 private://エイリアス
 //Microsoft::WRL::を省略
 	template<class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -72,7 +84,8 @@ public:
 	void Option_KEY_Collision(XMFLOAT2 pos);
 	void TitleCollision(XMFLOAT2 pos);
 
-	void CreateFile();
+	void WriteFile();
+	void LoadFile();
 
 	//マウス座標取得
 	POINT mouse_pos;

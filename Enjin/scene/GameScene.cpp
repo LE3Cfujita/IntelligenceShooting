@@ -94,13 +94,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	key->Initialize(input, mouse);
 	enemy->Initialize(player);
 	player->Initialize(input, mouse, key);
-
 	left = key->GetLeftDecimal();
 	right = key->GetRightDecimal();
 	up = key->GetUpDecimaly();
 	down = key->GetDownDecimal();
 	attack = key->GetAttackDecimal();
-	CreateFile();
+
+	LoadFile();
+
+
 }
 
 void GameScene::Update(WinApp* winApp)
@@ -189,11 +191,7 @@ void GameScene::Option_KEY()
 		gameState = GameState::OPSTION_SOUND;
 	}
 
-	left = key->GetLeftDecimal();
-	right = key->GetRightDecimal();
-	up = key->GetUpDecimaly();
-	down = key->GetDownDecimal();
-	attack = key->GetAttackDecimal();
+
 
 	if (left != 32)
 	{
@@ -648,6 +646,11 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 		key->SettingKey();
 		keyCount = key->GetCount();
 		player->GetKey();
+		left = key->GetLeftDecimal();
+		right = key->GetRightDecimal();
+		up = key->GetUpDecimaly();
+		down = key->GetDownDecimal();
+		attack = key->GetAttackDecimal();
 	}
 }
 
@@ -678,17 +681,37 @@ void GameScene::TitleCollision(XMFLOAT2 pos)
 
 }
 
-void GameScene::CreateFile()
+void GameScene::WriteFile()
 {
-	ofstream outputfile("test.txt");
-	outputfile << left;
-	outputfile << "\n";
-	outputfile << right;
-	outputfile << "\n";
-	outputfile << up;
-	outputfile << "\n";
-	outputfile << down;
-	outputfile << "\n";
-	outputfile.close();
+	SaveData Data = { left,right,up,down,attack };
+	FILE* fp;
+	fopen_s(&fp, "text.txt", "w");
+	fwrite(&Data, sizeof(Data), 1, fp);//‚Ð‚¾‚èƒL[‚Ì’l‚Ì“ü—Í
+	fclose(fp);
 
+}
+
+void GameScene::LoadFile()
+{
+
+	SaveData Data;
+	FILE* fp;
+	fopen_s(&fp, "text.txt", "r");
+	if (fp != NULL)
+	{
+		fread(&Data, sizeof(Data), 1, fp);
+		fclose(fp);
+		left = Data.left;
+		right = Data.right;
+		up = Data.up;
+		down = Data.down;
+		attack = Data.attack;
+
+		key->SetLeftDecimal(left);
+		key->SetRightDecimal(right);
+		key->SetUpDecimaly(up);
+		key->SetDownDecimal(down);
+		key->SetAttackDecimal(attack);
+		player->GetKey();
+	}
 }
