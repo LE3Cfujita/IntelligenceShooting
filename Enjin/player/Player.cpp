@@ -117,8 +117,8 @@ void Player::Move()
 
 	XMFLOAT2 mouseM{ mouse->GetMouseVelocityX() ,mouse->GetMouseVelocityY() };
 
-	rock.position.x += mouseM.x / 12;
-	rock.position.y -= mouseM.y / 12;
+	rock.position.x += mouseM.x / sensi;
+	rock.position.y -= mouseM.y / sensi;
 
 
 	player->SetPosition(position);

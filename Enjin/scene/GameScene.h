@@ -24,8 +24,10 @@ public:
 	enum GameState
 	{
 		TITLE,
-		OPSTION_SOUND,
-		OPSTION_KEY,
+		OPTION_SELECT,
+		OPTION_SOUND,
+		OPTION_KEY,
+		OPTION_SENSI,
 		PLAY,
 		CLEA,
 		OVER
@@ -68,8 +70,10 @@ public:
 
 	void Option_BGMSE();
 	void Option_KEY();
-
-	void DrawPercent();
+	void Option_Select();
+	void Option_Sensi();
+	void DrawVolumePercent();
+	void DrawSensiPercent();
 
 	void Draw();
 	void Text();
@@ -79,10 +83,7 @@ public:
 	void SceneChange();
 
 	void Setting(WinApp* winApp);
-
-	void Option_BGMSE_Collision(XMFLOAT2 pos);
 	void Option_KEY_Collision(XMFLOAT2 pos);
-	void TitleCollision(XMFLOAT2 pos);
 
 	void WriteFile();
 	void LoadFile();
@@ -127,8 +128,11 @@ private:
 
 	XMFLOAT2 yajirusiPos = { 445.0f,465.0f };
 
+	Sprite* opsion_Select = nullptr;
+
 	Sprite* opsion_bgmse = nullptr;
 	Sprite* opsion_key = nullptr;
+	Sprite* opsion_sensi = nullptr;
 	XMFLOAT2 optionPos = { 640,360 };
 
 	XMFLOAT2 mousePos = { 0,0 };
@@ -137,8 +141,10 @@ private:
 
 	Sprite* spriteBGMNumber[3];
 	Sprite* spriteSENumber[3];
-	XMFLOAT2 bgmNumberPos = { 710,210 };
-	XMFLOAT2 seNumberPos = { 710,290 };
+	Sprite* spriteSENSINumber[3];
+	XMFLOAT2 bgmNumberPos = { 670,200 };
+	XMFLOAT2 seNumberPos = { 670,330 };
+	XMFLOAT2 sensiNumberPos = { 670,200 };
 
 	Sprite* induction = nullptr;
 	XMFLOAT2 indPos = { 640,120 };

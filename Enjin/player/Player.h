@@ -53,6 +53,8 @@ public:
 
 	void GetKey();
 
+	void SetSensi(int sensi) { this->sensi = sensi; }
+	int GetSensi() { return sensi; }
 public:
 
 #define PBULLET_MAX 50
@@ -117,6 +119,8 @@ private://ƒƒ“ƒo•Ï”
 	int moveUp = 0;
 	int moveDown = 0;
 	int attackKey = 0;
+
+	int sensi = 12;
 
 };
 

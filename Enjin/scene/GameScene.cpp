@@ -47,14 +47,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	yajirusiOp->LoadTexture(3, L"Resources/yazirusi.png");
 
 	yajirusi = Sprite::Create(3, yajirusiPos);
-	yajirusiOp = Sprite::Create(3, { 380,250 });
+	yajirusiOp = Sprite::Create(3, { 450,185 });
 
 	// テクスチャ読み込み
 	opsion_bgmse->LoadTexture(4, L"Resources/BGMSEOpsion.png");
 
 	opsion_bgmse = Sprite::Create(4, optionPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
 
-	opsion_bgmse->SetSize({ 720,360 });
+	opsion_bgmse->SetSize({ 500,420 });
 
 	opsion_key->LoadTexture(6, L"Resources/OPTION_KEY.png");
 
@@ -68,6 +68,18 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 
 	induction->SetSize({ 720,100 });
 
+	opsion_Select->LoadTexture(8, L"Resources/OPTIONSelect.png");
+
+	opsion_Select = Sprite::Create(8, optionPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+
+	opsion_Select->SetSize({ 420,420 });
+
+	opsion_sensi->LoadTexture(9, L"Resources/Sensi.png");
+
+	opsion_sensi = Sprite::Create(9, optionPos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+
+	opsion_sensi->SetSize({ 500,420 });
+
 	if (!Sprite::LoadTexture(5, L"Resources/number.png")) {
 		assert(0);
 		return;
@@ -77,6 +89,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	{
 		spriteBGMNumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 		spriteSENumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
+		spriteSENSINumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 	}
 
 
@@ -110,7 +123,7 @@ void GameScene::Update(WinApp* winApp)
 	winApp->GetHwnd();
 
 	Setting(winApp);
-	//Text();
+	Text();
 
 	BCollision();
 
@@ -119,11 +132,17 @@ void GameScene::Update(WinApp* winApp)
 	case GameState::TITLE://タイトル
 		Title();
 		break;
-	case GameState::OPSTION_SOUND://操作説明など
+	case GameState::OPTION_SELECT:
+		Option_Select();
+		break;
+	case GameState::OPTION_SOUND://操作説明など
 		Option_BGMSE();
 		break;
-	case GameState::OPSTION_KEY:
+	case GameState::OPTION_KEY:
 		Option_KEY();
+		break;
+	case GameState::OPTION_SENSI:
+		Option_Sensi();
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
@@ -145,52 +164,137 @@ void GameScene::Update(WinApp* winApp)
 
 void GameScene::Title()
 {
-	if (input->TriggerKey(DIK_RETURN))
-	{
-		if (count == 0)
-		{
-			gameState = GameState::PLAY;
-			audio->SoundPlayWave("decisionSE.wav", false);
-		}
-		else
-		{
-			gameState = GameState::OPSTION_SOUND;
-			audio->SoundPlayWave("decisionSE.wav", false);
-		}
-	}
-	if (input->TriggerKey(DIK_UP))
-	{
-		count = 0;
-		yajirusiPos.y = 465.0f;
-	}
-	if (input->TriggerKey(DIK_DOWN))
-	{
-		count = 1;
-		yajirusiPos.y = 600.0f;
-	}
-	/*****************/
-	TitleCollision(mousePos);
 
+	if (mousePos.x >= 480 && mousePos.x <= 800)
+	{
+		if (mousePos.y >= 400.0f && mousePos.y <= 500.0f)
+		{
+			yajirusiPos.y = 465.0f;
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::PLAY;
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (mousePos.y >= 550.0f && mousePos.y <= 650.0f)
+		{
+			yajirusiPos.y = 600.0f;
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPTION_SELECT;
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+	}
 	yajirusi->SetPosition(yajirusiPos);
 }
 
+void GameScene::Option_Select()
+{
+	if (mousePos.x >= 515 && mousePos.x <= 770)
+	{
+		if (mousePos.y >= 185 && mousePos.y <= 245)
+		{
+			yajirusiOp->SetPosition({ 450,185 });
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPTION_SOUND;
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (mousePos.y >= 280 && mousePos.y <= 340)
+		{
+			yajirusiOp->SetPosition({ 450,280 });
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPTION_KEY;
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (mousePos.y >= 375 && mousePos.y <= 430)
+		{
+			yajirusiOp->SetPosition({ 450,375 });
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPTION_SENSI;
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (mousePos.y >= 465 && mousePos.y <= 525)
+		{
+			yajirusiOp->SetPosition({ 450,465 });
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::TITLE;
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+	}
+}
 void GameScene::Option_BGMSE()
 {
-	Option_BGMSE_Collision(mousePos);
-	if (input->TriggerKey(DIK_RETURN))
+	if (mousePos.x >= 470 && mousePos.x <= 835)
+	{
+		if (mousePos.y >= 185 && mousePos.y <= 260)
+		{
+			yajirusiOp->SetPosition({ 410,200 });
+			if (mouse->TriggerMouseLeft())
+			{
+				if (bgmVolume != 100)
+				{
+					bgmVolume += 10;
+				}
+				else
+				{
+					bgmVolume = 0;
+				}
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+
+		}
+		if (mousePos.y >= 320 && mousePos.y <= 390)
+		{
+			yajirusiOp->SetPosition({ 410,330 });
+			if (mouse->TriggerMouseLeft())
+			{
+				if (seVolume != 100)
+				{
+					seVolume += 10;
+				}
+				else
+				{
+					seVolume = 0;
+				}
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+		if (mousePos.y >= 450 && mousePos.y <= 520)
+		{
+			yajirusiOp->SetPosition({ 410,460 });
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPTION_SELECT;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+				yajirusiOp->SetPosition({ 450,185 });
+			}
+		}
+	}
+	if (mouse->TriggerMouseRight())
 	{
 		gameState = GameState::TITLE;
+		audio->SoundStop("decisionSE.wav");
+		audio->SoundPlayWave("decisionSE.wav", false);
 	}
+	audio->SoundVolume(0, bgmVolume * volumeSize);
+	audio->SoundVolume(1, seVolume * volumeSize);
 }
 
 void GameScene::Option_KEY()
 {
 	Option_KEY_Collision(mousePos);
-	if (input->TriggerKey(DIK_RETURN))
-	{
-		gameState = GameState::OPSTION_SOUND;
-	}
-
 
 
 	if (left != 32)
@@ -240,7 +344,7 @@ void GameScene::Option_KEY()
 	}
 }
 
-void GameScene::DrawPercent()
+void GameScene::DrawVolumePercent()
 {
 	//BGM
 	/*************************/
@@ -260,9 +364,10 @@ void GameScene::DrawPercent()
 
 		for (int i = 0; i < 3; i++)
 		{
-			spriteBGMNumber[i]->SetSize({ 64,64 });
+			spriteBGMNumber[i]->SetSize({ 32,48 });
 			spriteBGMNumber[i]->SetTextureRect({ (float)(32 * eachBGMNumber[i]), 0, }, { 32,32 });
-			spriteBGMNumber[i]->SetPosition(XMFLOAT2{ bgmNumberPos.x + i * 60.0f, bgmNumberPos.y });
+			spriteBGMNumber[i]->SetPosition(XMFLOAT2{ bgmNumberPos.x + i * 32.0f, bgmNumberPos.y }
+			);
 			spriteBGMNumber[i]->Draw();
 		}
 	}
@@ -278,9 +383,9 @@ void GameScene::DrawPercent()
 
 		for (int i = 0; i < 2; i++)
 		{
-			spriteBGMNumber[i]->SetSize({ 64,64 });
+			spriteBGMNumber[i]->SetSize({ 32,48 });
 			spriteBGMNumber[i]->SetTextureRect({ (float)(32 * eachBGMNumber[i]), 0, }, { 32,32 });
-			spriteBGMNumber[i]->SetPosition(XMFLOAT2{ bgmNumberPos.x + 60 + i * 60.0f, bgmNumberPos.y });
+			spriteBGMNumber[i]->SetPosition(XMFLOAT2{ bgmNumberPos.x + 32 + i * 32.0f, bgmNumberPos.y });
 			spriteBGMNumber[i]->Draw();
 		}
 	}
@@ -303,9 +408,9 @@ void GameScene::DrawPercent()
 
 		for (int i = 0; i < 3; i++)
 		{
-			spriteSENumber[i]->SetSize({ 64,64 });
+			spriteSENumber[i]->SetSize({ 32,48 });
 			spriteSENumber[i]->SetTextureRect({ (float)(32 * eachSENumber[i]), 0, }, { 32,32 });
-			spriteSENumber[i]->SetPosition(XMFLOAT2{ seNumberPos.x + i * 60.0f, seNumberPos.y });
+			spriteSENumber[i]->SetPosition(XMFLOAT2{ seNumberPos.x + i * 32.0f, seNumberPos.y });
 			spriteSENumber[i]->Draw();
 		}
 	}
@@ -321,15 +426,58 @@ void GameScene::DrawPercent()
 
 		for (int i = 0; i < 2; i++)
 		{
-			spriteSENumber[i]->SetSize({ 64,64 });
+			spriteSENumber[i]->SetSize({ 32,48 });
 			spriteSENumber[i]->SetTextureRect({ (float)(32 * eachSENumber[i]), 0, }, { 32,32 });
-			spriteSENumber[i]->SetPosition(XMFLOAT2{ seNumberPos.x + 60 + i * 60.0f, seNumberPos.y });
+			spriteSENumber[i]->SetPosition(XMFLOAT2{ seNumberPos.x + 32 + i * 32.0f, seNumberPos.y });
 			spriteSENumber[i]->Draw();
 		}
 	}
 	/***************************/
 }
 
+void GameScene::DrawSensiPercent()
+{
+
+	char eachSensiNumber[3] = {};//各桁の値
+	int sensiNumber = player->GetSensi();//表示する数字
+
+	if (player->GetSensi() == 100)
+	{
+		int keta = 100;//最初の桁
+		for (int i = 0; i < 3; i++)
+		{
+			eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
+			sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			spriteSENSINumber[i]->SetSize({ 32,48 });
+			spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
+			spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + i * 32.0f, sensiNumberPos.y });
+			spriteSENSINumber[i]->Draw();
+		}
+	}
+	else
+	{
+		int keta = 10;
+		for (int i = 0; i < 2; i++)
+		{
+			eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
+			sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
+
+		for (int i = 0; i < 2; i++)
+		{
+			spriteSENSINumber[i]->SetSize({ 32,48 });
+			spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
+			spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + 32 + i * 32.0f, sensiNumberPos.y });
+			spriteSENSINumber[i]->Draw();
+		}
+	}
+}
 void GameScene::Draw()
 {
 	// コマンドリストの取得
@@ -344,10 +492,11 @@ void GameScene::Draw()
 	{
 	case GameState::TITLE://タイトル
 		break;
-
-	case GameState::OPSTION_SOUND://操作説明など
+	case GameState::OPTION_SELECT:
 		break;
-	case GameState::OPSTION_KEY://操作説明など
+	case GameState::OPTION_SOUND://操作説明など
+		break;
+	case GameState::OPTION_KEY://操作説明など
 		break;
 	case GameState::PLAY://ゲームシーン
 	//3Dオブジェクトの描画
@@ -373,14 +522,20 @@ void GameScene::Draw()
 		sprite->Draw();
 		yajirusi->Draw();
 		break;
-	case GameState::OPSTION_SOUND://操作説明など
+	case GameState::OPTION_SELECT:
+		sprite->Draw();
+		yajirusi->Draw();
+		opsion_Select->Draw();
+		yajirusiOp->Draw();
+		break;
+	case GameState::OPTION_SOUND://操作説明など
 		sprite->Draw();
 		yajirusi->Draw();
 		opsion_bgmse->Draw();
 		yajirusiOp->Draw();
-		DrawPercent();
+		DrawVolumePercent();
 		break;
-	case GameState::OPSTION_KEY://操作説明など
+	case GameState::OPTION_KEY://操作説明など
 		sprite->Draw();
 		yajirusi->Draw();
 		opsion_key->Draw();
@@ -388,6 +543,12 @@ void GameScene::Draw()
 		{
 			induction->Draw();
 		}
+		break;
+	case GameState::OPTION_SENSI:
+		sprite->Draw();
+		yajirusi->Draw();
+		opsion_sensi->Draw();
+		DrawSensiPercent();
 		break;
 	case GameState::PLAY://ゲームシーン
 		break;
@@ -405,15 +566,22 @@ void GameScene::Draw()
 
 }
 
+void GameScene::Option_Sensi()
+{
+
+
+
+}
+
 void GameScene::Text()
 {
 	pHP = player->GetHP();
 
 	eHP = enemy->GetHP();
 
-	sprintf_s(str, "HP = %f", mousePos.x);
+	sprintf_s(str, "mousePosX = %f", mousePos.x);
 	debugText.Print(str, 0, 0, 1);
-	sprintf_s(str2, "eHP = %f", mousePos.y);
+	sprintf_s(str2, "mousePosY = %f", mousePos.y);
 	debugText.Print(str2, 0, 20, 1);
 }
 
@@ -496,75 +664,6 @@ void GameScene::Setting(WinApp* winApp)
 	mousePos = { (float)p.x,(float)p.y };
 }
 
-void GameScene::Option_BGMSE_Collision(XMFLOAT2 pos)
-{
-	if (pos.x >= 450 && pos.x <= 950)
-	{
-		if (pos.y >= 205 && pos.y <= 273)
-		{
-			yajirusiOp->SetPosition({ 380,210 });
-			if (mouse->TriggerMouseLeft())
-			{
-				if (bgmVolume != 100)
-				{
-					bgmVolume += 10;
-				}
-				else
-				{
-					bgmVolume = 0;
-				}
-				audio->SoundStop("decisionSE.wav");
-				audio->SoundPlayWave("decisionSE.wav", false);
-			}
-
-		}
-		if (pos.y >= 284 && pos.y <= 353)
-		{
-			yajirusiOp->SetPosition({ 380,290 });
-			if (mouse->TriggerMouseLeft())
-			{
-				if (seVolume != 100)
-				{
-					seVolume += 10;
-				}
-				else
-				{
-					seVolume = 0;
-				}
-				audio->SoundStop("decisionSE.wav");
-				audio->SoundPlayWave("decisionSE.wav", false);
-			}
-		}
-		if (pos.y >= 370 && pos.y <= 435)
-		{
-			yajirusiOp->SetPosition({ 380,376 });
-			if (mouse->TriggerMouseLeft())
-			{
-				gameState = GameState::OPSTION_KEY;
-				audio->SoundStop("decisionSE.wav");
-				audio->SoundPlayWave("decisionSE.wav", false);
-			}
-		}
-		if (pos.y >= 452 && pos.y <= 520)
-		{
-			yajirusiOp->SetPosition({ 380,460 });
-			if (mouse->TriggerMouseLeft())
-			{
-				gameState = GameState::TITLE;
-				audio->SoundStop("decisionSE.wav");
-				audio->SoundPlayWave("decisionSE.wav", false);
-			}
-		}
-	}
-	if (mouse->TriggerMouseRight())
-	{
-		gameState = GameState::TITLE;
-		audio->SoundStop("decisionSE.wav");
-		audio->SoundPlayWave("decisionSE.wav", false);
-	}
-	audio->SoundVolume(0, bgmVolume * volumeSize);
-	audio->SoundVolume(1, seVolume * volumeSize);
-}
 
 void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 {
@@ -629,9 +728,10 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				gameState = GameState::OPSTION_SOUND;
+				gameState = GameState::OPTION_SELECT;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
+				yajirusiOp->SetPosition({ 450,185 });
 			}
 		}
 	}
@@ -654,32 +754,6 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 	}
 }
 
-void GameScene::TitleCollision(XMFLOAT2 pos)
-{
-	if (pos.x >= 480 && pos.x <= 800)
-	{
-		if (pos.y >= 400.0f && pos.y <= 500.0f)
-		{
-			yajirusiPos.y = 465.0f;
-			if (mouse->TriggerMouseLeft())
-			{
-				gameState = GameState::PLAY;
-				audio->SoundPlayWave("decisionSE.wav", false);
-			}
-		}
-		if (pos.y >= 550.0f && pos.y <= 650.0f)
-		{
-			yajirusiPos.y = 600.0f;
-			if (mouse->TriggerMouseLeft())
-			{
-				gameState = GameState::OPSTION_SOUND;
-				audio->SoundPlayWave("decisionSE.wav", false);
-			}
-		}
-	}
-	yajirusi->SetPosition(yajirusiPos);
-
-}
 
 void GameScene::WriteFile()
 {
@@ -688,7 +762,6 @@ void GameScene::WriteFile()
 	fopen_s(&fp, "text.txt", "w");
 	fwrite(&Data, sizeof(Data), 1, fp);//ひだりキーの値の入力
 	fclose(fp);
-
 }
 
 void GameScene::LoadFile()
