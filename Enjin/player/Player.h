@@ -53,8 +53,22 @@ public:
 
 	void GetKey();
 
-	void SetSensi(int sensi) { this->sensi = sensi; }
+	void SetSensi(int sensi,int drawSensi) 
+	{ 
+		if (sensi > 100)
+		{
+			sensi = 10;
+			drawSensi = 100;
+		}
+		else if (sensi == 100)
+		{
+			drawSensi = 1;
+		}
+		this->sensi = sensi;
+		this->drawSensi = drawSensi;
+	}
 	int GetSensi() { return sensi; }
+	int GetDrawSensi() { return drawSensi; }
 public:
 
 #define PBULLET_MAX 50
@@ -63,7 +77,7 @@ public:
 	XMFLOAT3 position = { 0,0,-5 };
 	XMFLOAT3 rotation = { 0,-90,0 };
 
-	int HP = 10;
+	int HP = 30;
 
 	//UŒ‚ƒtƒ‰ƒO
 	struct BULLET
@@ -120,7 +134,7 @@ private://ƒƒ“ƒo•Ï”
 	int moveDown = 0;
 	int attackKey = 0;
 
-	int sensi = 12;
-
+	int sensi = 50;
+	int drawSensi = 50;
 };
 

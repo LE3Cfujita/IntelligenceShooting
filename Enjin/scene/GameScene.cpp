@@ -93,6 +93,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	}
 
 
+	//ground = Model::LoadFormOBJ("ground");
+	//3Dオブジェクト生成
+	//woods = Object3d::Create();
+	//オブジェクトにモデルを紐付ける
+	//woods->SetModel(ground);
+	//woods->SetPosition({ 0,-20,15 });
+	//woods->SetScale({ 10,10,10 });
+
 	audio->SoundLoadWave("Alarm01.wav", 0);//テスト
 	audio->SoundLoadWave("decisionSE.wav", 1);//テスト
 	audio->SoundVolume(0, bgmVolume * volumeSize);
@@ -113,9 +121,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	down = key->GetDownDecimal();
 	attack = key->GetAttackDecimal();
 
+
+
 	LoadFile();
-
-
 }
 
 void GameScene::Update(WinApp* winApp)
@@ -126,6 +134,7 @@ void GameScene::Update(WinApp* winApp)
 	Text();
 
 	BCollision();
+	SceneChange();
 
 	switch (gameState)
 	{
@@ -146,9 +155,9 @@ void GameScene::Update(WinApp* winApp)
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
+		//woods->Update();
 		player->Update();
 		enemy->Update();
-		SceneChange();
 
 		SetCursorPos(690, 360);
 		break;
@@ -164,7 +173,6 @@ void GameScene::Update(WinApp* winApp)
 
 void GameScene::Title()
 {
-
 	if (mousePos.x >= 480 && mousePos.x <= 800)
 	{
 		if (mousePos.y >= 400.0f && mousePos.y <= 500.0f)
@@ -439,9 +447,8 @@ void GameScene::DrawSensiPercent()
 {
 
 	char eachSensiNumber[3] = {};//各桁の値
-	int sensiNumber = player->GetSensi();//表示する数字
-
-	if (player->GetSensi() == 100)
+	int sensiNumber = player->GetDrawSensi();//表示する数字
+	if (player->GetDrawSensi() == 100)
 	{
 		int keta = 100;//最初の桁
 		for (int i = 0; i < 3; i++)
@@ -456,6 +463,24 @@ void GameScene::DrawSensiPercent()
 			spriteSENSINumber[i]->SetSize({ 32,48 });
 			spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
 			spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + i * 32.0f, sensiNumberPos.y });
+			spriteSENSINumber[i]->Draw();
+		}
+	}
+	else if (player->GetDrawSensi() == 1)
+	{
+		int keta = 1;
+		for (int i = 0; i < 1; i++)
+		{
+			eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
+			sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
+
+		for (int i = 0; i < 1; i++)
+		{
+			spriteSENSINumber[i]->SetSize({ 32,48 });
+			spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
+			spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + 64 + i * 32.0f, sensiNumberPos.y });
 			spriteSENSINumber[i]->Draw();
 		}
 	}
@@ -500,6 +525,7 @@ void GameScene::Draw()
 		break;
 	case GameState::PLAY://ゲームシーン
 	//3Dオブジェクトの描画
+		//woods->Draw();
 		enemy->Draw();
 		player->Draw();
 		break;
@@ -562,22 +588,45 @@ void GameScene::Draw()
 	// デバッグテキストの描画
 	debugText.DrawAll(cmdList);
 	Sprite::PostDraw();
-
-
 }
 
 void GameScene::Option_Sensi()
 {
-
-
-
+	if (mousePos.x >= 440 && mousePos.x <= 850)
+	{
+		if (mousePos.y >= 245 && mousePos.y <= 320)
+		{
+			if (mouse->TriggerMouseLeft())
+			{
+				player->SetSensi(player->GetSensi() + 10, player->GetDrawSensi() - 10);
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+	}
+	if (mousePos.x >= 520 && mousePos.x <= 755)
+	{
+		if (mousePos.y >= 460 && mousePos.y <= 530)
+		{
+			if (mouse->TriggerMouseLeft())
+			{
+				gameState = GameState::OPTION_SELECT;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
+	}
+	if (mouse->TriggerMouseRight())
+	{
+		gameState = GameState::TITLE;
+		audio->SoundStop("decisionSE.wav");
+		audio->SoundPlayWave("decisionSE.wav", false);
+	}
 }
 
 void GameScene::Text()
 {
-	pHP = player->GetHP();
 
-	eHP = enemy->GetHP();
 
 	sprintf_s(str, "mousePosX = %f", mousePos.x);
 	debugText.Print(str, 0, 0, 1);
@@ -644,13 +693,16 @@ void GameScene::BCollision()
 
 void GameScene::SceneChange()
 {
+
+	pHP = player->GetHP();
+	eHP = enemy->GetHP();
 	if (pHP <= 0)
 	{
-		gameState == GameState::OVER;//ゲームオーバー
+		gameState = GameState::OVER;//ゲームオーバー
 	}
 	if (eHP <= 0)
 	{
-		gameState == GameState::CLEA;//ゲームクリア
+		gameState = GameState::CLEA;//ゲームクリア
 	}
 }
 
@@ -676,6 +728,8 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 			{
 				key->SetCount(1);
 				keyCount = 1;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
 		//ひだり
@@ -685,6 +739,8 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 			{
 				key->SetCount(2);
 				keyCount = 2;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
 	}
@@ -698,6 +754,8 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 			{
 				key->SetCount(3);
 				keyCount = 3;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
 		//みぎ
@@ -707,6 +765,8 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 			{
 				key->SetCount(4);
 				keyCount = 4;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
 	}
@@ -719,6 +779,8 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 			{
 				key->SetCount(5);
 				keyCount = 5;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
 	}
@@ -757,10 +819,12 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 
 void GameScene::WriteFile()
 {
-	SaveData Data = { left,right,up,down,attack };
+	sensi = player->GetSensi();
+	drawSensi = player->GetDrawSensi();
+	SaveData Data = { left,right,up,down,attack,sensi,drawSensi, };
 	FILE* fp;
-	fopen_s(&fp, "text.txt", "w");
-	fwrite(&Data, sizeof(Data), 1, fp);//ひだりキーの値の入力
+	fopen_s(&fp, "save.pdf", "w");
+	fwrite(&Data, sizeof(Data), 2, fp);
 	fclose(fp);
 }
 
@@ -769,7 +833,7 @@ void GameScene::LoadFile()
 
 	SaveData Data;
 	FILE* fp;
-	fopen_s(&fp, "text.txt", "r");
+	fopen_s(&fp, "save.pdf", "r");
 	if (fp != NULL)
 	{
 		fread(&Data, sizeof(Data), 1, fp);
@@ -786,5 +850,8 @@ void GameScene::LoadFile()
 		key->SetDownDecimal(down);
 		key->SetAttackDecimal(attack);
 		player->GetKey();
+		player->SetSensi(Data.sensi, Data.drawSensi);
+		sensi = Data.sensi;
+		drawSensi = Data.drawSensi;
 	}
 }

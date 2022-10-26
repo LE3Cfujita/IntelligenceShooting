@@ -32,13 +32,15 @@ public:
 		CLEA,
 		OVER
 	};
-
+	//セーブデータ
 	typedef struct {
-		int left;
-		int right;
-		int up;
-		int down;
-		int attack;
+		int left;//左移動ボタン
+		int right;//右移動ボタン
+		int up;//上移動ボタン
+		int down;//下移動ボタン
+		int attack;//攻撃ボタン
+		int sensi;//感度
+		int drawSensi;//表示用感度
 	}SaveData;
 	
 	
@@ -119,6 +121,9 @@ private:
 	Collision* collision = nullptr;
 	OptionKey* key = nullptr;
 	
+	/*Model* ground = nullptr;
+	Object3d* woods = nullptr;
+	XMFLOAT3 woodsPos = { 0,0,0 };*/
 
 	Object3d* object3d_3 = nullptr;
 
@@ -144,7 +149,7 @@ private:
 	Sprite* spriteSENSINumber[3];
 	XMFLOAT2 bgmNumberPos = { 670,200 };
 	XMFLOAT2 seNumberPos = { 670,330 };
-	XMFLOAT2 sensiNumberPos = { 670,200 };
+	XMFLOAT2 sensiNumberPos = { 670,255 };
 
 	Sprite* induction = nullptr;
 	XMFLOAT2 indPos = { 640,120 };
@@ -183,6 +188,9 @@ private:
 	int up = 0;
 	int down = 0;
 	int attack = 0;
+
+	int sensi = 0;
+	int drawSensi = 70;
 
 	//float bgm = 1.0f;//BGM音量
 	//float se = 1.0f;//SE音量
