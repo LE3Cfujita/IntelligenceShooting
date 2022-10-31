@@ -37,6 +37,7 @@ public: // サブクラス
 	struct ConstBufferDataB0
 	{
 		XMMATRIX mat;	// ３Ｄ変換行列
+		XMFLOAT4 color;
 	};
 
 private: // 定数
@@ -213,6 +214,8 @@ public: // メンバ関数
 	void SetModel(Model* model) { this->model = model; }
 
 	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
+
+	void SetColor(XMFLOAT4 color) { this->color = color; }
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ

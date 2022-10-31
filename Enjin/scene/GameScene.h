@@ -68,6 +68,8 @@ public:
 
 	void Update(WinApp* winApp);
 
+	void CreateStars();
+
 	void Title();
 
 	void Option_BGMSE();
@@ -120,38 +122,49 @@ private:
 	Mouse* mouse = nullptr;
 	Collision* collision = nullptr;
 	OptionKey* key = nullptr;
-	
-	/*Model* ground = nullptr;
-	Object3d* woods = nullptr;
-	XMFLOAT3 woodsPos = { 0,0,0 };*/
-
-	Object3d* object3d_3 = nullptr;
-
 	//矢印
 	Sprite* yajirusi = nullptr;
 	Sprite* yajirusiOp = nullptr;
+	Sprite* spriteBGMNumber[3];
+	Sprite* spriteSENumber[3];
+	Sprite* spriteSENSINumber[3];
+	Sprite* induction = nullptr;
+	Sprite* opsion_bgmse = nullptr;
+	Sprite* opsion_key = nullptr;
+	Sprite* opsion_sensi = nullptr;
+
+	Model* planet = nullptr;
+#define STARS_MAX 30
+	Object3d* stars[STARS_MAX];
+
+	int time = 0;
+	struct STARS
+	{
+		int flag = 0;
+		XMFLOAT3 starsPos = { 100,0,0 };
+		XMFLOAT4 color = { 0,0,0,0 };
+	};
+	STARS star[STARS_MAX];
+
+	Model* dome = nullptr;
+	Object3d* skydome = nullptr;
+
 
 	XMFLOAT2 yajirusiPos = { 445.0f,465.0f };
 
 	Sprite* opsion_Select = nullptr;
 
-	Sprite* opsion_bgmse = nullptr;
-	Sprite* opsion_key = nullptr;
-	Sprite* opsion_sensi = nullptr;
+
 	XMFLOAT2 optionPos = { 640,360 };
 
 	XMFLOAT2 mousePos = { 0,0 };
 
 	GameState gameState;
 
-	Sprite* spriteBGMNumber[3];
-	Sprite* spriteSENumber[3];
-	Sprite* spriteSENSINumber[3];
 	XMFLOAT2 bgmNumberPos = { 670,200 };
 	XMFLOAT2 seNumberPos = { 670,330 };
 	XMFLOAT2 sensiNumberPos = { 670,255 };
 
-	Sprite* induction = nullptr;
 	XMFLOAT2 indPos = { 640,120 };
 
 	//デバックテキスト用

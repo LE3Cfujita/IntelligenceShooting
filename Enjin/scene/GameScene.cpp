@@ -12,7 +12,10 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	safe_delete(object3d_3);
+	safe_delete(enemy);
+	safe_delete(player);
+	safe_delete(key);
+	safe_delete(collision);
 	safe_delete(sprite);
 }
 
@@ -93,13 +96,21 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	}
 
 
-	//ground = Model::LoadFormOBJ("ground");
-	//3Dオブジェクト生成
-	//woods = Object3d::Create();
-	//オブジェクトにモデルを紐付ける
-	//woods->SetModel(ground);
-	//woods->SetPosition({ 0,-20,15 });
-	//woods->SetScale({ 10,10,10 });
+	planet = Model::LoadFormOBJ("planet");
+	for (int i = 0; i < STARS_MAX; i++)
+	{
+		//3Dオブジェクト生成
+		stars[i] = Object3d::Create();
+		//オブジェクトにモデルを紐付ける
+		stars[i]->SetModel(planet);
+		stars[i]->SetPosition(star[i].starsPos);
+		stars[i]->SetScale({ 5,5,5 });
+		stars[i]->SetColor({ star[i].color });
+	}
+	dome = Model::LoadFormOBJ("skydome");
+	skydome = Object3d::Create();
+	skydome->SetModel(dome);
+	skydome->SetScale({ 9,9,9 });
 
 	audio->SoundLoadWave("Alarm01.wav", 0);//テスト
 	audio->SoundLoadWave("decisionSE.wav", 1);//テスト
@@ -158,7 +169,14 @@ void GameScene::Update(WinApp* winApp)
 		//woods->Update();
 		player->Update();
 		enemy->Update();
-
+		skydome->Update();
+		CreateStars();
+		for (int i = 0; i < STARS_MAX; i++)
+		{
+			stars[i]->SetColor(star[i].color);
+			stars[i]->SetPosition(star[i].starsPos);
+			stars[i]->Update();
+		}
 		SetCursorPos(690, 360);
 		break;
 	case GameState::OVER://ゲームオーバー
@@ -352,6 +370,77 @@ void GameScene::Option_KEY()
 	}
 }
 
+void GameScene::CreateStars()
+{
+	if (time == 0)
+	{
+		for (int i = 0; i < STARS_MAX; i++)
+		{
+			if (star[i].flag == 0)
+			{
+				star[i].flag = 1;
+				int lar = rand() % 2;
+				int uad = rand() % 2;
+
+				if (uad == 0)
+				{
+					star[i].starsPos.y = (rand() % 300) * 0.1;
+				}
+				else
+				{
+					star[i].starsPos.y = (rand() % 300) * -0.1;
+				}
+				if (lar == 0)
+				{
+					if (star[i].starsPos.y >= 25 || star[i].starsPos.y <= -15)
+					{
+						star[i].starsPos.x = (rand() % 400) * 0.1;
+					}
+					star[i].starsPos.x = (rand() % 400 + 300) * 0.1;
+				}
+				else
+				{
+					if (star[i].starsPos.y >= 25 || star[i].starsPos.y <= -15)
+					{
+						star[i].starsPos.x = (rand() % 400) * -0.1;
+					}
+					star[i].starsPos.x = (rand() % 400 + 300) * -0.1;
+				}
+				star[i].starsPos.z = 200;
+				star[i].color.x = rand() % 100 * 0.01;
+				star[i].color.y = rand() % 100 * 0.01;
+				star[i].color.z = rand() % 100 * 0.01;
+				time = 1;
+				break;
+			}
+		}
+	}
+	else
+	{
+		time++;
+		if (time >= 20)
+		{
+			time = 0;
+		}
+	}
+	if (input->PushKey(DIK_M))
+	{
+		int a = 0;
+	}
+	for (int i = 0; i < STARS_MAX; i++)
+	{
+		if (star[i].flag == 1)
+		{
+			star[i].starsPos.z -= 3;
+			if (star[i].starsPos.z < -20)
+			{
+				star[i].flag = 0;
+				star[i].starsPos.x = 100;
+			}
+		}
+	}
+}
+
 void GameScene::DrawVolumePercent()
 {
 	//BGM
@@ -525,9 +614,13 @@ void GameScene::Draw()
 		break;
 	case GameState::PLAY://ゲームシーン
 	//3Dオブジェクトの描画
-		//woods->Draw();
+		skydome->Draw();
 		enemy->Draw();
 		player->Draw();
+		for (int i = 0; i < STARS_MAX; i++)
+		{
+			stars[i]->Draw();
+		}
 		break;
 	case GameState::OVER://ゲームオーバー
 		break;

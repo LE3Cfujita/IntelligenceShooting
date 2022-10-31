@@ -228,8 +228,8 @@ Object3d * Object3d::Create()
 		return nullptr;
 	}
 
-	//float scale_val = 20;
-	//object3d->scale = { scale_val,scale_val,scale_val };
+	/*float scale_val = 20;
+	object3d->scale = { scale_val,scale_val,scale_val };*/
 
 	return object3d;
 }
@@ -447,6 +447,7 @@ void Object3d::Update()
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
 	constMap->mat = matWorld * matProjection;	// 行列の合成
+	constMap->color = color;
 	constBuffB0->Unmap(0, nullptr);
 }
 

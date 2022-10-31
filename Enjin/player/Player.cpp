@@ -28,7 +28,6 @@ void Player::Initialize(Input* input, Mouse* mouse, OptionKey* key)
 	player->SetRotation(rotation);
 	player->SetScale({ 0.5,0.7,0.5 });
 
-
 	GetKey();
 	//’e
 	for (int i = 0; i < PBULLET_MAX; i++)
@@ -182,7 +181,6 @@ void Player::AttackMove()
 			b[i].position.x -= (b[i].dx / b[i].L) * b[i].speed;
 			b[i].position.y -= (b[i].dy / b[i].L) * b[i].speed;
 			b[i].position.z -= (b[i].dz / b[i].L) * b[i].speed;
-
 		}
 
 		if (b[i].position.z >= 100)
