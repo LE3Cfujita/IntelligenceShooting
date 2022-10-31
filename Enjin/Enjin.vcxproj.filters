@@ -69,12 +69,6 @@
     <ClCompile Include="scene\GameScene.cpp">
       <Filter>scene</Filter>
     </ClCompile>
-    <ClCompile Include="camera\Camera.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
-    <ClCompile Include="camera\DebugCamera.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
     <ClCompile Include="input\Input.cpp">
       <Filter>input</Filter>
     </ClCompile>
@@ -124,12 +118,6 @@
     </ClInclude>
     <ClInclude Include="scene\GameScene.h">
       <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="camera\Camera.h">
-      <Filter>camera</Filter>
-    </ClInclude>
-    <ClInclude Include="camera\DebugCamera.h">
-      <Filter>camera</Filter>
     </ClInclude>
     <ClInclude Include="input\Input.h">
       <Filter>input</Filter>

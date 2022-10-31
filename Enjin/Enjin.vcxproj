@@ -28,8 +28,6 @@
     <ClCompile Include="audio\Audio.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
-    <ClCompile Include="camera\Camera.cpp" />
-    <ClCompile Include="camera\DebugCamera.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="enemy\Enemy.cpp" />
     <ClCompile Include="input\Input.cpp" />
@@ -50,8 +48,6 @@
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="base\SafeDelete.h" />
     <ClInclude Include="base\WinApp.h" />
-    <ClInclude Include="camera\Camera.h" />
-    <ClInclude Include="camera\DebugCamera.h" />
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="enemy\Enemy.h" />
     <ClInclude Include="input\Input.h" />

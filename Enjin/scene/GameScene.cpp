@@ -27,13 +27,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	this->mouse = mouse;
 	gameState = GameState::TITLE;
 
-	// カメラ生成
-	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input, mouse);
-
-	//FBX用
-	camera->SetTarget({ 0,3,0 });
-	camera->SetDistance(10.0f);
-
 
 	//デバッグテキスト用のテクスチャ読み込み
 	Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png");
@@ -95,7 +88,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 		spriteSENSINumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 	}
 
-
 	planet = Model::LoadFormOBJ("planet");
 	for (int i = 0; i < STARS_MAX; i++)
 	{
@@ -110,7 +102,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	dome = Model::LoadFormOBJ("skydome");
 	skydome = Object3d::Create();
 	skydome->SetModel(dome);
-	skydome->SetScale({ 9,9,9 });
+	skydome->SetScale({ 3,3,3 });
 
 	audio->SoundLoadWave("Alarm01.wav", 0);//テスト
 	audio->SoundLoadWave("decisionSE.wav", 1);//テスト
@@ -185,7 +177,6 @@ void GameScene::Update(WinApp* winApp)
 	case GameState::CLEA://ゲームクリア
 		break;
 	}
-	camera->Update();
 	mouse->Update();
 }
 

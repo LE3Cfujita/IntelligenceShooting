@@ -116,7 +116,6 @@ private:
 	Audio* audio = nullptr;
 	DebugText debugText;
 	Sprite* sprite = nullptr;
-	DebugCamera* camera = nullptr;
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
 	Mouse* mouse = nullptr;
