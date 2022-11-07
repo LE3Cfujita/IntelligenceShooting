@@ -147,6 +147,7 @@ private:
 
 	Model* dome = nullptr;
 	Object3d* skydome = nullptr;
+	XMFLOAT3 skyrot = { 0,0,0 };
 
 
 	XMFLOAT2 yajirusiPos = { 445.0f,465.0f };

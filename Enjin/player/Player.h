@@ -77,7 +77,7 @@ public:
 	XMFLOAT3 position = { 0,0,-5 };
 	XMFLOAT3 rotation = { 0,-90,0 };
 
-	int HP = 30;
+	int HP = 30000;
 
 	//çUåÇÉtÉâÉO
 	struct BULLET
@@ -96,7 +96,7 @@ public:
 		float da = 0;
 		float L = 0;
 		
-		float speed = 3;
+		float speed = 7;
 	};
 	BULLET b[PBULLET_MAX];
 

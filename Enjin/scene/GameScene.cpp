@@ -161,6 +161,9 @@ void GameScene::Update(WinApp* winApp)
 		//woods->Update();
 		player->Update();
 		enemy->Update();
+		skyrot.x += 0.05;
+		skyrot.y += 0.05;
+		skydome->SetRotation(skyrot);
 		skydome->Update();
 		CreateStars();
 		for (int i = 0; i < STARS_MAX; i++)
@@ -712,9 +715,9 @@ void GameScene::Text()
 {
 
 
-	sprintf_s(str, "mousePosX = %f", mousePos.x);
+	sprintf_s(str, "HP = %d", pHP);
 	debugText.Print(str, 0, 0, 1);
-	sprintf_s(str2, "mousePosY = %f", mousePos.y);
+	sprintf_s(str2, "EnemyHP = %d", eHP);
 	debugText.Print(str2, 0, 20, 1);
 }
 

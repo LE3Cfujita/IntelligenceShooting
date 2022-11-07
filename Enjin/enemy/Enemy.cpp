@@ -40,6 +40,7 @@ void Enemy::Initialize(Player* player)
 		bulletBarrage[i]->SetPosition(barrage[i].position);
 		bulletBarrage[i]->SetRotation(barrage[i].rotation);
 		bulletBarrage[i]->SetScale({ 1,1,1 });
+		bulletBarrage[i]->SetColor({ 255, 255, 0,0 });
 	}
 	enemy.directionX = rand() % 2;
 	enemy.directionY = rand() % 2;
@@ -53,11 +54,8 @@ void Enemy::Update()
 	}
 	pPosition = player->GetPosition();
 
-	if (pPosition.x < -5)
-	{
-		Attack1();
-	}
-	else if (pPosition.x > 5)
+	Attack1();
+	if (pPosition.x < -5 || pPosition.x > 5)
 	{
 		Attack2();
 	}
@@ -97,95 +95,102 @@ void Enemy::Draw()
 
 void Enemy::Move()
 {
+	MoveLimit();
 
-	rock.rPosition = player->GetAimPosition();
-
-	//照準との距離を計算して逃げるような動きを作る
-	rock.dx = enemy.position.x - rock.rPosition.x;
-	rock.dy = enemy.position.y - rock.rPosition.y;
-	rock.da = rock.dx * rock.dx + rock.dy + rock.dy;
-	rock.L = sqrt(rock.da);
-
-	if (enemy.directionX == 0)
+	if (!(enemy.directionX == 0) || !(enemy.directionY == 0))return;
+	if (rock.getTime == 0)
 	{
-		enemy.position.x += enemy.speed;
+		rock.rPosition = player->GetAimPosition();
+		rock.getTime = 1;
+		enemy.speed = 1;
+
+		//照準との距離を計算して逃げるような動きを作る
+		rock.dx = enemy.position.x - rock.rPosition.x;
+		rock.dy = enemy.position.y - rock.rPosition.y;
+		rock.da = rock.dx * rock.dx + rock.dy + rock.dy;
+		rock.L = sqrt(rock.da);
 	}
-	if (enemy.directionX == 1)
+	else
+	{
+		rock.getTime++;
+		if (rock.getTime >= 50)
+		{
+			rock.getTime = 0;
+		}
+	}
+	if (rock.L >= 30)return;
+	enemy.speed -= 0.02;
+	if (rock.dx < 0)
 	{
 		enemy.position.x -= enemy.speed;
 	}
-	if (enemy.directionY == 0)
+	else
+	{
+		enemy.position.x += enemy.speed;
+	}
+	if (rock.dy < 0)
+	{
+		enemy.position.y -= enemy.speed;
+	}
+	else
 	{
 		enemy.position.y += enemy.speed;
+	}
+	boss->SetPosition(enemy.position);
+}
+
+void Enemy::MoveLimit()
+{
+	if (enemy.position.x > 90)
+	{
+		enemy.directionX = 1;
+		enemy.speed = 2;
+	}
+	if (enemy.position.x < -90)
+	{
+		enemy.directionX = 2;
+		enemy.speed = 2;
+	}
+	if (enemy.position.y > 60)
+	{
+		enemy.directionY = 1;
+		enemy.speed = 2;
+	}
+	if (enemy.position.y < -55)
+	{
+		enemy.directionY = 2;
+		enemy.speed = 2;
+	}
+
+	if (enemy.directionX == 1)
+	{
+		enemy.position.x -= enemy.speed;
+		enemy.speed -= 0.02;
+	}
+	if (enemy.directionX == 2)
+	{
+		enemy.position.x += enemy.speed;
+		enemy.speed -= 0.02;
 	}
 	if (enemy.directionY == 1)
 	{
 		enemy.position.y -= enemy.speed;
+		if (enemy.position.y < 60)
+		{
+			enemy.speed -= 0.02;
+		}
+	}
+	if (enemy.directionY == 2)
+	{
+		enemy.position.y += enemy.speed;
+		enemy.speed -= 0.02;
 	}
 
-	if (rock.directionCount == 1)
+	if (enemy.speed <= 0)
 	{
-		rock.directionTime++;
-		if (rock.directionTime > 60)
-		{
-			rock.directionTime = 0;
-			rock.directionCount = 0;
-		}
-	}
-
-	if (rock.L <= 6 && rock.directionCount == 0)
-	{
-		if (enemy.position.x < 80 && enemy.position.x <= rock.rPosition.x)
-		{
-			enemy.directionX = 0;
-			rock.directionCount = 1;
-		}
-		else if (enemy.position.x > -80 && enemy.position.x >= rock.rPosition.x)
-		{
-			enemy.directionX = 1;
-			rock.directionCount = 1;
-		}
-		if (enemy.position.y < 60 && enemy.position.y >= rock.rPosition.y);
-		{
-				enemy.directionY = 0;
-				rock.directionCount = 1;
-		}
-		if (enemy.position.y > -55 && enemy.position.y <= rock.rPosition.y)
-		{
-				enemy.directionY = 1;
-				rock.directionCount = 1;
-		}
-	}
-	else
-	{
-		if (enemy.position.x >= 80)
-		{
-			if (enemy.directionX == 0)
-			{
-				enemy.directionX = 1;
-			}
-		}
-		if (enemy.position.x <= -80)
-		{
-			if (enemy.directionX == 1)
-			{
-				enemy.directionX = 0;
-			}
-		}
-		if (enemy.position.y >= 60)
-		{
-			if (enemy.directionY == 0)
-			{
-				enemy.directionY = 1;
-			}
-		}
-		if (enemy.position.y <= -55)
-		{
-			if (enemy.directionY == 1)
-			{
-				enemy.directionY = 0;
-			}
-		}
+		enemy.directionX = 0;
+		enemy.directionY = 0;
+		enemy.speed = 1;
 	}
 	boss->SetPosition(enemy.position);
 }
@@ -198,7 +203,7 @@ void Enemy::Attack1()
 		{
 			enemy.attackFlag = 1;
 			b.position = enemy.position;
-			homingCount = 0;
+			b.homingCount = 0;
 			b.flag = 1;
 		}
 	}
@@ -212,14 +217,14 @@ void Enemy::Attack1Move()
 {
 	if (enemy.attackFlag == 1)
 	{
-		homingTime++;
-		if (homingTime >= 20)
+		b.homingTime++;
+		if (b.homingTime >= 40)
 		{
-			homingTime = 0;
-			homingCount = 1;
+			b.homingTime = 0;
+			b.homingCount = 1;
 		}
 		//カウントが0ならホーミングする
-		if (homingCount == 0)
+		if (b.homingCount == 0)
 		{
 			b.dx = pPosition.x - b.position.x;//Xの距離の計算
 			b.dy = pPosition.y - b.position.y;//Yの距離の計算
@@ -243,79 +248,99 @@ void Enemy::Attack1Move()
 	bullet->SetPosition(b.position);
 }
 
+
 void Enemy::Attack2()
 {
 	if (enemy.position.y <= 60)
 	{
-		if (enemy.attackFlag2 == 0 && enemy.attackFlag3 == 0)
+		if (coolCount == 0)
 		{
-			enemy.attackFlag2 = 1;
-		}
-	}
-	if (enemy.attackFlag2 == 1)
-	{
-
-		if (enemy.barrageTime == 0)
-		{
-			enemy.barrageTime = 1;
 			for (int i = 0; i < EBULLET_MAX; i++)
 			{
-				if (barrage[i].flag == 0)
+				if (enemy.attackFlag3 == 0 && barrage[i].flag == 0)
 				{
 					barrage[i].flag = 1;
+					barrage[i].homingTime = 0;
+					barrage[i].homingCount = 0;
 					barrage[i].position = enemy.position;
-					float move = 0.2;
-					int directions = rand() % 2;
+					coolCount = 1;
+					float move = 0.15;
+					int directions = rand() % 3;
 					if (directions == 0)
 					{
-						barrage[i].direction.x = (rand() % 10 + 1) * move;
+						barrage[i].directionX = move;
+					}
+					else if (directions == 1)
+					{
+						barrage[i].directionX = -move;
 					}
 					else
 					{
-						barrage[i].direction.x = (rand() % 10 + 1) * -move;
+						barrage[i].directionX = 0;
 					}
-					int direction = rand() % 2;
-					if (direction == 1)
+					int directions2 = rand() % 3;
+					if (directions2 == 0)
 					{
-						move = -0.07;
+						barrage[i].directionY = move;
 					}
-					barrage[i].direction.y = (rand() % 10) * move;
-
+					else if (directions2 == 1)
+					{
+						barrage[i].directionY = -move;
+					}
+					else
+					{
+						barrage[i].directionY = 0;
+					}
 					break;
 				}
+				bulletBarrage[i]->SetPosition(barrage[i].position);
 			}
 		}
 		else
 		{
-			enemy.barrageTime++;
-			if (enemy.barrageTime >= 2)
-			{
-				enemy.barrageTime = 0;
-			}
+			coolTime++;
+			if (coolTime < 7)return;
+			coolTime = 0;
+			coolCount = 0;
 		}
 	}
 }
-
 void Enemy::Attack2Move()
 {
 	for (int i = 0; i < EBULLET_MAX; i++)
 	{
 		if (barrage[i].flag == 1)
 		{
-			barrage[i].position.x -= barrage[i].direction.x;
-			barrage[i].position.y -= barrage[i].direction.y;
-			barrage[i].position.z -= barrage[i].speed;
+			barrage[i].homingTime++;
+			if (barrage[i].homingTime >= 40)
+			{
+				barrage[i].homingTime = 0;
+				barrage[i].homingCount = 1;
+			}
+			//カウントが0ならホーミングする
+			if (barrage[i].homingCount == 0)
+			{
+				barrage[i].dx = pPosition.x - barrage[i].position.x;//Xの距離の計算
+				barrage[i].dy = pPosition.y - barrage[i].position.y;//Yの距離の計算
+				barrage[i].dz = pPosition.z - barrage[i].position.z;//Zの距離の計算
+				//ルートの中の計算
+				barrage[i].da = barrage[i].dx * barrage[i].dx + barrage[i].dy * barrage[i].dy + barrage[i].dz * barrage[i].dz;
+				barrage[i].L = sqrt(barrage[i].da);
+			}
 		}
-		if (pPosition.z - 10 >= barrage[i].position.z)
+		//弾の移動
+		barrage[i].position.x += (barrage[i].dx / barrage[i].L) * barrage[i].speed + barrage[i].directionX;
+		barrage[i].position.y += (barrage[i].dy / barrage[i].L) * barrage[i].speed + barrage[i].directionY;
+		barrage[i].position.z += (barrage[i].dz / barrage[i].L) * barrage[i].speed;
+		if (pPosition.z - 10 > barrage[i].position.z)
 		{
-			enemy.attackFlag2 = 0;
 			barrage[i].flag = 0;
 			barrage[i].position.z = 100;
+			barrage[i].homingTime = 0;
+			barrage[i].homingCount = 0;
 		}
 		bulletBarrage[i]->SetPosition(barrage[i].position);
-
 	}
-
 }
 
 void Enemy::Attack3()
@@ -386,6 +411,7 @@ void Enemy::Attack3Move()
 		enemy.homingCount = 0;
 		enemy.homingTime = 0;
 		enemy.rushCount = 0;
+		enemy.speed = 1;
 	}
 
 	boss->SetRotation(enemy.rotation);

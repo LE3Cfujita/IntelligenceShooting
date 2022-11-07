@@ -25,6 +25,7 @@ public:
 	void Draw();
 
 	void Move();
+	void MoveLimit();
 
 	//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚éUŒ‚
 	void Attack1();
@@ -88,7 +89,7 @@ public:
 	};
 	ENEMY enemy;
 
-#define EBULLET_MAX 100
+#define EBULLET_MAX 50
 	//UŒ‚ƒtƒ‰ƒO
 	struct BULLET
 	{
@@ -103,8 +104,12 @@ public:
 		float da = 0;
 		float L = 0;
 
-		float speed = 3;
-		
+		float speed = 1.5;
+
+		int homingTime = 0;
+		int homingCount = 0;
+		float directionX = 0;
+		float directionY = 0;
 		XMFLOAT3 direction = { 0,0,0 };
 	};
 	BULLET b;//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
@@ -116,8 +121,9 @@ public:
 
 	XMFLOAT3 pPosition = { 0,0,0 };
 
-	int homingTime = 0;
-	int homingCount = 0;
+	int coolTime = 0;
+	int coolCount = 0;
+
 
 	struct AIM
 	{
@@ -130,6 +136,8 @@ public:
 
 		int directionCount = 0;
 		int directionTime = 0;
+
+		int getTime = 0;
 	};
 	AIM rock;
 
