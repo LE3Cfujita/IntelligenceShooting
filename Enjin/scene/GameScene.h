@@ -9,6 +9,7 @@
 #include "SafeDelete.h"
 #include <DirectXMath.h>
 #include"Player.h"
+#include"PlayerBullet.h"
 #include"Enemy.h"
 #include"Collision.h"
 #include"OptionKey.h"
@@ -16,6 +17,7 @@
 #include <fstream>
 #include <string>
 #include<stdio.h>
+#include"Rock.h"
 #pragma once
 
 class GameScene
@@ -121,6 +123,8 @@ private:
 	Mouse* mouse = nullptr;
 	Collision* collision = nullptr;
 	OptionKey* key = nullptr;
+	PlayerBullet* bullet = nullptr;
+	Rock* rock = nullptr;
 	//–îˆó
 	Sprite* yajirusi = nullptr;
 	Sprite* yajirusiOp = nullptr;

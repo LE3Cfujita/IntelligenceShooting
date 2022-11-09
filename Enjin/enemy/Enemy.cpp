@@ -8,13 +8,16 @@ Enemy::Enemy()
 Enemy::~Enemy()
 {
 	safe_delete(modelBoss);
+	safe_delete(modelBullet);
 	safe_delete(boss);
+	safe_delete(bullet);
 }
 
-void Enemy::Initialize(Player* player)
+void Enemy::Initialize(Player* player, Rock* rock)
 {
 
 	this->player = player;
+	this->rock = rock;
 
 	//OBJからモデルデータを読み込む
 	modelBoss = Model::LoadFormOBJ("enemy");
@@ -98,29 +101,29 @@ void Enemy::Move()
 	MoveLimit();
 
 	if (!(enemy.directionX == 0) || !(enemy.directionY == 0))return;
-	if (rock.getTime == 0)
+	if (aim.getTime == 0)
 	{
-		rock.rPosition = player->GetAimPosition();
-		rock.getTime = 1;
+		aim.rPosition = rock->GetPosition();
+		aim.getTime = 1;
 		enemy.speed = 1;
 
 		//照準との距離を計算して逃げるような動きを作る
-		rock.dx = enemy.position.x - rock.rPosition.x;
-		rock.dy = enemy.position.y - rock.rPosition.y;
-		rock.da = rock.dx * rock.dx + rock.dy + rock.dy;
-		rock.L = sqrt(rock.da);
+		aim.dx = enemy.position.x - aim.rPosition.x;
+		aim.dy = enemy.position.y - aim.rPosition.y;
+		aim.da = aim.dx * aim.dx + aim.dy + aim.dy;
+		aim.L = sqrt(aim.da);
 	}
 	else
 	{
-		rock.getTime++;
-		if (rock.getTime >= 50)
+		aim.getTime++;
+		if (aim.getTime >= 50)
 		{
-			rock.getTime = 0;
+			aim.getTime = 0;
 		}
 	}
-	if (rock.L >= 30)return;
+	if (aim.L >= 30)return;
 	enemy.speed -= 0.02;
-	if (rock.dx < 0)
+	if (aim.dx < 0)
 	{
 		enemy.position.x -= enemy.speed;
 	}
@@ -128,7 +131,7 @@ void Enemy::Move()
 	{
 		enemy.position.x += enemy.speed;
 	}
-	if (rock.dy < 0)
+	if (aim.dy < 0)
 	{
 		enemy.position.y -= enemy.speed;
 	}

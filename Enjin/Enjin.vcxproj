@@ -34,7 +34,9 @@
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OptionKey.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="player\Player.cpp" />
+    <ClCompile Include="Rock.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +55,9 @@
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="input\Mouse.h" />
     <ClInclude Include="OptionKey.h" />
+    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="player\Player.h" />
+    <ClInclude Include="Rock.h" />
     <ClInclude Include="scene\GameScene.h" />
   </ItemGroup>
   <ItemGroup>

@@ -111,13 +111,17 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 
 	audio->SoundPlayWave("Alarm01.wav", true);
 
-
+	
 	enemy = new Enemy;
+	bullet = new PlayerBullet;
 	player = new Player;
 	key = new OptionKey;
+	rock = new Rock;
 	key->Initialize(input, mouse);
-	enemy->Initialize(player);
-	player->Initialize(input, mouse, key);
+	rock->Initialize(mouse);
+	enemy->Initialize(player,rock);
+	bullet->Initialize(input, mouse, rock);
+	player->Initialize(input,key, bullet);
 	left = key->GetLeftDecimal();
 	right = key->GetRightDecimal();
 	up = key->GetUpDecimaly();
@@ -158,9 +162,9 @@ void GameScene::Update(WinApp* winApp)
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
-		//woods->Update();
 		player->Update();
 		enemy->Update();
+		bullet->Update();
 		skyrot.x += 0.05;
 		skyrot.y += 0.05;
 		skydome->SetRotation(skyrot);
@@ -530,8 +534,8 @@ void GameScene::DrawSensiPercent()
 {
 
 	char eachSensiNumber[3] = {};//各桁の値
-	int sensiNumber = player->GetDrawSensi();//表示する数字
-	if (player->GetDrawSensi() == 100)
+	int sensiNumber = rock->GetDrawSensi();//表示する数字
+	if (rock->GetDrawSensi() == 100)
 	{
 		int keta = 100;//最初の桁
 		for (int i = 0; i < 3; i++)
@@ -549,7 +553,7 @@ void GameScene::DrawSensiPercent()
 			spriteSENSINumber[i]->Draw();
 		}
 	}
-	else if (player->GetDrawSensi() == 1)
+	else if (rock->GetDrawSensi() == 1)
 	{
 		int keta = 1;
 		for (int i = 0; i < 1; i++)
@@ -611,6 +615,8 @@ void GameScene::Draw()
 		skydome->Draw();
 		enemy->Draw();
 		player->Draw();
+		rock->Draw();
+		bullet->Draw();
 		for (int i = 0; i < STARS_MAX; i++)
 		{
 			stars[i]->Draw();
@@ -685,7 +691,7 @@ void GameScene::Option_Sensi()
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				player->SetSensi(player->GetSensi() + 10, player->GetDrawSensi() - 10);
+				rock->SetSensi(rock->GetSensi() + 10, rock->GetDrawSensi() - 10);
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
 			}
@@ -755,16 +761,16 @@ void GameScene::BCollision()
 	//プレイヤー弾の座標
 	for (int i = 0; i < PBULLET_MAX; i++)
 	{
-		pBPosition[i] = player->GetBPosition();
+		pBPosition[i] = bullet->GetBPosition();
 		if (enemy->GetHP() != 0)
 		{
 			if (collision->ballToball(ePosition.x, ePosition.y, ePosition.z, pBPosition[i].x, pBPosition[i].y, pBPosition[i].z, 10, 1))
 			{
-				player->PHit();
+				bullet->Hit();
 				enemy->PHit();
 			}
 		}
-		player->PlusNumber();
+		bullet->PlusNumber();
 	}
 
 	if (enemy->GetRushCount() == 0)
@@ -906,8 +912,8 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 
 void GameScene::WriteFile()
 {
-	sensi = player->GetSensi();
-	drawSensi = player->GetDrawSensi();
+	sensi = rock->GetSensi();
+	drawSensi = rock->GetDrawSensi();
 	SaveData Data = { left,right,up,down,attack,sensi,drawSensi, };
 	FILE* fp;
 	fopen_s(&fp, "save.pdf", "w");
@@ -937,7 +943,7 @@ void GameScene::LoadFile()
 		key->SetDownDecimal(down);
 		key->SetAttackDecimal(attack);
 		player->GetKey();
-		player->SetSensi(Data.sensi, Data.drawSensi);
+		rock->SetSensi(Data.sensi, Data.drawSensi);
 		sensi = Data.sensi;
 		drawSensi = Data.drawSensi;
 	}

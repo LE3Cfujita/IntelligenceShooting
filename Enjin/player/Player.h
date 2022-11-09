@@ -1,9 +1,8 @@
 #include"Model.h"
 #include"Object3d.h"
-#include"Input.h"
 #include"SafeDelete.h"
-#include"Mouse.h"
 #include"OptionKey.h"
+#include"PlayerBullet.h"
 
 #pragma once
 class Player
@@ -20,7 +19,7 @@ public:
 	~Player();
 
 	//初期化
-	void Initialize(Input* input, Mouse* mouse,OptionKey*key);
+	void Initialize(Input* input, OptionKey*key, PlayerBullet* bullet);
 
 	void Update();
 
@@ -28,11 +27,8 @@ public:
 
 	void Move();
 
-	void Attack();
 
-	void AttackMove();
-
-	void PlusNumber();
+	
 
 	//敵の攻撃が当たった時
 	void Hit();
@@ -46,71 +42,19 @@ public:
 
 	int GetHP() { return HP; }
 
-	XMFLOAT3 GetAimPosition() { return rock.position; }
 
-	int GetBFlag() { return b[bulletNumber].flag; };
-	XMFLOAT3 GetBPosition() { return b[bulletNumber].position; };
 
 	void GetKey();
 
-	void SetSensi(int sensi,int drawSensi) 
-	{ 
-		if (sensi > 100)
-		{
-			sensi = 10;
-			drawSensi = 100;
-		}
-		else if (sensi == 100)
-		{
-			drawSensi = 1;
-		}
-		this->sensi = sensi;
-		this->drawSensi = drawSensi;
-	}
-	int GetSensi() { return sensi; }
-	int GetDrawSensi() { return drawSensi; }
 public:
-
-#define PBULLET_MAX 50
 
 	//変数
 	XMFLOAT3 position = { 0,0,-5 };
 	XMFLOAT3 rotation = { 0,-90,0 };
 
-	int HP = 30000;
+	int HP = 300;
 
-	//攻撃フラグ
-	struct BULLET
-	{
-		int flag = 0;
 
-		XMFLOAT3 position = { 100,100,0 };
-		XMFLOAT3 rotation = { 0,-90,0 };
-
-		int homingTime = 0;
-		int homingCount = 0;
-
-		float dx = 0;
-		float dy = 0;
-		float dz = 0;
-		float da = 0;
-		float L = 0;
-		
-		float speed = 7;
-	};
-	BULLET b[PBULLET_MAX];
-
-	int bulletNumber = 0;
-
-	int attackCT = 0;
-
-	struct AIM
-	{
-		XMFLOAT3 position = { 0,0,100 };
-		XMFLOAT3 rotation = { 0,90,0 };
-
-	};
-	AIM rock;
 
 
 private://メンバ変数
@@ -121,11 +65,7 @@ private://メンバ変数
 	Model* modelPlayer = nullptr;
 	Object3d* player = nullptr;
 
-	Model* modelBullet = nullptr;
-	Object3d* bullet[PBULLET_MAX];
-
-	Model* modelAim = nullptr;
-	Object3d* aim = nullptr;
+	PlayerBullet* bullet = nullptr;
 
 	OptionKey* key = nullptr;
 	int moveLeft = 0;
@@ -134,7 +74,5 @@ private://メンバ変数
 	int moveDown = 0;
 	int attackKey = 0;
 
-	int sensi = 50;
-	int drawSensi = 50;
 };
 

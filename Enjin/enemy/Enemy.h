@@ -2,6 +2,7 @@
 #include"Model.h"
 #include"SafeDelete.h"
 #include"Player.h"
+#include"rock.h"
 #pragma once
 class Enemy
 {
@@ -18,7 +19,7 @@ public:
 	~Enemy();
 
 	//‰Šú‰»
-	void Initialize(Player* player);
+	void Initialize(Player* player,Rock*rock);
 
 	void Update();
 
@@ -139,7 +140,7 @@ public:
 
 		int getTime = 0;
 	};
-	AIM rock;
+	AIM aim;
 
 
 	//getter
@@ -161,6 +162,7 @@ private://ƒƒ“ƒo•Ï”
 
 
 
+	Rock* rock = nullptr;
 	Model* modelBoss = nullptr;
 	Object3d* boss = nullptr;
 

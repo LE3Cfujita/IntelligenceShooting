@@ -34,9 +34,6 @@
     <Filter Include="scene">
       <UniqueIdentifier>{a2423d26-3e81-4cb2-b786-00b4820e9723}</UniqueIdentifier>
     </Filter>
-    <Filter Include="camera">
-      <UniqueIdentifier>{5ec877a4-34e9-4e04-938e-41de334c0f35}</UniqueIdentifier>
-    </Filter>
     <Filter Include="player">
       <UniqueIdentifier>{274a770b-5227-4e63-a3d7-97a93018a295}</UniqueIdentifier>
     </Filter>
@@ -99,6 +96,12 @@
     <ClCompile Include="OptionKey.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\Sprite.h">
@@ -150,6 +153,12 @@
       <Filter>Collision</Filter>
     </ClInclude>
     <ClInclude Include="OptionKey.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
