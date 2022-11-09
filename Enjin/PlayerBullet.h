@@ -1,9 +1,3 @@
-#pragma once
-//#include"Model.h"
-//#include"Object3d.h"
-//#include"SafeDelete.h"
-//#include"Input.h"
-//#include"Mouse.h"
 #include"Rock.h"
 
 using namespace DirectX;

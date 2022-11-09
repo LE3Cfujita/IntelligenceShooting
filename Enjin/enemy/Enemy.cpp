@@ -8,43 +8,29 @@ Enemy::Enemy()
 Enemy::~Enemy()
 {
 	safe_delete(modelBoss);
-	safe_delete(modelBullet);
 	safe_delete(boss);
-	safe_delete(bullet);
+
 }
 
-void Enemy::Initialize(Player* player, Rock* rock)
+void Enemy::Initialize(Player* player, Rock* rock, EnemyBullet* bullet, EnemyBarrage* barrage)
 {
 
 	this->player = player;
 	this->rock = rock;
-
+	this->bullet = bullet;
+	this->barrage = barrage;
 	//OBJからモデルデータを読み込む
 	modelBoss = Model::LoadFormOBJ("enemy");
-	modelBullet = Model::LoadFormOBJ("enemyBullet");
 	//3Dオブジェクト生成
 	boss = Object3d::Create();
-	bullet = Object3d::Create();
 	//オブジェクトにモデルを紐付ける
 	boss->SetModel(modelBoss);
 	boss->SetPosition(enemy.position);
 	boss->SetRotation(enemy.rotation);
 	boss->SetScale({ 4,4,4 });
 
-	bullet->SetModel(modelBullet);
-	bullet->SetPosition(b.position);
-	bullet->SetRotation(b.rotation);
-	bullet->SetScale({ 0.7,0.7,0.7 });
 
-	for (int i = 0; i < EBULLET_MAX; i++)
-	{
-		bulletBarrage[i] = Object3d::Create();
-		bulletBarrage[i]->SetModel(modelBullet);
-		bulletBarrage[i]->SetPosition(barrage[i].position);
-		bulletBarrage[i]->SetRotation(barrage[i].rotation);
-		bulletBarrage[i]->SetScale({ 1,1,1 });
-		bulletBarrage[i]->SetColor({ 255, 255, 0,0 });
-	}
+
 	enemy.directionX = rand() % 2;
 	enemy.directionY = rand() % 2;
 }
@@ -70,30 +56,14 @@ void Enemy::Update()
 		}
 	}
 	Attack1Move();
-	Attack2Move();
+	barrage->Move(pPosition);
 	Attack3Move();
 	boss->Update();
-	bullet->Update();
-	for (int i = 0; i < EBULLET_MAX; i++)
-	{
-		bulletBarrage[i]->Update();
-	}
 }
 
 void Enemy::Draw()
 {
 	boss->Draw();
-	if (b.flag == 1)
-	{
-		bullet->Draw();
-	}
-	for (int i = 0; i < EBULLET_MAX; i++)
-	{
-		if (barrage[i].flag == 1)
-		{
-			bulletBarrage[i]->Draw();
-		}
-	}
 }
 
 void Enemy::Move()
@@ -202,147 +172,35 @@ void Enemy::Attack1()
 {
 	if (enemy.position.y <= 60)
 	{
-		if (enemy.attackFlag == 0 && enemy.attackFlag3 == 0 && b.flag == 0)
+		if (enemy.attackFlag == 0 && enemy.attackFlag3 == 0 && bullet->GetFlag() == 0)
 		{
+			bullet->Create(enemy.position);
 			enemy.attackFlag = 1;
-			b.position = enemy.position;
-			b.homingCount = 0;
-			b.flag = 1;
 		}
 	}
-
-
-	bullet->SetPosition(b.position);
-
 }
 
 void Enemy::Attack1Move()
 {
 	if (enemy.attackFlag == 1)
 	{
-		b.homingTime++;
-		if (b.homingTime >= 40)
-		{
-			b.homingTime = 0;
-			b.homingCount = 1;
-		}
-		//カウントが0ならホーミングする
-		if (b.homingCount == 0)
-		{
-			b.dx = pPosition.x - b.position.x;//Xの距離の計算
-			b.dy = pPosition.y - b.position.y;//Yの距離の計算
-			b.dz = pPosition.z - b.position.z;//Zの距離の計算
-			//ルートの中の計算
-			b.da = b.dx * b.dx + b.dy * b.dy + b.dz * b.dz;
-			b.L = sqrt(b.da);
-		}
-		//弾の移動
-		b.position.x += (b.dx / b.L) * b.speed;
-		b.position.y += (b.dy / b.L) * b.speed;
-		b.position.z += (b.dz / b.L) * b.speed;
+		bullet->Move(pPosition);
 	}
 
-	if (pPosition.z - 10 > b.position.z)
+	if (pPosition.z - 10 > bullet->GetPos().z)
 	{
 		enemy.attackFlag = 0;
-		b.flag = 0;
-		b.position.z = 100;
+		bullet->SetFlag(0);
+		bullet->SetPos({ 100,100,100 });
 	}
-	bullet->SetPosition(b.position);
 }
 
 
 void Enemy::Attack2()
 {
-	if (enemy.position.y <= 60)
+	if (enemy.position.y <= 60 && enemy.attackFlag3 == 0)
 	{
-		if (coolCount == 0)
-		{
-			for (int i = 0; i < EBULLET_MAX; i++)
-			{
-				if (enemy.attackFlag3 == 0 && barrage[i].flag == 0)
-				{
-					barrage[i].flag = 1;
-					barrage[i].homingTime = 0;
-					barrage[i].homingCount = 0;
-					barrage[i].position = enemy.position;
-					coolCount = 1;
-					float move = 0.15;
-					int directions = rand() % 3;
-					if (directions == 0)
-					{
-						barrage[i].directionX = move;
-					}
-					else if (directions == 1)
-					{
-						barrage[i].directionX = -move;
-					}
-					else
-					{
-						barrage[i].directionX = 0;
-					}
-					int directions2 = rand() % 3;
-					if (directions2 == 0)
-					{
-						barrage[i].directionY = move;
-					}
-					else if (directions2 == 1)
-					{
-						barrage[i].directionY = -move;
-					}
-					else
-					{
-						barrage[i].directionY = 0;
-					}
-					break;
-				}
-				bulletBarrage[i]->SetPosition(barrage[i].position);
-			}
-		}
-		else
-		{
-			coolTime++;
-			if (coolTime < 7)return;
-			coolTime = 0;
-			coolCount = 0;
-		}
-	}
-}
-void Enemy::Attack2Move()
-{
-	for (int i = 0; i < EBULLET_MAX; i++)
-	{
-		if (barrage[i].flag == 1)
-		{
-			barrage[i].homingTime++;
-			if (barrage[i].homingTime >= 40)
-			{
-				barrage[i].homingTime = 0;
-				barrage[i].homingCount = 1;
-			}
-			//カウントが0ならホーミングする
-			if (barrage[i].homingCount == 0)
-			{
-				barrage[i].dx = pPosition.x - barrage[i].position.x;//Xの距離の計算
-				barrage[i].dy = pPosition.y - barrage[i].position.y;//Yの距離の計算
-				barrage[i].dz = pPosition.z - barrage[i].position.z;//Zの距離の計算
-				//ルートの中の計算
-				barrage[i].da = barrage[i].dx * barrage[i].dx + barrage[i].dy * barrage[i].dy + barrage[i].dz * barrage[i].dz;
-				barrage[i].L = sqrt(barrage[i].da);
-			}
-		}
-		//弾の移動
-		barrage[i].position.x += (barrage[i].dx / barrage[i].L) * barrage[i].speed + barrage[i].directionX;
-		barrage[i].position.y += (barrage[i].dy / barrage[i].L) * barrage[i].speed + barrage[i].directionY;
-		barrage[i].position.z += (barrage[i].dz / barrage[i].L) * barrage[i].speed;
-		if (pPosition.z - 10 > barrage[i].position.z)
-		{
-			barrage[i].flag = 0;
-			barrage[i].position.z = 100;
-			barrage[i].homingTime = 0;
-			barrage[i].homingCount = 0;
-		}
-		bulletBarrage[i]->SetPosition(barrage[i].position);
+		barrage->Create(enemy.position);
 	}
 }
 
@@ -424,18 +282,13 @@ void Enemy::Attack3Move()
 void Enemy::BHit()
 {
 	enemy.attackFlag = 0;
-	b.flag = 0;
-	b.position.z = 100;
-	bullet->SetPosition(b.position);
+	bullet->Hit();
 }
 
 void Enemy::BarrageHit()
 {
 	enemy.attackFlag2 = 0;
-	barrage[barrageNumber].flag = 0;
-	barrage[barrageNumber].position.x = 100;
-	barrage[barrageNumber].position.y = 100;
-	barrage[barrageNumber].position.z = 100;
+	barrage->Hit();
 }
 
 void Enemy::RushHit()
@@ -446,13 +299,4 @@ void Enemy::RushHit()
 void Enemy::PHit()
 {
 	enemy.HP -= 1;
-}
-
-void Enemy::PlusNumber()
-{
-	barrageNumber += 1;
-	if (barrageNumber > EBULLET_MAX)
-	{
-		barrageNumber = 0;
-	}
 }

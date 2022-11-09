@@ -114,12 +114,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, 
 	
 	enemy = new Enemy;
 	bullet = new PlayerBullet;
+	eBullet = new EnemyBullet;
+	barrage = new EnemyBarrage;
 	player = new Player;
 	key = new OptionKey;
 	rock = new Rock;
 	key->Initialize(input, mouse);
 	rock->Initialize(mouse);
-	enemy->Initialize(player,rock);
+	eBullet->Initialize();
+	barrage->Initialize();
+	enemy->Initialize(player,rock,eBullet, barrage);
 	bullet->Initialize(input, mouse, rock);
 	player->Initialize(input,key, bullet);
 	left = key->GetLeftDecimal();
@@ -166,6 +170,13 @@ void GameScene::Update(WinApp* winApp)
 		enemy->Update();
 		rock->Update();
 		bullet->Update();
+		eBullet->Update();
+		barrage->Update();
+
+
+
+
+
 		skyrot.x += 0.05;
 		skyrot.y += 0.05;
 		skydome->SetRotation(skyrot);
@@ -618,6 +629,10 @@ void GameScene::Draw()
 		player->Draw();
 		rock->Draw();
 		bullet->Draw();
+		eBullet->Draw();
+		barrage->Draw();
+
+
 		for (int i = 0; i < STARS_MAX; i++)
 		{
 			stars[i]->Draw();
@@ -730,10 +745,10 @@ void GameScene::Text()
 
 void GameScene::BCollision()
 {
-	XMFLOAT3 bPosition = enemy->GetBPosition();
+	XMFLOAT3 bPosition = bullet->GetBPosition();
 	XMFLOAT3 pPosition = player->GetPosition();
 
-	if (enemy->GetBFlag() == 1)
+	if (bullet->GetBFlag() == 1)
 	{
 		if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, bPosition.x, bPosition.y, bPosition.z, 0.5, 0.5))
 		{
@@ -745,9 +760,9 @@ void GameScene::BCollision()
 
 	for (int i = 0; i < EBULLET_MAX; i++)
 	{
-		barragePosition[i] = enemy->GetBarragePosition();
+		barragePosition[i] = barrage->GetBarragePosition();
 
-		if (enemy->GetBarrageFlag() == 1)
+		if (barrage->GetBarrageFlag() == 1)
 		{
 			if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, barragePosition[i].x, barragePosition[i].y, barragePosition[i].z, 2, 2))
 			{
@@ -755,7 +770,7 @@ void GameScene::BCollision()
 				enemy->BarrageHit();
 			}
 		}
-		enemy->PlusNumber();
+		barrage->PlusNumber();
 	}
 	//“G‚ÌÀ•W
 	XMFLOAT3 ePosition = enemy->GetPosition();

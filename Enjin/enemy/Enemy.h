@@ -3,6 +3,8 @@
 #include"SafeDelete.h"
 #include"Player.h"
 #include"rock.h"
+#include"EnemyBullet.h"
+#include"EnemyBarrage.h"
 #pragma once
 class Enemy
 {
@@ -19,7 +21,7 @@ public:
 	~Enemy();
 
 	//‰Šú‰»
-	void Initialize(Player* player,Rock*rock);
+	void Initialize(Player* player,Rock*rock, EnemyBullet*bullet,EnemyBarrage* barrage);
 
 	void Update();
 
@@ -34,7 +36,6 @@ public:
 
 	//’e–‹UŒ‚
 	void Attack2();
-	void Attack2Move();
 
 	//’e–‹UŒ‚
 	void Attack3();
@@ -90,35 +91,7 @@ public:
 	};
 	ENEMY enemy;
 
-#define EBULLET_MAX 50
-	//UŒ‚ƒtƒ‰ƒO
-	struct BULLET
-	{
-		int flag = 0;
 
-		XMFLOAT3 position = { 100,100,100 };
-		XMFLOAT3 rotation = { 0,90,0 };
-
-		float dx = 0;
-		float dy = 0;
-		float dz = 0;
-		float da = 0;
-		float L = 0;
-
-		float speed = 1.5;
-
-		int homingTime = 0;
-		int homingCount = 0;
-		float directionX = 0;
-		float directionY = 0;
-		XMFLOAT3 direction = { 0,0,0 };
-	};
-	BULLET b;//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
-	BULLET barrage[EBULLET_MAX];//’e–‹
-
-	int barrageNumber = 0;
-
-	void PlusNumber();
 
 	XMFLOAT3 pPosition = { 0,0,0 };
 
@@ -146,11 +119,7 @@ public:
 	//getter
 	XMFLOAT3 GetPosition() { return enemy.position; }
 
-	XMFLOAT3 GetBPosition() { return b.position; }
-	int GetBFlag() { return b.flag; }
 
-	XMFLOAT3 GetBarragePosition() { return barrage[barrageNumber].position; }
-	int GetBarrageFlag() { return barrage[barrageNumber].flag; }
 
 	int GetCount() { return enemy.attackFlag3; }
 
@@ -161,18 +130,11 @@ public:
 private://ƒƒ“ƒo•Ï”
 
 
-
+	EnemyBullet* bullet = nullptr;
 	Rock* rock = nullptr;
 	Model* modelBoss = nullptr;
 	Object3d* boss = nullptr;
-
-	//‘_‚Á‚ÄŒ‚‚Á‚Ä‚­‚é
-	Model* modelBullet = nullptr;
-	Object3d* bullet = nullptr;
-
-
-	//’e–‹
-	Object3d* bulletBarrage[EBULLET_MAX];
+	EnemyBarrage* barrage = nullptr;
 
 	Player* player = nullptr;
 

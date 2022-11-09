@@ -6,18 +6,10 @@
 #include"Audio.h"
 #include"DirectXCommon.h"
 #include"DebugCamera.h"
-#include "SafeDelete.h"
-#include <DirectXMath.h>
 #include"Player.h"
-#include"PlayerBullet.h"
 #include"Enemy.h"
 #include"Collision.h"
 #include"OptionKey.h"
-#include <iostream>
-#include <fstream>
-#include <string>
-#include<stdio.h>
-#include"Rock.h"
 #pragma once
 
 class GameScene
@@ -125,6 +117,8 @@ private:
 	OptionKey* key = nullptr;
 	PlayerBullet* bullet = nullptr;
 	Rock* rock = nullptr;
+	EnemyBullet* eBullet = nullptr;
+	EnemyBarrage* barrage = nullptr;
 	//–îˆó
 	Sprite* yajirusi = nullptr;
 	Sprite* yajirusiOp = nullptr;
