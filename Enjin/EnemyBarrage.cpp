@@ -56,8 +56,8 @@ void EnemyBarrage::Create(XMFLOAT3 ePos)
 			if (flag[i] == 0)
 			{
 				flag[i] = 1;
-				homingTime = 0;
-				homingCount = 0;
+				homingTime[i] = 0;
+				homingCount[i] = 0;
 				position[i] = ePos;
 				coolCount = 1;
 				float move = 0.15;
@@ -115,14 +115,14 @@ void EnemyBarrage::Move(XMFLOAT3 pPos)
 	{
 		if (flag[i] == 1)
 		{
-			homingTime++;
-			if (homingTime >= 40)
+			homingTime[i]++;
+			if (homingTime[i] >= 40)
 			{
-				homingTime = 0;
-				homingCount = 1;
+				homingTime[i] = 0;
+				homingCount[i] = 1;
 			}
 			//カウントが0ならホーミングする
-			if (homingCount == 0)
+			if (homingCount[i] == 0)
 			{
 				dx[i] = pPos.x - position[i].x;//Xの距離の計算
 				dy[i] = pPos.y - position[i].y;//Yの距離の計算
@@ -140,8 +140,8 @@ void EnemyBarrage::Move(XMFLOAT3 pPos)
 		{
 			flag[i] = 0;
 			position[i].z = 100;
-			homingTime = 0;
-			homingCount = 0;
+			homingTime[i] = 0;
+			homingCount[i] = 0;
 		}
 		bullet[i]->SetPosition(position[i]);
 	}

@@ -48,8 +48,8 @@ private:
 
 	float speed = 1.5;
 
-	int homingTime = 0;
-	int homingCount = 0;
+	int homingTime[EBULLET_MAX];
+	int homingCount[EBULLET_MAX];
 	float directionX[EBULLET_MAX];
 	float directionY[EBULLET_MAX];
 	XMFLOAT3 direction = { 0,0,0 };
