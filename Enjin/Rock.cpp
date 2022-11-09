@@ -19,7 +19,6 @@ void Rock::Initialize(Mouse* mouse)
 	//Æ€
 	rock = Object3d::Create();
 	rock->SetModel(model);
-	position.z = 80;
 	rock->SetPosition(position);
 	rock->SetRotation(rotation);
 	rock->SetScale({ 3,3,3 });

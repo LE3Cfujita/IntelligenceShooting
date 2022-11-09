@@ -33,6 +33,7 @@ void PlayerBullet::Initialize(Input* input, Mouse* mouse, Rock* rock)
 
 void PlayerBullet::Update()
 {
+	Move();
 	for (int i = 0; i < PBULLET_MAX; i++)
 	{
 		bullet[i]->Update();

@@ -164,6 +164,7 @@ void GameScene::Update(WinApp* winApp)
 		ShowCursor(FALSE);
 		player->Update();
 		enemy->Update();
+		rock->Update();
 		bullet->Update();
 		skyrot.x += 0.05;
 		skyrot.y += 0.05;
