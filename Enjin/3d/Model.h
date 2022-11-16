@@ -23,10 +23,15 @@ private:
 	static const std::string baseDirectory;
 
 private: // 静的メンバ変数
+	//テクスチャの最大枚数
+	static const int number = 512;
 	// デバイス
 	static ID3D12Device* device;
 	// デスクリプタサイズ
 	static UINT descriptorHandleIncrementSize;
+
+	// テクスチャバッファ
+	static Model* texBuff[number];
 
 public: // 静的メンバ関数
 
@@ -42,6 +47,11 @@ public: // 静的メンバ関数
 	/// <param name="modelname">モデル名</param>
 	/// <returns>生成されたモデル</returns>
 	static Model* LoadFormOBJ(const std::string& modelname);
+
+
+	static void AdvanceLoadModel(int number, const std::string& modelnamel);
+
+	static Model* CreateModel(int number);
 
 public: // メンバ関数
 	/// <summary>
@@ -60,6 +70,8 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="cmdList">命令発行先コマンドリスト</param>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+
+
 
 private: // メンバ変数
 	// 名前

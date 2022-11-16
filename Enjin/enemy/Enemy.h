@@ -67,7 +67,6 @@ public:
 
 
 private://ƒƒ“ƒo•Ï”
-
 	Model* modelBoss = nullptr;
 	Object3d* boss = nullptr;
 };

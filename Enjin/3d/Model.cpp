@@ -11,8 +11,10 @@ using namespace std;
 const std::string Model::baseDirectory = "Resources/";
 ID3D12Device* Model::device = nullptr;
 UINT Model::descriptorHandleIncrementSize = 0;
+Model* Model::texBuff[number];
 
-void Model::StaticInitialize(ID3D12Device * device)
+
+void Model::StaticInitialize(ID3D12Device* device)
 {
 	Model::device = device;
 
@@ -25,7 +27,7 @@ Model* Model::LoadFormOBJ(const std::string& modelname)
 	// メモリ確保
 	Model* instance = new Model;
 	instance->Initialize(modelname);
-	
+
 	return instance;
 }
 
@@ -88,8 +90,8 @@ void Model::Initialize(const std::string& modelname)
 		}
 		// 先頭文字列がgならグループの開始
 		if (key == "g") {
-            // カレントメッシュの情報が揃っているなら
-            if (mesh->GetName().size() > 0 && mesh->GetVertexCount() > 0) {
+			// カレントメッシュの情報が揃っているなら
+			if (mesh->GetName().size() > 0 && mesh->GetVertexCount() > 0) {
 				// コンテナに登録
 				meshes.emplace_back(mesh);
 				// 次のメッシュ生成
@@ -161,7 +163,7 @@ void Model::Initialize(const std::string& modelname)
 				std::istringstream index_stream(index_string);
 				unsigned short indexPosition, indexNormal, indexTexcoord;
 				// 頂点番号
-				index_stream >> indexPosition;				
+				index_stream >> indexPosition;
 
 				Material* material = mesh->GetMaterial();
 				index_stream.seekg(1, ios_base::cur); // スラッシュを飛ばす
@@ -175,7 +177,7 @@ void Model::Initialize(const std::string& modelname)
 					vertex.pos = positions[indexPosition - 1];
 					vertex.normal = normals[indexNormal - 1];
 					vertex.uv = texcoords[indexTexcoord - 1];
-					mesh->AddVertex(vertex);					
+					mesh->AddVertex(vertex);
 				}
 				else {
 					char c;
@@ -267,7 +269,7 @@ void Model::Initialize(const std::string& modelname)
 	LoadTextures();
 }
 
-void Model::LoadMaterial(const std::string & directoryPath, const std::string & filename)
+void Model::LoadMaterial(const std::string& directoryPath, const std::string& filename)
 {
 	// ファイルストリーム
 	std::ifstream file;
@@ -347,7 +349,7 @@ void Model::LoadMaterial(const std::string & directoryPath, const std::string & 
 		}
 	}
 	// ファイルを閉じる
-	file.close();	
+	file.close();
 
 	if (material) {
 		// マテリアルを登録
@@ -355,7 +357,7 @@ void Model::LoadMaterial(const std::string & directoryPath, const std::string & 
 	}
 }
 
-void Model::AddMaterial(Material * material)
+void Model::AddMaterial(Material* material)
 {
 	// コンテナに登録
 	materials.emplace(material->name, material);
@@ -413,7 +415,7 @@ void Model::LoadTextures()
 	}
 }
 
-void Model::Draw(ID3D12GraphicsCommandList * cmdList)
+void Model::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	// デスクリプタヒープの配列
 	if (descHeap) {
@@ -425,5 +427,15 @@ void Model::Draw(ID3D12GraphicsCommandList * cmdList)
 	for (auto& mesh : meshes) {
 		mesh->Draw(cmdList);
 	}
+}
+
+void Model::AdvanceLoadModel(int number, const std::string& modelname)
+{
+	texBuff[number] = LoadFormOBJ(modelname);
+}
+
+Model* Model::CreateModel(int number)
+{
+	return texBuff[number];
 }
 

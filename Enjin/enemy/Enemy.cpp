@@ -47,16 +47,16 @@ void Enemy::Update()
 		{
 			XMFLOAT3 pos = gameobject->GetPosition();
 
+			//Attack1();
 			if (pos.x < -5 || pos.x > 5)
 			{
-				Attack1();
-				//Attack2();
+				Attack2();
 			}
 			else
 			{
 				if (ct == 0)
 				{
-					Attack3();
+					//Attack3();
 				}
 			}
 		}
@@ -198,12 +198,22 @@ void Enemy::Attack2()
 {
 	if (position.y <= 60 && attackFlag3 == 0)
 	{
-		for (GameObject* gameobject : referenceGameObjects)
+		if (coolCount == 0)
 		{
 			EnemyBarrage* barrage = new EnemyBarrage();
 			barrage->BaseInitialize(input, audio, mouse, referenceGameObjects);
 			barrage->Initialize();
 			addGameObjects.push_back(barrage);
+			barrage->Create(position);
+			attackFlag2 = 1;
+			coolCount = 1;
+		}
+		else
+		{
+			coolTime++;
+			if (coolTime < 5)return;
+			coolTime = 0;
+			coolCount = 0;
 		}
 	}
 }

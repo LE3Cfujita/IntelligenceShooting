@@ -78,6 +78,8 @@ void GameScene::SpriteCreate()
 		spriteSENumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 		spriteSENSINumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 	}
+
+	Model::AdvanceLoadModel(1,"enemyBullet");
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, Mouse* mouse)

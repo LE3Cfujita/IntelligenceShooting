@@ -12,17 +12,22 @@ EnemyBarrage::~EnemyBarrage()
 
 void EnemyBarrage::Initialize()
 {
-	model = Model::LoadFormOBJ("enemyBullet");
 
+	speed = 1.7;
 	objectMember = OBJECTMEMBER::ENEMYBARRAGE;
-
 	position = { 100,100,100 };
+	model = Model::CreateModel(1);
 	bullet = Object3d::Create();
 	bullet->SetModel(model);
 	bullet->SetPosition(position);
 	bullet->SetRotation(rotation);
 	bullet->SetScale({ 1,1,1 });
 	bullet->SetColor({ 255, 255, 0,0 });
+}
+
+void EnemyBarrage::ModelCreate()
+{
+	//model = Model::LoadFormOBJ("enemyBullet");
 }
 
 void EnemyBarrage::Update()
@@ -38,52 +43,38 @@ void EnemyBarrage::Draw()
 
 void EnemyBarrage::Create(XMFLOAT3 ePos)
 {
-	if (coolCount == 0)
+	deathFlag = false;
+	homingTime = 0;
+	homingCount = 0;
+	position = ePos;
+	float move = 0.1f;
+	int directions = rand() % 3;
+	if (directions == 0)
 	{
-		if (deathFlag == true)
-		{
-			deathFlag = false;
-			homingTime = 0;
-			homingCount = 0;
-			position = ePos;
-			coolCount = 1;
-			float move = 0.15;
-			int directions = rand() % 3;
-			if (directions == 0)
-			{
-				directionX = move;
-			}
-			else if (directions == 1)
-			{
-				directionX = -move;
-			}
-			else
-			{
-				directionX = 0;
-			}
-			int directions2 = rand() % 3;
-			if (directions2 == 0)
-			{
-				directionY = move;
-			}
-			else if (directions2 == 1)
-			{
-				directionY = -move;
-			}
-			else
-			{
-				directionY = 0;
-			}
-		}
-		bullet->SetPosition(position);
+		directionX = move;
+	}
+	else if (directions == 1)
+	{
+		directionX = -move;
 	}
 	else
 	{
-		coolTime++;
-		if (coolTime < 7)return;
-		coolTime = 0;
-		coolCount = 0;
+		directionX = 0;
 	}
+	int directions2 = rand() % 3;
+	if (directions2 == 0)
+	{
+		directionY = move;
+	}
+	else if (directions2 == 1)
+	{
+		directionY = -move;
+	}
+	else
+	{
+		directionY = 0;
+	}
+	bullet->SetPosition(position);
 }
 
 void EnemyBarrage::Hit()
@@ -96,42 +87,39 @@ void EnemyBarrage::Hit()
 
 void EnemyBarrage::Move()
 {
+	XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
 	for (GameObject* gameobject : referenceGameObjects)
 	{
-		if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYER)
-		{
-			XMFLOAT3 pos = gameobject->GetPosition();
-			if (deathFlag == false)
-			{
-				homingTime++;
-				if (homingTime >= 40)
-				{
-					homingTime = 0;
-					homingCount = 1;
-				}
-				//カウントが0ならホーミングする
-				if (homingCount == 0)
-				{
-					dx = pos.x - position.x;//Xの距離の計算
-					dy = pos.y - position.y;//Yの距離の計算
-					dz = pos.z - position.z;//Zの距離の計算
-					//ルートの中の計算
-					da = dx * dx + dy * dy + dz * dz;
-					L = sqrt(da);
-				}
-			}
-			//弾の移動
-			position.x += (dx / L) * speed + directionX;
-			position.y += (dy / L) * speed + directionY;
-			position.z += (dz / L) * speed;
-			if (pos.z - 10 > position.z)
-			{
-				deathFlag = true;
-				position.z = 100;
-				homingTime = 0;
-				homingCount = 0;
-			}
-		}
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER)continue;
+		pos = gameobject->GetPosition();
+		break;
+	}
+	homingTime++;
+	if (homingTime >= 30)
+	{
+		homingTime = 0;
+		homingCount = 1;
+	}
+	//カウントが0ならホーミングする
+	if (homingCount == 0)
+	{
+		dx = pos.x - position.x;//Xの距離の計算
+		dy = pos.y - position.y;//Yの距離の計算
+		dz = pos.z - position.z;//Zの距離の計算
+		//ルートの中の計算
+		da = dx * dx + dy * dy + dz * dz;
+		L = sqrt(da);
+	}
+	//弾の移動
+	position.x += (dx / L) * speed + directionX;
+	position.y += (dy / L) * speed + directionY;
+	position.z += (dz / L) * speed;
+	if (pos.z - 10 > position.z)
+	{
+		deathFlag = true;
+		position.z = 100;
+		homingTime = 0;
+		homingCount = 0;
 	}
 	bullet->SetPosition(position);
 }

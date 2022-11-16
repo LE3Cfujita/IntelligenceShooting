@@ -116,6 +116,7 @@ private:
 	Collision* collision = nullptr;
 	OptionKey* key = nullptr;
 	Player* player = nullptr;
+	EnemyBarrage* barrage = nullptr;
 	//–îˆó
 	Sprite* yajirusi = nullptr;
 	Sprite* yajirusiOp = nullptr;
