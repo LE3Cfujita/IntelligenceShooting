@@ -32,6 +32,7 @@
     <ClCompile Include="EnemyBarrage.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="enemy\Enemy.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="main.cpp" />
@@ -56,6 +57,8 @@
     <ClInclude Include="EnemyBarrage.h" />
     <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="enemy\Enemy.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="input\Mouse.h" />
     <ClInclude Include="OptionKey.h" />

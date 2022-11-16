@@ -7,135 +7,94 @@ PlayerBullet::PlayerBullet()
 PlayerBullet::~PlayerBullet()
 {
 	safe_delete(model);
-	for (int i = 0; i < PBULLET_MAX; i++)
-	{
-		safe_delete(bullet[i]);
-	}
+	safe_delete(bullet);
 }
 
-void PlayerBullet::Initialize(Input* input, Mouse* mouse, Rock* rock)
+void PlayerBullet::Initialize()
 {
-	this->input = input;
-	this->mouse = mouse;
-	this->rock = rock;
-
+	speed = 7;
+	objectMember = OBJECTMEMBER::PLAYERBULLET;
+	rotation = { 0,-90,0 };
 	model = Model::LoadFormOBJ("bullet");
 	//弾
-	for (int i = 0; i < PBULLET_MAX; i++)
-	{
-		bullet[i] = Object3d::Create();
-		bullet[i]->SetModel(model);
-		bullet[i]->SetPosition(position[i]);
-		bullet[i]->SetRotation(rotation);
-		bullet[i]->SetScale({ 0.7,0.7,0.7 });
-	}
+	bullet = Object3d::Create();
+	bullet->SetModel(model);
+	bullet->SetRotation(rotation);
+	bullet->SetScale({ 0.7,0.7,0.7 });
 }
 
 void PlayerBullet::Update()
 {
 	Move();
-	for (int i = 0; i < PBULLET_MAX; i++)
-	{
-		bullet[i]->Update();
-	}
 }
 
 void PlayerBullet::Draw()
 {
-	for (int i = 0; i < PBULLET_MAX; i++)
-	{
-		if (flag[i] == 1)
-		{
-			bullet[i]->Draw();
-		}
-	}
+	bullet->Update();
+	bullet->Draw();
 }
 
 void PlayerBullet::Move()
 {
 
-	for (int i = 0; i < PBULLET_MAX; i++)
+	if (deathFlag == false)
 	{
-		if (flag[i] == 1)
+		homingTime++;
+		if (homingTime >= 5)
 		{
-			homingTime[i]++;
-			if (homingTime[i] >= 5)
-			{
-				homingTime[i] = 0;
-				homingCount[i] = 1;
-			}
-			//カウントが0ならホーミングする
-			if (homingCount[i] == 0)
-			{
-				dx[i] = position[i].x - rock->GetPosition().x;//Xの距離の計算
-				dy[i] = position[i].y - rock->GetPosition().y;//Yの距離の計算
-				dz[i] = position[i].z - rock->GetPosition().z;//Zの距離の計算
-				//ルートの中の計算
-				da[i] = dx[i] * dx[i] + dy[i] * dy[i] + dz[i] * dz[i];
-				//da = dx * dx + dy * dy;
-				L[i] = sqrt(da[i]);
-			}
-			//弾の移動
-			position[i].x -= (dx[i] / L[i]) * speed;
-			position[i].y -= (dy[i] / L[i]) * speed;
-			position[i].z -= (dz[i] / L[i]) * speed;
+			homingTime = 0;
+			homingCount = 1;
 		}
-
-		if (position[i].z >= 100)
+		//カウントが0ならホーミングする
+		if (homingCount == 0)
 		{
-			flag[i] = 0;
-			homingCount[i] = 0;
-		}
-		bullet[i]->SetPosition(position[i]);
-	}
-}
-
-void PlayerBullet::Create(XMFLOAT3 pos, int key)
-{
-	if (attackCT == 0)
-	{
-		if (input->PushKey(key) == true || mouse->PushMouseLeft() == true)
-		{
-			for (int i = 0; i < PBULLET_MAX; i++)
+			for (GameObject* gameobject : referenceGameObjects)
 			{
-				if (flag[i] == 0)
+				if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::ROCK)
 				{
-					flag[i] = 1;
-					position[i] = pos;
-					attackCT = 1;
-					break;
+					dx = position.x - gameobject->GetPosition().x;//Xの距離の計算
+					dy = position.y - gameobject->GetPosition().y;//Yの距離の計算
+					dz = position.z - gameobject->GetPosition().z;//Zの距離の計算
+					//ルートの中の計算
+					da = dx * dx + dy * dy + dz * dz;
+					//da = dx * dx + dy * dy;
+					L = sqrt(da);
 				}
 			}
 		}
+		//弾の移動
+		position.x -= (dx / L) * speed;
+		position.y -= (dy / L) * speed;
+		position.z -= (dz / L) * speed;
 	}
-	else
+
+	if (position.z >= 100)
 	{
-		attackCT += 1;
-		if (attackCT >= 10)
+		deathFlag = true;
+		homingCount = 0;
+	}
+	bullet->SetPosition(position);
+}
+
+void PlayerBullet::Create()
+{
+	for (GameObject* gameobject : referenceGameObjects)
+	{
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYERBULLET)continue;
+		if (deathFlag == true)
 		{
-			attackCT = 0;
+			deathFlag = false;
+			position = gameobject->GetPosition();;
+			attackCT = 1;
 		}
 	}
 
-}
-
-
-void PlayerBullet::PlusNumber()
-{
-	number += 1;
-	if (number > PBULLET_MAX)
-	{
-		number = 0;
-	}
 }
 
 
 void PlayerBullet::Hit()
 {
-	for (int i = 0; i < PBULLET_MAX; i++)
-	{
-		flag[i] = 0;
-		homingCount[i] = 0;
-		position[i].x = 1000;
-	}
+	deathFlag = true;
+	homingCount = 0;
+	position.x = 1000;
 }

@@ -10,11 +10,10 @@ Player::~Player()
 	safe_delete(player);
 }
 
-void Player::Initialize(Input* input, OptionKey* key,PlayerBullet* bullet)
+void Player::Initialize()
 {
-	this->input = input;
-	this->key = key;
-	this->bullet = bullet;
+	objectMember = GameObject::PLAYER;
+	HP = 300;
 	//OBJからモデルデータを読み込む
 	modelPlayer = Model::LoadFormOBJ("player");
 	//3Dオブジェクト生成
@@ -34,13 +33,12 @@ void Player::Initialize(Input* input, OptionKey* key,PlayerBullet* bullet)
 void Player::Update()
 {
 
-	Move();
-	bullet->Create(position, attackKey);
-	player->Update();
 }
 
 void Player::Draw()
 {
+	Move();
+	player->Update();
 	player->Draw();
 }
 
@@ -97,9 +95,13 @@ void Player::RushHit()
 
 void Player::GetKey()
 {
-	moveLeft = key->GetLeftKey();
-	moveRight = key->GetRightKey();
-	moveUp = key->GetUpKey();
-	moveDown = key->GetDownKey();
-	attackKey = key->GetAttackKey();
+	for (GameObject* gameobject : referenceGameObjects)
+	{
+		
+		moveLeft = gameobject->GetLeftKey();
+		moveRight = gameobject->GetRightKey();
+		moveUp = gameobject->GetUpKey();
+		moveDown = gameobject->GetDownKey();
+		attackKey = gameobject->GetAttackKey();
+	}
 }

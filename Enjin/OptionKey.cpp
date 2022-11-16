@@ -1,9 +1,8 @@
 #include "OptionKey.h"
 
-void OptionKey::Initialize(Input* input, Mouse* mouse)
+void OptionKey::Initialize()
 {
-	this->input = input;
-	this->mouse = mouse;
+	objectMember = OBJECTMEMBER::OPTIONKEY;
 	left = DIK_A;
 	right = DIK_D;
 	up = DIK_W;

@@ -12,57 +12,61 @@ Enemy::~Enemy()
 
 }
 
-void Enemy::Initialize(Player* player, Rock* rock, EnemyBullet* bullet, EnemyBarrage* barrage)
+void Enemy::Initialize()
 {
 
-	this->player = player;
-	this->rock = rock;
-	this->bullet = bullet;
-	this->barrage = barrage;
+	position = { 0,0,100 };
+	rotation = { 0,180,0 };
+
+	objectMember = OBJECTMEMBER::ENEMY;
 	//OBJからモデルデータを読み込む
 	modelBoss = Model::LoadFormOBJ("enemy");
 	//3Dオブジェクト生成
 	boss = Object3d::Create();
 	//オブジェクトにモデルを紐付ける
 	boss->SetModel(modelBoss);
-	boss->SetPosition(enemy.position);
-	boss->SetRotation(enemy.rotation);
+	boss->SetPosition(position);
+	boss->SetRotation(rotation);
 	boss->SetScale({ 4,4,4 });
 
 
 
-	enemy.directionX = rand() % 2;
-	enemy.directionY = rand() % 2;
+	directionX = rand() % 2;
+	directionY = rand() % 2;
 }
 
 void Enemy::Update()
 {
-	if (enemy.attackFlag3 == 0)
+	if (attackFlag3 == 0)
 	{
 		Move();
 	}
-	pPosition = player->GetPosition();
-
-	Attack1();
-	if (pPosition.x < -5 || pPosition.x > 5)
+	for (GameObject* gameobject : referenceGameObjects)
 	{
-		Attack2();
-	}
-	else
-	{
-		if (enemy.ct == 0)
+		if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYER)
 		{
-			Attack3();
+			XMFLOAT3 pos = gameobject->GetPosition();
+
+			if (pos.x < -5 || pos.x > 5)
+			{
+				Attack1();
+				//Attack2();
+			}
+			else
+			{
+				if (ct == 0)
+				{
+					Attack3();
+				}
+			}
 		}
 	}
-	Attack1Move();
-	barrage->Move(pPosition);
 	Attack3Move();
-	boss->Update();
 }
 
 void Enemy::Draw()
 {
+	boss->Update();
 	boss->Draw();
 }
 
@@ -70,16 +74,23 @@ void Enemy::Move()
 {
 	MoveLimit();
 
-	if (!(enemy.directionX == 0) || !(enemy.directionY == 0))return;
+	if (!(directionX == 0) || !(directionY == 0))return;
+
 	if (aim.getTime == 0)
 	{
-		aim.rPosition = rock->GetPosition();
+		for (GameObject* gameobject : referenceGameObjects)
+		{
+			if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::ROCK)return;
+			{
+				aim.rPosition = gameobject->GetPosition();
+			}
+		}
 		aim.getTime = 1;
-		enemy.speed = 1;
+		speed = 1;
 
 		//照準との距離を計算して逃げるような動きを作る
-		aim.dx = enemy.position.x - aim.rPosition.x;
-		aim.dy = enemy.position.y - aim.rPosition.y;
+		aim.dx = position.x - aim.rPosition.x;
+		aim.dy = position.y - aim.rPosition.y;
 		aim.da = aim.dx * aim.dx + aim.dy + aim.dy;
 		aim.L = sqrt(aim.da);
 	}
@@ -92,211 +103,207 @@ void Enemy::Move()
 		}
 	}
 	if (aim.L >= 30)return;
-	enemy.speed -= 0.02;
+	speed -= 0.02;
 	if (aim.dx < 0)
 	{
-		enemy.position.x -= enemy.speed;
+		position.x -= speed;
 	}
 	else
 	{
-		enemy.position.x += enemy.speed;
+		position.x += speed;
 	}
 	if (aim.dy < 0)
 	{
-		enemy.position.y -= enemy.speed;
+		position.y -= speed;
 	}
 	else
 	{
-		enemy.position.y += enemy.speed;
+		position.y += speed;
 	}
-	boss->SetPosition(enemy.position);
+	boss->SetPosition(position);
 }
 
 void Enemy::MoveLimit()
 {
-	if (enemy.position.x > 90)
+	if (position.x > 90)
 	{
-		enemy.directionX = 1;
-		enemy.speed = 2;
+		directionX = 1;
+		speed = 2;
 	}
-	if (enemy.position.x < -90)
+	if (position.x < -90)
 	{
-		enemy.directionX = 2;
-		enemy.speed = 2;
+		directionX = 2;
+		speed = 2;
 	}
-	if (enemy.position.y > 60)
+	if (position.y > 60)
 	{
-		enemy.directionY = 1;
-		enemy.speed = 2;
+		directionY = 1;
+		speed = 2;
 	}
-	if (enemy.position.y < -55)
+	if (position.y < -55)
 	{
-		enemy.directionY = 2;
-		enemy.speed = 2;
+		directionY = 2;
+		speed = 2;
 	}
 
-	if (enemy.directionX == 1)
+	if (directionX == 1)
 	{
-		enemy.position.x -= enemy.speed;
-		enemy.speed -= 0.02;
+		position.x -= speed;
+		speed -= 0.02;
 	}
-	if (enemy.directionX == 2)
+	if (directionX == 2)
 	{
-		enemy.position.x += enemy.speed;
-		enemy.speed -= 0.02;
+		position.x += speed;
+		speed -= 0.02;
 	}
-	if (enemy.directionY == 1)
+	if (directionY == 1)
 	{
-		enemy.position.y -= enemy.speed;
-		if (enemy.position.y < 60)
+		position.y -= speed;
+		if (position.y < 60)
 		{
-			enemy.speed -= 0.02;
+			speed -= 0.02;
 		}
 	}
-	if (enemy.directionY == 2)
+	if (directionY == 2)
 	{
-		enemy.position.y += enemy.speed;
-		enemy.speed -= 0.02;
+		position.y += speed;
+		speed -= 0.02;
 	}
 
-	if (enemy.speed <= 0)
+	if (speed <= 0)
 	{
-		enemy.directionX = 0;
-		enemy.directionY = 0;
-		enemy.speed = 1;
+		directionX = 0;
+		directionY = 0;
+		speed = 1;
 	}
-	boss->SetPosition(enemy.position);
+	boss->SetPosition(position);
 }
 
 void Enemy::Attack1()
 {
-	if (enemy.position.y <= 60)
+	if (position.y <= 60 && attackFlag == 0 && attackFlag3 == 0)
 	{
-		if (enemy.attackFlag == 0 && enemy.attackFlag3 == 0 && bullet->GetFlag() == 0)
-		{
-			bullet->Create(enemy.position);
-			enemy.attackFlag = 1;
-		}
+		EnemyBullet* bullet = new EnemyBullet();
+		bullet->BaseInitialize(input, audio, mouse, referenceGameObjects);
+		bullet->Initialize();
+		addGameObjects.push_back(bullet);
+		bullet->Create(position);
+		attackFlag = 1;
 	}
 }
 
-void Enemy::Attack1Move()
-{
-	if (enemy.attackFlag == 1)
-	{
-		bullet->Move(pPosition);
-	}
-
-	if (pPosition.z - 10 > bullet->GetPos().z)
-	{
-		enemy.attackFlag = 0;
-		bullet->SetFlag(0);
-		bullet->SetPos({ 100,100,100 });
-	}
-}
 
 
 void Enemy::Attack2()
 {
-	if (enemy.position.y <= 60 && enemy.attackFlag3 == 0)
+	if (position.y <= 60 && attackFlag3 == 0)
 	{
-		barrage->Create(enemy.position);
+		for (GameObject* gameobject : referenceGameObjects)
+		{
+			EnemyBarrage* barrage = new EnemyBarrage();
+			barrage->BaseInitialize(input, audio, mouse, referenceGameObjects);
+			barrage->Initialize();
+			addGameObjects.push_back(barrage);
+		}
 	}
 }
 
 void Enemy::Attack3()
 {
-	if (enemy.attackFlag3 == 0)
+	if (attackFlag3 == 0)
 	{
-		enemy.attackFlag3 = 1;
-		enemy.ct = 60;
+		attackFlag3 = 1;
+		ct = 60;
 	}
 }
 
 void Enemy::Attack3Move()
 {
-
-	if (enemy.attackFlag3 == 1)
+	for (GameObject* gameobject : referenceGameObjects)
 	{
-		enemy.homingTime++;
-		if (enemy.homingTime >= 60)
+		if (gameobject->GetObjectMember() != OBJECTMEMBER::PLAYER)return;
+		XMFLOAT3 pos = gameobject->GetPosition();
+		if (attackFlag3 == 1)
 		{
-			enemy.homingTime = 0;
-			enemy.homingCount = 1;
-		}
-		//カウントが0ならホーミングする
-		if (enemy.homingCount == 0)
-		{
-			enemy.dx = enemy.position.x - pPosition.x;//Xの距離の計算
-			enemy.dy = enemy.position.y - pPosition.y;//Yの距離の計算
-			enemy.dz = enemy.position.z - pPosition.z;//Zの距離の計算
-			//ルートの中の計算
-			enemy.da = enemy.dx * enemy.dx + enemy.dy * enemy.dy + enemy.dz * enemy.dz;
-			enemy.L = sqrt(enemy.da);
-		}
-
-
-		if (enemy.rotCount == 0)
-		{
-			enemy.rotation.z -= 8;
-			enemy.position.x += (enemy.dx / enemy.L) * 5;
-			enemy.position.y += (enemy.dy / enemy.L) * 5;
-			enemy.position.z += (enemy.dz / enemy.L) * 5;
-
-			if (enemy.rotation.z <= -300)
+			homingTime++;
+			if (homingTime >= 60)
 			{
-				enemy.rotCount = 1;
-				enemy.homingCount = 0;
+				homingTime = 0;
+				homingCount = 1;
+			}
+			//カウントが0ならホーミングする
+			if (homingCount == 0)
+			{
+				dx = position.x - pos.x;//Xの距離の計算
+				dy = position.y - pos.y;//Yの距離の計算
+				dz = position.z - pos.z;//Zの距離の計算
+				//ルートの中の計算
+				da = dx * dx + dy * dy + dz * dz;
+				L = sqrt(da);
+			}
+
+
+			if (rotCount == 0)
+			{
+				rotation.z -= 8;
+				position.x += (dx / L) * 5;
+				position.y += (dy / L) * 5;
+				position.z += (dz / L) * 5;
+
+				if (rotation.z <= -300)
+				{
+					rotCount = 1;
+					homingCount = 0;
+				}
+			}
+			if (rotCount == 1)
+			{
+				rotation.z += 16;
+				position.x -= (dx / L) * 10;
+				position.y -= (dy / L) * 10;
+				position.z -= (dz / L) * 10;
 			}
 		}
-		if (enemy.rotCount == 1)
+		if (ct > 0 && position.z == 100)
 		{
-			enemy.rotation.z += 16;
-			enemy.position.x -= (enemy.dx / enemy.L) * 10;
-			enemy.position.y -= (enemy.dy / enemy.L) * 10;
-			enemy.position.z -= (enemy.dz / enemy.L) * 10;
+
+			ct--;
+		}
+		if (pos.z - 30 >= position.z)
+		{
+			position = { 0,120,100 };
+			rotation = { 0,180,0 };
+			ct = 300;
+			rotCount = 0;
+			attackFlag3 = 0;
+			homingCount = 0;
+			homingTime = 0;
+			rushCount = 0;
+			speed = 1;
 		}
 	}
-	if (enemy.ct > 0 && enemy.position.z == 100)
-	{
-
-		enemy.ct--;
-	}
-	if (pPosition.z - 30 >= enemy.position.z)
-	{
-		enemy.position = { 0,120,100 };
-		enemy.rotation = { 0,180,0 };
-		enemy.ct = 300;
-		enemy.rotCount = 0;
-		enemy.attackFlag3 = 0;
-		enemy.homingCount = 0;
-		enemy.homingTime = 0;
-		enemy.rushCount = 0;
-		enemy.speed = 1;
-	}
-
-	boss->SetRotation(enemy.rotation);
-	boss->SetPosition(enemy.position);
+	boss->SetRotation(rotation);
+	boss->SetPosition(position);
 }
 
 void Enemy::BHit()
 {
-	enemy.attackFlag = 0;
-	bullet->Hit();
+	attackFlag = 0;
+	//bullet->Hit();
 }
 
 void Enemy::BarrageHit()
 {
-	enemy.attackFlag2 = 0;
-	barrage->Hit();
+	attackFlag2 = 0;
+	//barrage->Hit();
 }
 
 void Enemy::RushHit()
 {
-	enemy.rushCount = 1;
+	rushCount = 1;
 }
 
 void Enemy::PHit()
 {
-	enemy.HP -= 1;
+	HP -= 1;
 }

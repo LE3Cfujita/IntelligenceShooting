@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	gameScene = new GameScene();
-	gameScene->Initialize(dxCommon, input, audio,mouse);
+	gameScene->Initialize(dxCommon,audio,input,mouse);
 
 
 	while (input->TriggerKey(DIK_ESCAPE) == 0)  //ゲームループ

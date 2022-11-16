@@ -1,15 +1,14 @@
-#include "Input.h"
-#include"Mouse.h"
-#include "Object3d.h"
 #include"Sprite.h"
 #include "DebugText.h"
-#include"Audio.h"
 #include"DirectXCommon.h"
 #include"DebugCamera.h"
 #include"Player.h"
+#include"PlayerBullet.h"
 #include"Enemy.h"
 #include"Collision.h"
 #include"OptionKey.h"
+#include"GameManager.h"
+#include"Rock.h"
 #pragma once
 
 class GameScene
@@ -36,8 +35,8 @@ public:
 		int sensi;//感度
 		int drawSensi;//表示用感度
 	}SaveData;
-	
-	
+
+
 private://エイリアス
 //Microsoft::WRL::を省略
 	template<class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -58,9 +57,15 @@ public:
 	/// </summary>
 	~GameScene();
 
-	void Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio, Mouse* mouse);
+	void Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, Mouse* mouse);
+
+	void SpriteCreate();
+
+	void ObjInitialize();
 
 	void Update(WinApp* winApp);
+
+	void pBulletCreate();
 
 	void CreateStars();
 
@@ -96,13 +101,10 @@ public:
 
 	XMFLOAT2 cursor_pos = { 0,0 };
 
-	XMFLOAT3 barragePosition[EBULLET_MAX];
 
-	XMFLOAT3 pBPosition[PBULLET_MAX];
 
-	
 private:
-
+	GameManager* gameObjectManager = nullptr;
 
 	//ポインタ置き場
 	DirectXCommon* dxCommon = nullptr;
@@ -110,15 +112,10 @@ private:
 	Audio* audio = nullptr;
 	DebugText debugText;
 	Sprite* sprite = nullptr;
-	Player* player = nullptr;
-	Enemy* enemy = nullptr;
 	Mouse* mouse = nullptr;
 	Collision* collision = nullptr;
 	OptionKey* key = nullptr;
-	PlayerBullet* bullet = nullptr;
-	Rock* rock = nullptr;
-	EnemyBullet* eBullet = nullptr;
-	EnemyBarrage* barrage = nullptr;
+	Player* player = nullptr;
 	//矢印
 	Sprite* yajirusi = nullptr;
 	Sprite* yajirusiOp = nullptr;
@@ -134,6 +131,7 @@ private:
 #define STARS_MAX 30
 	Object3d* stars[STARS_MAX];
 
+	int attackCT = 0;
 	int time = 0;
 	struct STARS
 	{

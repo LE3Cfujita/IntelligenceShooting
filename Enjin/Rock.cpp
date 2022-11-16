@@ -10,10 +10,12 @@ Rock::~Rock()
 	safe_delete(rock);
 }
 
-void Rock::Initialize(Mouse* mouse)
+void Rock::Initialize()
 {
-	this->mouse = mouse;
 
+	objectMember = OBJECTMEMBER::ROCK;
+	position = { 0,0,80 };
+	rotation = { 0,90,0 };
 	model = Model::LoadFormOBJ("aim");
 
 	//è∆èÄ
