@@ -14,7 +14,7 @@ void Rock::Initialize()
 {
 
 	objectMember = OBJECTMEMBER::ROCK;
-	position = { 0,0,80 };
+	position = { 0, 0,80 };
 	rotation = { 0,90,0 };
 	model = Model::LoadFormOBJ("aim");
 
@@ -36,10 +36,10 @@ void Rock::Update()
 
 
 	rock->SetPosition(position);
-	rock->Update();
 }
 
 void Rock::Draw()
 {
+	rock->Update();
 	rock->Draw();
 }

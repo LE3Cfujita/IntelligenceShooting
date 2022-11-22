@@ -41,6 +41,7 @@
     <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="Rock.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="Star.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
@@ -66,6 +67,8 @@
     <ClInclude Include="player\Player.h" />
     <ClInclude Include="Rock.h" />
     <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="Star.h" />
+    <ClInclude Include="XMFLOAT_Helper.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">

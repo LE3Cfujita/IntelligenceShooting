@@ -6,6 +6,7 @@
 #include "Audio.h"
 #include"Mouse.h"
 #include "GameObject.h"
+#include"XMFLOAT_Helper.h"
 class GameManager
 {
 private:

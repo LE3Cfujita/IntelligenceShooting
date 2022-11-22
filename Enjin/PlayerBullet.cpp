@@ -10,17 +10,19 @@ PlayerBullet::~PlayerBullet()
 	safe_delete(bullet);
 }
 
-void PlayerBullet::Initialize()
+void PlayerBullet::Initialize(XMFLOAT3 pos)
 {
-	speed = 7;
+	position = pos;
+	speed = 3;
 	objectMember = OBJECTMEMBER::PLAYERBULLET;
-	rotation = { 0,-90,0 };
-	model = Model::LoadFormOBJ("bullet");
+	rotation = { 90,0,0 };
+	model = Model::CreateModel(2);
 	//弾
 	bullet = Object3d::Create();
+	bullet->SetPosition(position);
 	bullet->SetModel(model);
-	bullet->SetRotation(rotation);
-	bullet->SetScale({ 0.7,0.7,0.7 });
+	bullet->SetScale({ 0.5,0.5,0.5 });
+	//bullet->SetColor({ 0, 1, 0,0 });
 }
 
 void PlayerBullet::Update()
@@ -36,37 +38,35 @@ void PlayerBullet::Draw()
 
 void PlayerBullet::Move()
 {
-
-	if (deathFlag == false)
+	XMFLOAT3 rPos = { 0.0f,0.0f,0.0f };
+	homingTime++;
+	if (homingTime >= 5)
 	{
-		homingTime++;
-		if (homingTime >= 5)
+		homingTime = 0;
+		homingCount = 1;
+	}
+	//カウントが0ならホーミングする
+	if (homingCount == 0)
+	{
+		for (GameObject* gameobject : referenceGameObjects)
 		{
-			homingTime = 0;
-			homingCount = 1;
-		}
-		//カウントが0ならホーミングする
-		if (homingCount == 0)
-		{
-			for (GameObject* gameobject : referenceGameObjects)
+			if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::ROCK)
 			{
-				if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::ROCK)
-				{
-					dx = position.x - gameobject->GetPosition().x;//Xの距離の計算
-					dy = position.y - gameobject->GetPosition().y;//Yの距離の計算
-					dz = position.z - gameobject->GetPosition().z;//Zの距離の計算
-					//ルートの中の計算
-					da = dx * dx + dy * dy + dz * dz;
-					//da = dx * dx + dy * dy;
-					L = sqrt(da);
-				}
+				rPos = gameobject->GetPosition();
 			}
 		}
-		//弾の移動
-		position.x -= (dx / L) * speed;
-		position.y -= (dy / L) * speed;
-		position.z -= (dz / L) * speed;
+		dx = position.x - rPos.x;//Xの距離の計算
+		dy = position.y - rPos.y;//Yの距離の計算
+		dz = position.z - rPos.z;//Zの距離の計算
+		//ルートの中の計算
+		da = dx * dx + dy * dy + dz * dz;
+		//da = dx * dx + dy * dy;
+		L = sqrt(da);
 	}
+	//弾の移動
+	position.x -= (dx / L) * speed;
+	position.y -= (dy / L) * speed;
+	position.z -= (dz / L) * speed;
 
 	if (position.z >= 100)
 	{
@@ -78,17 +78,7 @@ void PlayerBullet::Move()
 
 void PlayerBullet::Create()
 {
-	for (GameObject* gameobject : referenceGameObjects)
-	{
-		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYERBULLET)continue;
-		if (deathFlag == true)
-		{
-			deathFlag = false;
-			position = gameobject->GetPosition();;
-			attackCT = 1;
-		}
-	}
-
+	deathFlag = false;
 }
 
 

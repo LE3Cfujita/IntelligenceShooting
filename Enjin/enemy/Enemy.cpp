@@ -43,21 +43,23 @@ void Enemy::Update()
 	}
 	for (GameObject* gameobject : referenceGameObjects)
 	{
-		if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYER)
+		XMFLOAT3 pos;
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER)continue;
+		pos = gameobject->GetPosition();
+		Attack1();
+		if (pos.x < -5 || pos.x > 5)
 		{
-			XMFLOAT3 pos = gameobject->GetPosition();
-
-			//Attack1();
-			if (pos.x < -5 || pos.x > 5)
+			Attack2();
+		}
+		else
+		{
+			if (ct == 0)
 			{
-				Attack2();
+				Attack3();
 			}
-			else
+			if (ct > 0 && position.z == 100)
 			{
-				if (ct == 0)
-				{
-					//Attack3();
-				}
+				ct--;
 			}
 		}
 	}
@@ -76,35 +78,36 @@ void Enemy::Move()
 
 	if (!(directionX == 0) || !(directionY == 0))return;
 
-	if (aim.getTime == 0)
+	if (getTime == 0)
 	{
+		XMFLOAT3 pos;
 		for (GameObject* gameobject : referenceGameObjects)
 		{
-			if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::ROCK)return;
+			if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER)continue;
 			{
-				aim.rPosition = gameobject->GetPosition();
+				pos = gameobject->GetPosition();
 			}
 		}
-		aim.getTime = 1;
+		getTime = 1;
 		speed = 1;
 
 		//照準との距離を計算して逃げるような動きを作る
-		aim.dx = position.x - aim.rPosition.x;
-		aim.dy = position.y - aim.rPosition.y;
-		aim.da = aim.dx * aim.dx + aim.dy + aim.dy;
-		aim.L = sqrt(aim.da);
+		dx = position.x - pos.x;
+		dy = position.y - pos.y;
+		da = dx * dx + dy + dy;
+		L = sqrt(da);
 	}
 	else
 	{
-		aim.getTime++;
-		if (aim.getTime >= 50)
+		getTime++;
+		if (getTime >= 50)
 		{
-			aim.getTime = 0;
+			getTime = 0;
 		}
 	}
-	if (aim.L >= 30)return;
+	if (L >= 30)return;
 	speed -= 0.02;
-	if (aim.dx < 0)
+	if (dx < 0)
 	{
 		position.x -= speed;
 	}
@@ -112,7 +115,7 @@ void Enemy::Move()
 	{
 		position.x += speed;
 	}
-	if (aim.dy < 0)
+	if (dy < 0)
 	{
 		position.y -= speed;
 	}
@@ -229,61 +232,59 @@ void Enemy::Attack3()
 
 void Enemy::Attack3Move()
 {
-	for (GameObject* gameobject : referenceGameObjects)
+
+
+	if (attackFlag3 == 1)
 	{
-		if (gameobject->GetObjectMember() != OBJECTMEMBER::PLAYER)return;
-		XMFLOAT3 pos = gameobject->GetPosition();
-		if (attackFlag3 == 1)
+		XMFLOAT3 pos;
+		for (GameObject* gameobject : referenceGameObjects)
 		{
-			homingTime++;
-			if (homingTime >= 60)
-			{
-				homingTime = 0;
-				homingCount = 1;
-			}
-			//カウントが0ならホーミングする
-			if (homingCount == 0)
-			{
-				dx = position.x - pos.x;//Xの距離の計算
-				dy = position.y - pos.y;//Yの距離の計算
-				dz = position.z - pos.z;//Zの距離の計算
-				//ルートの中の計算
-				da = dx * dx + dy * dy + dz * dz;
-				L = sqrt(da);
-			}
+			if (gameobject->GetObjectMember() != OBJECTMEMBER::PLAYER)continue;
+			pos = gameobject->GetPosition();
+		}
+		homingTime++;
+		if (homingTime >= 60)
+		{
+			homingTime = 0;
+			homingCount = 1;
+		}
+		//カウントが0ならホーミングする
+		if (homingCount == 0)
+		{
+			dx = position.x - pos.x;//Xの距離の計算
+			dy = position.y - pos.y;//Yの距離の計算
+			dz = position.z - pos.z;//Zの距離の計算
+			//ルートの中の計算
+			da = dx * dx + dy * dy + dz * dz;
+			L = sqrt(da);
+		}
 
 
-			if (rotCount == 0)
-			{
-				rotation.z -= 8;
-				position.x += (dx / L) * 5;
-				position.y += (dy / L) * 5;
-				position.z += (dz / L) * 5;
+		if (rotCount == 0)
+		{
+			rotation.z -= 8;
+			position.x += (dx / L) * 5;
+			position.y += (dy / L) * 5;
+			position.z += (dz / L) * 5;
 
-				if (rotation.z <= -300)
-				{
-					rotCount = 1;
-					homingCount = 0;
-				}
-			}
-			if (rotCount == 1)
+			if (rotation.z <= -300)
 			{
-				rotation.z += 16;
-				position.x -= (dx / L) * 10;
-				position.y -= (dy / L) * 10;
-				position.z -= (dz / L) * 10;
+				rotCount = 1;
+				homingCount = 0;
 			}
 		}
-		if (ct > 0 && position.z == 100)
+		if (rotCount == 1)
 		{
-
-			ct--;
+			rotation.z += 16;
+			position.x -= (dx / L) * 10;
+			position.y -= (dy / L) * 10;
+			position.z -= (dz / L) * 10;
 		}
 		if (pos.z - 30 >= position.z)
 		{
 			position = { 0,120,100 };
 			rotation = { 0,180,0 };
-			ct = 300;
+			ct = 250;
 			rotCount = 0;
 			attackFlag3 = 0;
 			homingCount = 0;

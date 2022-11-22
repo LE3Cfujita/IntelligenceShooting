@@ -79,7 +79,9 @@ void GameScene::SpriteCreate()
 		spriteSENSINumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 	}
 
-	Model::AdvanceLoadModel(1,"enemyBullet");
+	Model::AdvanceLoadModel(1, "enemyBullet");
+	Model::AdvanceLoadModel(2, "bullet2");
+	Model::AdvanceLoadModel(3, "planet");
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, Mouse* mouse)
@@ -93,24 +95,26 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, 
 	gameObjectManager = new GameManager();
 	gameObjectManager->Initialize(input, audio, mouse);
 
+
 	ObjInitialize();
 	SpriteCreate();
+	key = new OptionKey();
+	key->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
+	key->Initialize();
+	gameObjectManager->AddGameObject(key);
 
-	planet = Model::LoadFormOBJ("planet");
-	for (int i = 0; i < STARS_MAX; i++)
-	{
-		//3Dオブジェクト生成
-		stars[i] = Object3d::Create();
-		//オブジェクトにモデルを紐付ける
-		stars[i]->SetModel(planet);
-		stars[i]->SetPosition(star[i].starsPos);
-		stars[i]->SetScale({ 5,5,5 });
-		stars[i]->SetColor({ star[i].color });
-	}
+
+	left = key->GetLeftDecimal();
+	right = key->GetRightDecimal();
+	up = key->GetUpDecimaly();
+	down = key->GetDownDecimal();
+	attack = key->GetAttackDecimal();
+
 	dome = Model::LoadFormOBJ("skydome");
 	skydome = Object3d::Create();
 	skydome->SetModel(dome);
 	skydome->SetScale({ 3,3,3 });
+	skydome->SetPosition({ 0,0,100 });
 
 	audio->SoundLoadWave("Alarm01.wav", 0);//テスト
 	audio->SoundLoadWave("decisionSE.wav", 1);//テスト
@@ -131,24 +135,12 @@ void GameScene::ObjInitialize()
 	player->Initialize();
 	pHP = player->GetHP();
 	gameObjectManager->AddGameObject(player);
-	Enemy* enemy = new Enemy();
-	enemy->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
-	enemy->Initialize();
-	eHP = enemy->GetHP();
-	gameObjectManager->AddGameObject(enemy);
-	key = new OptionKey();
-	key->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
-	key->Initialize();
-	gameObjectManager->AddGameObject(key);
 
+	Rock* rock = new Rock();
+	rock->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
+	rock->Initialize();
+	gameObjectManager->AddGameObject(rock);
 
-
-
-	left = key->GetLeftDecimal();
-	right = key->GetRightDecimal();
-	up = key->GetUpDecimaly();
-	down = key->GetDownDecimal();
-	attack = key->GetAttackDecimal();
 }
 
 void GameScene::Update(WinApp* winApp)
@@ -178,7 +170,6 @@ void GameScene::Update(WinApp* winApp)
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
-		//pBulletCreate();
 
 		BCollision();
 		SceneChange();
@@ -206,6 +197,11 @@ void GameScene::Title()
 			yajirusiPos.y = 465.0f;
 			if (mouse->TriggerMouseLeft())
 			{
+				Enemy* enemy = new Enemy();
+				enemy->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
+				enemy->Initialize();
+				eHP = enemy->GetHP();
+				gameObjectManager->AddGameObject(enemy);
 				gameState = GameState::PLAY;
 				audio->SoundPlayWave("decisionSE.wav", false);
 			}
@@ -223,30 +219,6 @@ void GameScene::Title()
 	yajirusi->SetPosition(yajirusiPos);
 }
 
-void GameScene::pBulletCreate()
-{
-	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
-	{
-		if (attackCT == 0)
-		{
-			if (input->PushKey(gameobject->GetAttackKey()) == true || mouse->PushMouseLeft() == true)
-			{
-				PlayerBullet* pBullet = new PlayerBullet;
-				pBullet->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
-				pBullet->Initialize();
-				gameObjectManager->AddGameObject(pBullet);
-			}
-		}
-		else
-		{
-			attackCT += 1;
-			if (attackCT >= 10)
-			{
-				attackCT = 0;
-			}
-		}
-	}
-}
 
 void GameScene::Option_Select()
 {
@@ -408,81 +380,24 @@ void GameScene::CreateStars()
 
 	if (time == 0)
 	{
-		for (int i = 0; i < STARS_MAX; i++)
-		{
-			if (star[i].flag == 0)
-			{
-				star[i].flag = 1;
-				int lar = rand() % 2;
-				int uad = rand() % 2;
-
-				if (uad == 0)
-				{
-					star[i].starsPos.y = (rand() % 300) * 0.1;
-				}
-				else
-				{
-					star[i].starsPos.y = (rand() % 300) * -0.1;
-				}
-				if (lar == 0)
-				{
-					if (star[i].starsPos.y >= 25 || star[i].starsPos.y <= -15)
-					{
-						star[i].starsPos.x = (rand() % 400) * 0.1;
-					}
-					star[i].starsPos.x = (rand() % 400 + 300) * 0.1;
-				}
-				else
-				{
-					if (star[i].starsPos.y >= 25 || star[i].starsPos.y <= -15)
-					{
-						star[i].starsPos.x = (rand() % 400) * -0.1;
-					}
-					star[i].starsPos.x = (rand() % 400 + 300) * -0.1;
-				}
-				star[i].starsPos.z = 200;
-				star[i].color.x = rand() % 100 * 0.01;
-				star[i].color.y = rand() % 100 * 0.01;
-				star[i].color.z = rand() % 100 * 0.01;
-				time = 1;
-				break;
-			}
-		}
+		Star* star = new Star();
+		star->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
+		star->Initialize();
+		star->Create();
+		gameObjectManager->AddGameObject(star);
+		time = 1;
 	}
 	else
 	{
 		time++;
-		if (time >= 20)
+		if (time >= 15)
 		{
 			time = 0;
 		}
 	}
-	if (input->PushKey(DIK_M))
-	{
-		int a = 0;
-	}
-	for (int i = 0; i < STARS_MAX; i++)
-	{
-		if (star[i].flag == 1)
-		{
-			star[i].starsPos.z -= 3;
-			if (star[i].starsPos.z < -20)
-			{
-				star[i].flag = 0;
-				star[i].starsPos.x = 100;
-			}
-		}
-	}
-	skyrot.x += 0.05;
 	skyrot.y += 0.05;
 	skydome->SetRotation(skyrot);
 	skydome->Update();
-	for (int i = 0; i < STARS_MAX; i++)
-	{
-		stars[i]->SetColor(star[i].color);
-		stars[i]->SetPosition(star[i].starsPos);
-		stars[i]->Update();
-	}
 }
 
 void GameScene::DrawVolumePercent()
@@ -666,10 +581,6 @@ void GameScene::Draw()
 	case GameState::PLAY://ゲームシーン
 	//3Dオブジェクトの描画
 		skydome->Draw();
-		for (int i = 0; i < STARS_MAX; i++)
-		{
-			stars[i]->Draw();
-		}
 		break;
 	case GameState::OVER://ゲームオーバー
 		break;

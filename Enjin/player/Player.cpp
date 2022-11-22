@@ -32,12 +32,13 @@ void Player::Initialize()
 
 void Player::Update()
 {
-
+	Move();
+	Attack();
 }
 
 void Player::Draw()
 {
-	Move();
+
 	player->Update();
 	player->Draw();
 }
@@ -82,6 +83,28 @@ void Player::Move()
 	player->SetRotation(rotation);
 }
 
+void Player::Attack()
+{
+	if (coolCount == 0)
+	{
+		if (input->PushKey(attackKey) || mouse->PushMouseLeft()) {
+			PlayerBullet* bullet = new PlayerBullet();
+			bullet->BaseInitialize(input, audio, mouse, referenceGameObjects);
+			bullet->Initialize(position);
+			bullet->Create();
+			addGameObjects.push_back(bullet);
+			coolCount = 1;
+		}
+	}
+	else
+	{
+		coolTime++;
+		if (coolTime < 5)return;
+		coolTime = 0;
+		coolCount = 0;
+	}
+}
+
 void Player::Hit()
 {
 	HP -= 1;
@@ -97,7 +120,7 @@ void Player::GetKey()
 {
 	for (GameObject* gameobject : referenceGameObjects)
 	{
-		
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::OPTIONKEY)continue;
 		moveLeft = gameobject->GetLeftKey();
 		moveRight = gameobject->GetRightKey();
 		moveUp = gameobject->GetUpKey();

@@ -9,6 +9,7 @@
 #include"OptionKey.h"
 #include"GameManager.h"
 #include"Rock.h"
+#include"Star.h"
 #pragma once
 
 class GameScene
@@ -65,7 +66,6 @@ public:
 
 	void Update(WinApp* winApp);
 
-	void pBulletCreate();
 
 	void CreateStars();
 
@@ -128,19 +128,6 @@ private:
 	Sprite* opsion_key = nullptr;
 	Sprite* opsion_sensi = nullptr;
 
-	Model* planet = nullptr;
-#define STARS_MAX 30
-	Object3d* stars[STARS_MAX];
-
-	int attackCT = 0;
-	int time = 0;
-	struct STARS
-	{
-		int flag = 0;
-		XMFLOAT3 starsPos = { 100,0,0 };
-		XMFLOAT4 color = { 0,0,0,0 };
-	};
-	STARS star[STARS_MAX];
 
 	Model* dome = nullptr;
 	Object3d* skydome = nullptr;
@@ -170,6 +157,8 @@ private:
 	char str3[100];
 	char str4[100];
 	char str5[100];
+
+	int time = 0;
 
 	//スプライト
 	const int SPRITE_NUM = 10;

@@ -49,22 +49,7 @@ public:
 
 public:
 
-	struct AIM
-	{
-		XMFLOAT3 rPosition = { 0,0,0 };
-
-		float dx = 0;
-		float dy = 0;
-		float da = 0;
-		float L = 0;
-
-		int directionCount = 0;
-		int directionTime = 0;
-
-		int getTime = 0;
-	};
-	AIM aim;
-
+	
 
 private://ƒƒ“ƒo•Ï”
 	Model* modelBoss = nullptr;

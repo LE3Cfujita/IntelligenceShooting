@@ -147,6 +147,7 @@ private: // 静的メンバ変数
 	// Y軸回りビルボード行列
 	static XMMATRIX matBillboardY;
 
+
 private:// 静的メンバ関数
 
 	/// <summary>
@@ -217,6 +218,7 @@ public: // メンバ関数
 
 	void SetColor(XMFLOAT4 color) { this->color = color; }
 
+
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
@@ -233,7 +235,6 @@ private: // メンバ変数
 	XMMATRIX view;
 	//プロジェクション(持っていくよう)
 	XMMATRIX projection;
-
 	// 親オブジェクト
 	Object3d* parent = nullptr;
 	// モデル

@@ -417,6 +417,8 @@ void Object3d::Update()
 	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
 	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
+	
+	
 
 	// ワールド行列の合成
 	matWorld = XMMatrixIdentity(); // 変形をリセット

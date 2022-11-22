@@ -1,5 +1,6 @@
 #pragma once
 #include"GameObject.h"
+#include"PlayerBullet.h"
 
 class Player : public GameObject
 {
@@ -15,6 +16,8 @@ public:
 	void Draw();
 
 	void Move();
+
+	void Attack();
 	//“G‚ÌUŒ‚‚ª“–‚½‚Á‚½
 	void Hit();
 	//“G‚Ì“ËiUŒ‚‚ª“–‚½‚Á‚½
@@ -23,7 +26,6 @@ public:
 
 private://ƒƒ“ƒo•Ï”
 
-	Mouse* mouse = nullptr;
 
 	Model* modelPlayer = nullptr;
 	Object3d* player = nullptr;

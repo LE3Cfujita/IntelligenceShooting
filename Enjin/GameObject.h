@@ -19,6 +19,7 @@ public:
 		ENEMYBULLET,
 		ENEMYBARRAGE,
 		NONEMEMBER,
+		STAR,
 		ROCK,
 		OPTIONKEY,
 	};
@@ -31,6 +32,8 @@ protected:
 	XMFLOAT3 position;
 	XMFLOAT3 rotation;
 	XMFLOAT3 scale;
+	XMFLOAT3 velocity;
+	XMFLOAT4 color;
 	float speed;
 	int attackCT;
 	int number;
@@ -62,6 +65,7 @@ protected:
 	int rushCount;
 	int sensi;
 	int drawSensi;
+	int getTime;
 
 	int left;
 	int right;
@@ -70,11 +74,16 @@ protected:
 	int attack;
 	int count;
 
+	float radius;
+
 	int leftDecimal;
 	int rightDecimal;
 	int upDecimal;
 	int downDecimal;
 	int attackDecimal;
+
+	bool physicsFlag;
+	bool actionFlag;
 	OBJECTMEMBER objectMember;
 public:
 
@@ -89,12 +98,15 @@ public:
 		this->mouse = mouse;
 
 		deathFlag = false;
+		physicsFlag = false;
+		actionFlag = false;
 		rotation = { 0,-90,0 };
 
 		attackCT = 0;
 		number = 0;
-		XMFLOAT3 position;
+		position = { 0,0,0 };
 
+		color = { 0,0,0,0 };
 
 
 		dx = 0;
@@ -117,7 +129,7 @@ public:
 
 		HP = 50;
 
-
+		getTime = 0;
 
 		moveLeft = 0;
 		moveRight = 0;
@@ -129,7 +141,7 @@ public:
 		attackFlag2 = 0;//弾幕
 		attackFlag3 = 0;//突進
 
-		ct = 300;//突進攻撃のクールタイム	
+		ct = 250;//突進攻撃のクールタイム	
 
 		barrageTime = 0;
 		rotCount = 0;
@@ -166,6 +178,15 @@ public:
 
 	virtual void Draw() {}
 
+	XMFLOAT3 GetVelocity() { return velocity; }
+	void SetVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
+
+	float GetRadius() { return radius; }
+	float GetRadius(float radius) { this->radius = radius; }
+	bool GetPhysicsFlag() { return physicsFlag; }
+	void SetPhysicsFlag(bool physicsFlag) { this->physicsFlag = physicsFlag; }
+	bool GetActionFlag() { return actionFlag; }
+	void SetActionFlag(bool actionFlag) { this->actionFlag = actionFlag; }
 
 	bool GetDeathFlag() { return deathFlag; }
 

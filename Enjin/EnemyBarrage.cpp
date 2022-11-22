@@ -13,10 +13,9 @@ EnemyBarrage::~EnemyBarrage()
 void EnemyBarrage::Initialize()
 {
 
-	speed = 1.7;
 	objectMember = OBJECTMEMBER::ENEMYBARRAGE;
 	position = { 100,100,100 };
-	model = Model::CreateModel(1);
+	model = Model::CreateModel(3);
 	bullet = Object3d::Create();
 	bullet->SetModel(model);
 	bullet->SetPosition(position);
