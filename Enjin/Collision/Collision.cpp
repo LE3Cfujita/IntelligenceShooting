@@ -41,11 +41,11 @@ bool Collision::CircleToSquare(float pPos_x, float pPos_y, float ePos_x, float e
 	return false;
 }
 
-bool Collision::ballToball(float pPos_x, float pPos_y, float pPos_z, float ePos_x, float ePos_y, float ePos_z, float r1, float r2)
+bool Collision::ballToball(XMFLOAT3 pPos, XMFLOAT3 ePos, float r1, float r2)
 {
-	float a = pPos_x - ePos_x;
-	float b = pPos_y - ePos_y;
-	float c = pPos_z - ePos_z;
+	float a = pPos.x - ePos.x;
+	float b = pPos.y - ePos.y;
+	float c = pPos.z - ePos.z;
 
 	float d = sqrt(a * a + b * b + c * c);
 

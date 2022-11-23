@@ -56,17 +56,17 @@ void Star::Create()
 	{
 		if (position.y >= 25 || position.y <= -15)
 		{
-			position.x = (rand() % 500) * 0.1;
+			position.x = (rand() % 600) * 0.1;
 		}
-		position.x = (rand() % 400 + 400) * 0.1;
+		position.x = (rand() % 400 + 500) * 0.1;
 	}
 	else
 	{
 		if (position.y >= 25 || position.y <= -15)
 		{
-			position.x = (rand() % 500) * -0.1;
+			position.x = (rand() % 600) * -0.1;
 		}
-		position.x = (rand() % 400 + 400) * -0.1;
+		position.x = (rand() % 400 + 500) * -0.1;
 	}
 	position.z = 200;
 	color.x = rand() % 100 * 0.01;
@@ -74,9 +74,9 @@ void Star::Create()
 	color.z = rand() % 100 * 0.01;
 	rotation.x = rand() % 3610 * 0.1;
 	rotation.z = rand() % 3610 * 0.1;
-	scale.x = (rand() % 20 + 20) * 0.1;
-	scale.y = (rand() % 20 + 20) * 0.1;
-	scale.z = (rand() % 20 + 20) * 0.1;
+	scale.x = (rand() % 20 + 10) * 0.1;
+	scale.y = (rand() % 20 + 10) * 0.1;
+	scale.z = (rand() % 20 + 10) * 0.1;
 	obj->SetColor(color);
 	obj->SetPosition(position);
 	obj->SetScale(scale);

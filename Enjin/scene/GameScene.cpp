@@ -17,6 +17,50 @@ GameScene::~GameScene()
 	safe_delete(sprite);
 }
 
+void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, Mouse* mouse)
+{
+	this->dxCommon = dxCommon;
+	this->audio = audio;
+	this->input = input;
+	this->mouse = mouse;
+
+	gameState = GameState::TITLE;
+	gameObjectManager = new GameManager();
+	gameObjectManager->Initialize(input, audio, mouse, collision);
+
+
+	ObjInitialize();
+	SpriteCreate();
+	key = new OptionKey();
+	key->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+	key->Initialize();
+	gameObjectManager->AddGameObject(key);
+
+
+	left = key->GetLeftDecimal();
+	right = key->GetRightDecimal();
+	up = key->GetUpDecimaly();
+	down = key->GetDownDecimal();
+	attack = key->GetAttackDecimal();
+
+	dome = Model::LoadFormOBJ("skydome");
+	skydome = Object3d::Create();
+	skydome->SetModel(dome);
+	skydome->SetScale({ 3,3,3 });
+	skydome->SetPosition({ 0,0,100 });
+
+	audio->SoundLoadWave("Alarm01.wav", 0);//テスト
+	audio->SoundLoadWave("decisionSE.wav", 1);//テスト
+	audio->SoundVolume(0, bgmVolume * volumeSize);
+	audio->SoundVolume(1, seVolume * volumeSize);
+	audio->SoundPlayWave("Alarm01.wav", true);
+
+
+
+
+	LoadFile();
+}
+
 void GameScene::SpriteCreate()
 {
 	//デバッグテキスト用のテクスチャ読み込み
@@ -84,60 +128,16 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(3, "planet");
 }
 
-void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, Mouse* mouse)
-{
-	this->dxCommon = dxCommon;
-	this->audio = audio;
-	this->input = input;
-	this->mouse = mouse;
-
-	gameState = GameState::TITLE;
-	gameObjectManager = new GameManager();
-	gameObjectManager->Initialize(input, audio, mouse);
-
-
-	ObjInitialize();
-	SpriteCreate();
-	key = new OptionKey();
-	key->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
-	key->Initialize();
-	gameObjectManager->AddGameObject(key);
-
-
-	left = key->GetLeftDecimal();
-	right = key->GetRightDecimal();
-	up = key->GetUpDecimaly();
-	down = key->GetDownDecimal();
-	attack = key->GetAttackDecimal();
-
-	dome = Model::LoadFormOBJ("skydome");
-	skydome = Object3d::Create();
-	skydome->SetModel(dome);
-	skydome->SetScale({ 3,3,3 });
-	skydome->SetPosition({ 0,0,100 });
-
-	audio->SoundLoadWave("Alarm01.wav", 0);//テスト
-	audio->SoundLoadWave("decisionSE.wav", 1);//テスト
-	audio->SoundVolume(0, bgmVolume * volumeSize);
-	audio->SoundVolume(1, seVolume * volumeSize);
-	audio->SoundPlayWave("Alarm01.wav", true);
-
-
-
-
-	LoadFile();
-}
-
 void GameScene::ObjInitialize()
 {
 	player = new Player();
-	player->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
+	player->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 	player->Initialize();
 	pHP = player->GetHP();
 	gameObjectManager->AddGameObject(player);
 
 	Rock* rock = new Rock();
-	rock->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
+	rock->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 	rock->Initialize();
 	gameObjectManager->AddGameObject(rock);
 
@@ -170,13 +170,13 @@ void GameScene::Update(WinApp* winApp)
 		break;
 	case GameState::PLAY://ゲームシーン
 		ShowCursor(FALSE);
-
-		BCollision();
+		ObjCollision();
 		SceneChange();
 
 		CreateStars();
 
 		SetCursorPos(690, 360);
+		gameObjectManager->Update();
 		break;
 	case GameState::OVER://ゲームオーバー
 		break;
@@ -184,7 +184,6 @@ void GameScene::Update(WinApp* winApp)
 	case GameState::CLEA://ゲームクリア
 		break;
 	}
-	gameObjectManager->Update();
 	mouse->Update();
 }
 
@@ -197,8 +196,8 @@ void GameScene::Title()
 			yajirusiPos.y = 465.0f;
 			if (mouse->TriggerMouseLeft())
 			{
-				Enemy* enemy = new Enemy();
-				enemy->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
+				enemy = new Enemy();
+				enemy->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 				enemy->Initialize();
 				eHP = enemy->GetHP();
 				gameObjectManager->AddGameObject(enemy);
@@ -217,6 +216,45 @@ void GameScene::Title()
 		}
 	}
 	yajirusi->SetPosition(yajirusiPos);
+}
+
+void GameScene::ObjCollision()
+{
+	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
+	{
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER && gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYERBULLET)
+		{
+			if (collision->ballToball(player->GetPosition(), gameobject->GetPosition(), player->GetRadius(), gameobject->GetRadius()))
+			{
+				if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ENEMY)
+				{
+					player->Hit();
+					gameobject->Hit();
+
+				}
+				else
+				{
+					if (gameobject->GetAttackFlag3() == 1 && player->GetRushCount() == 0)
+					{
+						player->RushHit();
+					}
+				}
+				pHP = player->GetHP();
+			}
+		}
+		for (GameObject* gameobject2 : gameObjectManager->GetGameObjects())
+		{
+			if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYERBULLET && gameobject2->GetObjectMember() == GameObject::OBJECTMEMBER::ENEMY)
+			{
+				if (collision->ballToball(gameobject->GetPosition(), gameobject2->GetPosition(), gameobject2->GetRadius(), gameobject2->GetRadius()))
+				{
+					gameobject->Hit();
+					gameobject2->Hit();
+				}
+				eHP = enemy->GetHP();
+			}
+		}
+	}
 }
 
 
@@ -323,6 +361,7 @@ void GameScene::Option_BGMSE()
 	audio->SoundVolume(1, seVolume * volumeSize);
 }
 
+
 void GameScene::Option_KEY()
 {
 	Option_KEY_Collision(mousePos);
@@ -381,7 +420,7 @@ void GameScene::CreateStars()
 	if (time == 0)
 	{
 		Star* star = new Star();
-		star->BaseInitialize(input, audio, mouse, gameObjectManager->GetGameObjects());
+		star->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 		star->Initialize();
 		star->Create();
 		gameObjectManager->AddGameObject(star);
@@ -390,7 +429,7 @@ void GameScene::CreateStars()
 	else
 	{
 		time++;
-		if (time >= 15)
+		if (time >= 30)
 		{
 			time = 0;
 		}
@@ -567,7 +606,6 @@ void GameScene::Draw()
 	Object3d::PreDraw(dxCommon->GetCmdList());
 
 
-	gameObjectManager->Draw();
 	switch (gameState)
 	{
 	case GameState::TITLE://タイトル
@@ -581,6 +619,7 @@ void GameScene::Draw()
 	case GameState::PLAY://ゲームシーン
 	//3Dオブジェクトの描画
 		skydome->Draw();
+		gameObjectManager->Draw();
 		break;
 	case GameState::OVER://ゲームオーバー
 		break;
@@ -685,91 +724,29 @@ void GameScene::Option_Sensi()
 
 void GameScene::Text()
 {
-	int flag = 0;
+	int HP = 0;
 	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
 	{
-		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ENEMY)continue;
-		flag = gameobject->GetAttackFlag();
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER)continue;
+		HP = gameobject->GetHP();
 		break;
 	}
-	sprintf_s(str, "HP = %d", flag);
+	sprintf_s(str, "HP = %d", HP);
 	debugText.Print(str, 0, 0, 1);
 	sprintf_s(str2, "EnemyHP = %d", eHP);
 	debugText.Print(str2, 0, 20, 1);
 }
 
-void GameScene::BCollision()
-{
-	//XMFLOAT3 bPosition = bullet->GetPosition();
-	//XMFLOAT3 pPosition = player->GetPosition();
-
-	//if (bullet->GetBFlag() == 1)
-	//{
-	//	if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, bPosition.x, bPosition.y, bPosition.z, 0.5, 0.5))
-	//	{
-	//		player->Hit();
-	//		enemy->BHit();
-	//	}
-	//}
-
-
-	//for (int i = 0; i < EBULLET_MAX; i++)
-	//{
-	//	barragePosition[i] = barrage->GetBarragePosition();
-
-	//	if (barrage->GetBarrageFlag() == 1)
-	//	{
-	//		if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, barragePosition[i].x, barragePosition[i].y, barragePosition[i].z, 2, 2))
-	//		{
-	//			player->Hit();
-	//			enemy->BarrageHit();
-	//		}
-	//	}
-	//	barrage->PlusNumber();
-	//}
-	//敵の座標
-	//for (GameObject* gameobject : gameObjectManager->GetGameObjects())
-	//{
-	//	if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYERBULLET)
-	//	{
-	//		XMFLOAT3 pPos = gameobject->GetPosition();
-	//	}
-	//	if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYERBULLET)
-	//	{
-	//		XMFLOAT3 pPos = gameobject->GetPosition();
-	//	}
-	//	if (enemy->GetHP() != 0)
-	//	{
-	//		if (collision->ballToball(ePosition.x, ePosition.y, ePosition.z, pBPosition[i].x, pBPosition[i].y, pBPosition[i].z, 10, 1))
-	//		{
-	//			bullet->Hit();
-	//			enemy->PHit();
-	//		}
-	//	}
-	////}
-	//if (enemy->GetRushCount() == 0)
-	//{
-	//	if (collision->ballToball(pPosition.x, pPosition.y, pPosition.z, ePosition.x, ePosition.y, ePosition.z, 1, 3))
-	//	{
-	//		player->RushHit();
-	//		enemy->RushHit();
-	//	}
-	//}
-
-}
 
 void GameScene::SceneChange()
 {
-	for (GameObject* player : gameObjectManager->GetGameObjects())
+	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
 	{
-		if (player->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYER && player->GetDeathFlag() == true)
+		if (pHP <= 0)
 		{
-			gameState = GameState::OVER;//ゲームクリア
+			gameState = GameState::OVER;//ゲームオーバー
 		}
-	}
-	for (GameObject* enemy : gameObjectManager->GetGameObjects())
-	{
-		if (enemy->GetObjectMember() == GameObject::OBJECTMEMBER::ENEMY && enemy->GetDeathFlag() == true)
+		if (eHP <= 0)
 		{
 			gameState = GameState::CLEA;//ゲームクリア
 		}

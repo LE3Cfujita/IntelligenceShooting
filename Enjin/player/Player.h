@@ -17,6 +17,8 @@ public:
 
 	void Move();
 
+	void Death();
+
 	void Attack();
 	//“G‚ÌUŒ‚‚ª“–‚½‚Á‚½
 	void Hit();

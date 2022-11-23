@@ -16,6 +16,7 @@ void EnemyBullet::Initialize()
 	objectMember = OBJECTMEMBER::ENEMYBULLET;
 	position = { 100,100,100 };
 	rotation = { 0,90,0 };
+	radius = 1;
 	model = Model::LoadFormOBJ("enemyBullet");
 	bullet = Object3d::Create();
 	bullet->SetModel(model);
@@ -57,7 +58,7 @@ void EnemyBullet::Move()
 	}
 
 	homingTime++;
-	if (homingTime >= 40)
+	if (homingTime >= 30)
 	{
 		homingTime = 0;
 		homingCount = 1;
@@ -99,4 +100,10 @@ void EnemyBullet::Hit()
 	deathFlag = true;
 	position.z = 100;
 	bullet->SetPosition(position);
+	for (GameObject* gameobject : referenceGameObjects)
+	{
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ENEMY)continue;
+		gameobject->SetAttackFlag(0);
+	}
+
 }

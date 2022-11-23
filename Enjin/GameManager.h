@@ -17,7 +17,7 @@ public:
 
 	GameManager();
 	~GameManager();
-	void Initialize(Input* input, Audio* audio,Mouse*mouse);
+	void Initialize(Input* input, Audio* audio,Mouse*mouse, Collision* collision);
 	void Update();
 	void Draw();
 	void AddGameObject(GameObject* gameObject);

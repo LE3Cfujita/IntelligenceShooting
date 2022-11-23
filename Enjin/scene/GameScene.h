@@ -5,7 +5,6 @@
 #include"Player.h"
 #include"PlayerBullet.h"
 #include"Enemy.h"
-#include"Collision.h"
 #include"OptionKey.h"
 #include"GameManager.h"
 #include"Rock.h"
@@ -66,6 +65,8 @@ public:
 
 	void Update(WinApp* winApp);
 
+	void ObjCollision();
+
 
 	void CreateStars();
 
@@ -81,7 +82,6 @@ public:
 	void Draw();
 	void Text();
 
-	void BCollision();
 
 	void SceneChange();
 
@@ -115,6 +115,7 @@ private:
 	Mouse* mouse = nullptr;
 	Collision* collision = nullptr;
 	OptionKey* key = nullptr;
+	Enemy* enemy = nullptr;
 	Player* player = nullptr;
 	EnemyBarrage* barrage = nullptr;
 	//–îˆó

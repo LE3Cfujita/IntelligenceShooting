@@ -15,19 +15,15 @@ void EnemyBarrage::Initialize()
 
 	objectMember = OBJECTMEMBER::ENEMYBARRAGE;
 	position = { 100,100,100 };
-	model = Model::CreateModel(3);
+	model = Model::CreateModel(1);
 	bullet = Object3d::Create();
 	bullet->SetModel(model);
 	bullet->SetPosition(position);
 	bullet->SetRotation(rotation);
-	bullet->SetScale({ 1,1,1 });
+	bullet->SetScale({ 0.7,0.7,0.7 });
 	bullet->SetColor({ 255, 255, 0,0 });
 }
 
-void EnemyBarrage::ModelCreate()
-{
-	//model = Model::LoadFormOBJ("enemyBullet");
-}
 
 void EnemyBarrage::Update()
 {
@@ -113,7 +109,10 @@ void EnemyBarrage::Move()
 	position.x += (dx / L) * speed + directionX;
 	position.y += (dy / L) * speed + directionY;
 	position.z += (dz / L) * speed;
-	if (pos.z - 10 > position.z)
+	rotation.x += 20;
+	rotation.z += 20;
+
+	if (pos.z - 20 > position.z)
 	{
 		deathFlag = true;
 		position.z = 100;
@@ -121,4 +120,5 @@ void EnemyBarrage::Move()
 		homingCount = 0;
 	}
 	bullet->SetPosition(position);
+	bullet->SetRotation(rotation);
 }

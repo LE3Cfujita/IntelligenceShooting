@@ -13,7 +13,9 @@ Player::~Player()
 void Player::Initialize()
 {
 	objectMember = GameObject::PLAYER;
-	HP = 300;
+	HP = 50;
+	radius = 2;
+	position = { 0,0,0 };
 	//OBJからモデルデータを読み込む
 	modelPlayer = Model::LoadFormOBJ("player");
 	//3Dオブジェクト生成
@@ -34,6 +36,7 @@ void Player::Update()
 {
 	Move();
 	Attack();
+	Death();
 }
 
 void Player::Draw()
@@ -83,13 +86,21 @@ void Player::Move()
 	player->SetRotation(rotation);
 }
 
+void Player::Death()
+{
+	if (HP <= 0)
+	{
+		deathFlag = true;
+	}
+}
+
 void Player::Attack()
 {
 	if (coolCount == 0)
 	{
 		if (input->PushKey(attackKey) || mouse->PushMouseLeft()) {
 			PlayerBullet* bullet = new PlayerBullet();
-			bullet->BaseInitialize(input, audio, mouse, referenceGameObjects);
+			bullet->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
 			bullet->Initialize(position);
 			bullet->Create();
 			addGameObjects.push_back(bullet);
@@ -112,6 +123,7 @@ void Player::Hit()
 
 void Player::RushHit()
 {
+	rushCount = 1;
 	HP -= 10;
 }
 

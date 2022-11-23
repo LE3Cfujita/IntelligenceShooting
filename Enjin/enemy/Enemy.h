@@ -36,15 +36,13 @@ public:
 	void Attack3();
 	void Attack3Move();
 
-	//通常弾ヒット
-	void BHit();
-	void BarrageHit();
-
 	//突進攻撃ヒット
 	void RushHit();
 
 	//プレイヤー弾ヒット
-	void PHit();
+	void Hit();
+
+	void Death();
 
 
 public:

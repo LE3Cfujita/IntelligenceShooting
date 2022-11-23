@@ -5,6 +5,7 @@
 #include"Input.h"
 #include"Mouse.h"
 #include"Audio.h"
+#include"Collision.h"
 
 
 using namespace DirectX;
@@ -28,6 +29,7 @@ protected:
 	Input* input = nullptr;
 	Mouse* mouse = nullptr;
 	Audio* audio = nullptr;
+	Collision* collision = nullptr;
 
 	XMFLOAT3 position;
 	XMFLOAT3 rotation;
@@ -82,8 +84,6 @@ protected:
 	int downDecimal;
 	int attackDecimal;
 
-	bool physicsFlag;
-	bool actionFlag;
 	OBJECTMEMBER objectMember;
 public:
 
@@ -91,20 +91,19 @@ public:
 	~GameObject() {
 		std::vector<GameObject*>().swap(addGameObjects);
 	}
-	void BaseInitialize(Input* input, Audio* audio, Mouse* mouse, std::vector<GameObject*> referenceGameObjects)
+	void BaseInitialize(Input* input, Audio* audio, Mouse* mouse, Collision* collision, std::vector<GameObject*> referenceGameObjects)
 	{
 		this->input = input;
 		this->audio = audio;
 		this->mouse = mouse;
+		this->collision = collision;
 
 		deathFlag = false;
-		physicsFlag = false;
-		actionFlag = false;
 		rotation = { 0,-90,0 };
-
+		radius = 1;
 		attackCT = 0;
 		number = 0;
-		position = { 0,0,0 };
+		position = { 100,100,100 };
 
 		color = { 0,0,0,0 };
 
@@ -127,7 +126,7 @@ public:
 		directionY = 0;
 		XMFLOAT3 direction = { 0,0,0 };
 
-		HP = 50;
+		HP = 10;
 
 		getTime = 0;
 
@@ -177,16 +176,13 @@ public:
 	virtual void Update() {}
 
 	virtual void Draw() {}
+	virtual void Hit() {}
 
 	XMFLOAT3 GetVelocity() { return velocity; }
 	void SetVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 
 	float GetRadius() { return radius; }
 	float GetRadius(float radius) { this->radius = radius; }
-	bool GetPhysicsFlag() { return physicsFlag; }
-	void SetPhysicsFlag(bool physicsFlag) { this->physicsFlag = physicsFlag; }
-	bool GetActionFlag() { return actionFlag; }
-	void SetActionFlag(bool actionFlag) { this->actionFlag = actionFlag; }
 
 	bool GetDeathFlag() { return deathFlag; }
 
@@ -200,13 +196,13 @@ public:
 
 	int GetHP() { return HP; }
 
-	int GetCount() { return attackFlag3; }
+	int GetAttackFlag3() { return attackFlag3; }
 	int GetAttackFlag() { return attackFlag; }
 	void SetAttackFlag(int a) { this->attackFlag = a; }
 
 
 	int GetRushCount() { return rushCount; }
-
+	void SetRushCount(int a) { this->rushCount = a; }
 	std::vector<GameObject*> addGameObjects;
 
 	std::vector<GameObject*> referenceGameObjects;

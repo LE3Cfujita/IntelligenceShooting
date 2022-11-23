@@ -8,7 +8,6 @@ public:
 	~EnemyBarrage();
 	void Initialize();
 
-	void ModelCreate();
 
 	void Update();
 

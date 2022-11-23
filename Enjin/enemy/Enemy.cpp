@@ -17,7 +17,7 @@ void Enemy::Initialize()
 
 	position = { 0,0,100 };
 	rotation = { 0,180,0 };
-
+	radius = 10;
 	objectMember = OBJECTMEMBER::ENEMY;
 	//OBJからモデルデータを読み込む
 	modelBoss = Model::LoadFormOBJ("enemy");
@@ -37,7 +37,7 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	if (attackFlag3 == 0)
+	/*if (attackFlag3 == 0)
 	{
 		Move();
 	}
@@ -63,7 +63,8 @@ void Enemy::Update()
 			}
 		}
 	}
-	Attack3Move();
+	Attack3Move();*/
+	Death();
 }
 
 void Enemy::Draw()
@@ -83,14 +84,13 @@ void Enemy::Move()
 		XMFLOAT3 pos;
 		for (GameObject* gameobject : referenceGameObjects)
 		{
-			if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER)continue;
+			if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)continue;
 			{
 				pos = gameobject->GetPosition();
 			}
 		}
 		getTime = 1;
 		speed = 1;
-
 		//照準との距離を計算して逃げるような動きを作る
 		dx = position.x - pos.x;
 		dy = position.y - pos.y;
@@ -187,7 +187,7 @@ void Enemy::Attack1()
 	if (position.y <= 60 && attackFlag == 0 && attackFlag3 == 0)
 	{
 		EnemyBullet* bullet = new EnemyBullet();
-		bullet->BaseInitialize(input, audio, mouse, referenceGameObjects);
+		bullet->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
 		bullet->Initialize();
 		addGameObjects.push_back(bullet);
 		bullet->Create(position);
@@ -204,7 +204,7 @@ void Enemy::Attack2()
 		if (coolCount == 0)
 		{
 			EnemyBarrage* barrage = new EnemyBarrage();
-			barrage->BaseInitialize(input, audio, mouse, referenceGameObjects);
+			barrage->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
 			barrage->Initialize();
 			addGameObjects.push_back(barrage);
 			barrage->Create(position);
@@ -229,7 +229,6 @@ void Enemy::Attack3()
 		ct = 60;
 	}
 }
-
 void Enemy::Attack3Move()
 {
 
@@ -291,30 +290,33 @@ void Enemy::Attack3Move()
 			homingTime = 0;
 			rushCount = 0;
 			speed = 1;
+			for (GameObject* gameobject : referenceGameObjects)
+			{
+				if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER)continue;
+				gameobject->SetRushCount(0);
+				break;
+			}
 		}
 	}
 	boss->SetRotation(rotation);
 	boss->SetPosition(position);
 }
 
-void Enemy::BHit()
-{
-	attackFlag = 0;
-	//bullet->Hit();
-}
-
-void Enemy::BarrageHit()
-{
-	attackFlag2 = 0;
-	//barrage->Hit();
-}
 
 void Enemy::RushHit()
 {
 	rushCount = 1;
 }
 
-void Enemy::PHit()
+void Enemy::Hit()
 {
 	HP -= 1;
+}
+
+void Enemy::Death()
+{
+	if (HP <= 0)
+	{
+		deathFlag = true;
+	}
 }

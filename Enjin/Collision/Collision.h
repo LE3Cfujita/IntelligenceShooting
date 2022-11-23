@@ -1,6 +1,7 @@
 #pragma once
 #include "DirectXCommon.h"
 #include <DirectXMath.h>
+using namespace DirectX;
 class Collision
 {
 public:
@@ -12,7 +13,7 @@ public:
 	/// <summary>
 	/// 球と球
 	/// </summary>
-	bool ballToball(float pPos_x, float pPos_y, float pPos_z, float ePos_x, float ePos_y, float ePos_z, float r1, float r2);
+	bool ballToball(XMFLOAT3 pPos,XMFLOAT3 ePos, float r1, float r2);
 
 	/// <summary>
 	/// 四角形と四角形
