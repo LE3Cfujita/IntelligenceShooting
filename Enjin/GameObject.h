@@ -7,6 +7,8 @@
 #include"Audio.h"
 #include"Collision.h"
 
+#define _USE_MATH_DEFINES
+#include"math.h"
 
 using namespace DirectX;
 class GameObject
@@ -16,6 +18,7 @@ public:
 	{
 		PLAYER,
 		ENEMY,
+		NORMALENEMY,
 		PLAYERBULLET,
 		ENEMYBULLET,
 		ENEMYBARRAGE,
@@ -23,6 +26,7 @@ public:
 		STAR,
 		ROCK,
 		OPTIONKEY,
+		
 	};
 
 protected:
@@ -84,22 +88,29 @@ protected:
 	int downDecimal;
 	int attackDecimal;
 
+
+	//x‚ðŽ²‚É‚µ‚½Šp“x
+	double radian_x;
+	double radian_y;
+
+
 	OBJECTMEMBER objectMember;
 public:
 
 	GameObject() {}
-	~GameObject() {
+	virtual ~GameObject() {
 		std::vector<GameObject*>().swap(addGameObjects);
 	}
 	void BaseInitialize(Input* input, Audio* audio, Mouse* mouse, Collision* collision, std::vector<GameObject*> referenceGameObjects)
 	{
+		objectMember = OBJECTMEMBER::NONEMEMBER;
 		this->input = input;
 		this->audio = audio;
 		this->mouse = mouse;
 		this->collision = collision;
 
 		deathFlag = false;
-		rotation = { 0,-90,0 };
+		
 		radius = 1;
 		attackCT = 0;
 		number = 0;
@@ -124,7 +135,7 @@ public:
 		homingCount = 0;
 		directionX = 0;
 		directionY = 0;
-		XMFLOAT3 direction = { 0,0,0 };
+		direction = { 0,0,0 };
 
 		HP = 10;
 
@@ -166,7 +177,9 @@ public:
 		downDecimal = 0;
 		attackDecimal = 0;
 
-		objectMember = OBJECTMEMBER::NONEMEMBER;
+
+
+		
 		std::vector<GameObject*>().swap(addGameObjects);
 		this->referenceGameObjects = referenceGameObjects;
 	}

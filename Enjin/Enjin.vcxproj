@@ -38,6 +38,7 @@
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NormalEnemy.cpp" />
     <ClCompile Include="OptionKey.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="Rock.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="input\Mouse.h" />
+    <ClInclude Include="NormalEnemy.h" />
     <ClInclude Include="OptionKey.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="Rock.h" />
