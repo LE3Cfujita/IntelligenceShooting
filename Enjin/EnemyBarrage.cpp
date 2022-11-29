@@ -6,7 +6,6 @@ EnemyBarrage::EnemyBarrage()
 
 EnemyBarrage::~EnemyBarrage()
 {
-	safe_delete(model);
 	safe_delete(bullet);
 }
 
