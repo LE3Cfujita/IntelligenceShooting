@@ -16,8 +16,9 @@ void Player::Initialize()
 	HP = 50;
 	radius = 2;
 	position = { 0,0,0 };
+	rotation = { 0,-90,0 };
 	//OBJからモデルデータを読み込む
-	modelPlayer = Model::LoadFormOBJ("player");
+	modelPlayer = Model::CreateModel(4);
 	//3Dオブジェクト生成
 	player = Object3d::Create();
 	//オブジェクトにモデルを紐付ける

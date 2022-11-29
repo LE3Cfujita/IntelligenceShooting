@@ -63,9 +63,6 @@
     <ClCompile Include="base\WinApp.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="scene\GameScene.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
     <ClCompile Include="input\Input.cpp">
       <Filter>input</Filter>
     </ClCompile>
@@ -83,12 +80,6 @@
     </ClCompile>
     <ClCompile Include="3d\Model.cpp">
       <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="player\Player.cpp">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy\Enemy.cpp">
-      <Filter>Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Collision\Collision.cpp">
       <Filter>Collision</Filter>
@@ -114,6 +105,15 @@
     <ClCompile Include="Star.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\enemy\Enemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\player\Player.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\scene\GameScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\Sprite.h">
@@ -130,9 +130,6 @@
     </ClInclude>
     <ClInclude Include="base\WinApp.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="scene\GameScene.h">
-      <Filter>scene</Filter>
     </ClInclude>
     <ClInclude Include="input\Input.h">
       <Filter>input</Filter>
@@ -154,12 +151,6 @@
     </ClInclude>
     <ClInclude Include="base\SafeDelete.h">
       <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="player\Player.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="enemy\Enemy.h">
-      <Filter>Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Collision\Collision.h">
       <Filter>Collision</Filter>
@@ -190,6 +181,15 @@
     </ClInclude>
     <ClInclude Include="Star.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\enemy\Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\player\Player.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\scene\GameScene.h">
+      <Filter>scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

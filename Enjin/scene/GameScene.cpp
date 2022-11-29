@@ -29,12 +29,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, 
 	gameObjectManager->Initialize(input, audio, mouse, collision);
 
 
-	ObjInitialize();
 	SpriteCreate();
-	key = new OptionKey();
-	key->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
-	key->Initialize();
-	gameObjectManager->AddGameObject(key);
+	ObjInitialize();
+
 
 
 	left = key->GetLeftDecimal();
@@ -126,6 +123,9 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(1, "enemyBullet");
 	Model::AdvanceLoadModel(2, "bullet2");
 	Model::AdvanceLoadModel(3, "planet");
+	Model::AdvanceLoadModel(4, "player");
+	Model::AdvanceLoadModel(5, "enemy");
+
 }
 
 void GameScene::ObjInitialize()
@@ -140,6 +140,11 @@ void GameScene::ObjInitialize()
 	rock->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 	rock->Initialize();
 	gameObjectManager->AddGameObject(rock);
+
+	key = new OptionKey();
+	key->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+	key->Initialize();
+	gameObjectManager->AddGameObject(key);
 
 }
 
@@ -242,17 +247,16 @@ void GameScene::ObjCollision()
 				pHP = player->GetHP();
 			}
 		}
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYERBULLET)continue;
 		for (GameObject* gameobject2 : gameObjectManager->GetGameObjects())
 		{
-			if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYERBULLET && gameobject2->GetObjectMember() == GameObject::OBJECTMEMBER::ENEMY)
-			{
+			if (gameobject2->GetObjectMember() != GameObject::OBJECTMEMBER::ENEMY && gameobject2->GetObjectMember() != GameObject::OBJECTMEMBER::NORMALENEMY)continue;
 				if (collision->ballToball(gameobject->GetPosition(), gameobject2->GetPosition(), gameobject2->GetRadius(), gameobject2->GetRadius()))
 				{
 					gameobject->Hit();
 					gameobject2->Hit();
 				}
 				eHP = enemy->GetHP();
-			}
 		}
 	}
 }
@@ -872,6 +876,7 @@ void GameScene::WriteFile()
 		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)continue;
 		sensi = gameobject->GetSensi();
 		drawSensi = gameobject->GetDrawSensi();
+		break;
 	}
 	SaveData Data = { left,right,up,down,attack,sensi,drawSensi, };
 	FILE* fp;
@@ -907,6 +912,7 @@ void GameScene::LoadFile()
 		{
 			if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)continue;
 			gameobject->SetSensi(Data.sensi, Data.drawSensi);
+			break;
 		}
 		sensi = Data.sensi;
 		drawSensi = Data.drawSensi;

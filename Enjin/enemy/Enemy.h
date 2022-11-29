@@ -2,15 +2,10 @@
 #include"GameObject.h"
 #include "EnemyBullet.h"
 #include "EnemyBarrage.h"
+#include"NormalEnemy.h"
+
 class Enemy : public GameObject
 {
-
-private:
-	// DirectX::‚ğÈ—ª
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
 
 public:
 	Enemy();
@@ -44,13 +39,16 @@ public:
 
 	void Death();
 
+private:
 
-public:
-
-	
-
+	void NormalEnemyCreate();
 private://ƒƒ“ƒo•Ï”
 	Model* modelBoss = nullptr;
 	Object3d* boss = nullptr;
+	int maxHP = 500;
+
+	int createTime;
+
+
 };
 

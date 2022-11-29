@@ -16,11 +16,12 @@ void Enemy::Initialize()
 {
 
 	position = { 0,0,100 };
-	rotation = { 0,180,0 };
+	rotation = { 0,0,0 };
 	radius = 10;
+	HP = maxHP;
 	objectMember = OBJECTMEMBER::ENEMY;
 	//OBJからモデルデータを読み込む
-	modelBoss = Model::LoadFormOBJ("enemy");
+	modelBoss = Model::CreateModel(5);
 	//3Dオブジェクト生成
 	boss = Object3d::Create();
 	//オブジェクトにモデルを紐付ける
@@ -37,44 +38,72 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	/*if (attackFlag3 == 0)
+	createTime++;
+	if (attackFlag3 == 0)
 	{
-		Move();
+		//Move();
 	}
 	for (GameObject* gameobject : referenceGameObjects)
 	{
 		XMFLOAT3 pos;
 		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER)continue;
 		pos = gameobject->GetPosition();
-		Attack1();
-		if (pos.x < -5 || pos.x > 5)
+		if (position.y <= 60)
 		{
-			Attack2();
-		}
-		else
-		{
-			if (ct == 0)
+			Attack1();
+			if (pos.x < -7 || pos.x > 7)
 			{
-				Attack3();
+				Attack2();
 			}
-			if (ct > 0 && position.z == 100)
+			else
 			{
-				ct--;
+				if (ct == 0)
+				{
+					//Attack3();
+				}
+				if (ct > 0 && position.z == 100)
+				{
+					ct--;
+				}
 			}
+
+			if (createTime > 600 && attackFlag3 == 0)
+			{
+				NormalEnemyCreate();
+				createTime = 0;
+			}
+
 		}
 	}
-	Attack3Move();*/
+	Attack3Move();
 	Death();
 }
 
 void Enemy::Draw()
 {
+	boss->SetPosition(position);
+	XMFLOAT3 pos{};
+	for (GameObject* gameobject : referenceGameObjects)
+	{
+		if (gameobject->GetObjectMember() == OBJECTMEMBER::PLAYER)
+		{
+			pos = gameobject->GetPosition();
+			radian_y = atan2f(position.x - pos.x, position.z - pos.z);
+			radian_x = -atan2f(position.y - pos.y, position.z - pos.z);
+			rotation.x = radian_x * (180 / M_PI);
+			rotation.y = radian_y * (180 / M_PI);
+			break;
+		}
+	}
+
+	boss->SetRotation(rotation);
 	boss->Update();
 	boss->Draw();
 }
 
 void Enemy::Move()
 {
+
 	MoveLimit();
 
 	if (!(directionX == 0) || !(directionY == 0))return;
@@ -87,6 +116,7 @@ void Enemy::Move()
 			if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)continue;
 			{
 				pos = gameobject->GetPosition();
+				break;
 			}
 		}
 		getTime = 1;
@@ -100,12 +130,12 @@ void Enemy::Move()
 	else
 	{
 		getTime++;
-		if (getTime >= 50)
+		if (getTime > 120)
 		{
 			getTime = 0;
 		}
 	}
-	if (L >= 30)return;
+	if (L >= 15)return;
 	speed -= 0.02;
 	if (dx < 0)
 	{
@@ -123,7 +153,6 @@ void Enemy::Move()
 	{
 		position.y += speed;
 	}
-	boss->SetPosition(position);
 }
 
 void Enemy::MoveLimit()
@@ -179,12 +208,11 @@ void Enemy::MoveLimit()
 		directionY = 0;
 		speed = 1;
 	}
-	boss->SetPosition(position);
 }
 
 void Enemy::Attack1()
 {
-	if (position.y <= 60 && attackFlag == 0 && attackFlag3 == 0)
+	if (attackFlag == 0 && attackFlag3 == 0)
 	{
 		EnemyBullet* bullet = new EnemyBullet();
 		bullet->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
@@ -195,11 +223,9 @@ void Enemy::Attack1()
 	}
 }
 
-
-
 void Enemy::Attack2()
 {
-	if (position.y <= 60 && attackFlag3 == 0)
+	if (attackFlag3 == 0)
 	{
 		if (coolCount == 0)
 		{
@@ -231,18 +257,17 @@ void Enemy::Attack3()
 }
 void Enemy::Attack3Move()
 {
-
-
+	XMFLOAT3 pos;
+	for (GameObject* gameobject : referenceGameObjects)
+	{
+		if (gameobject->GetObjectMember() != OBJECTMEMBER::PLAYER)continue;
+		pos = gameobject->GetPosition();
+		break;
+	}
 	if (attackFlag3 == 1)
 	{
-		XMFLOAT3 pos;
-		for (GameObject* gameobject : referenceGameObjects)
-		{
-			if (gameobject->GetObjectMember() != OBJECTMEMBER::PLAYER)continue;
-			pos = gameobject->GetPosition();
-		}
 		homingTime++;
-		if (homingTime >= 60)
+		if (homingTime >= 2)
 		{
 			homingTime = 0;
 			homingCount = 1;
@@ -282,7 +307,7 @@ void Enemy::Attack3Move()
 		if (pos.z - 30 >= position.z)
 		{
 			position = { 0,120,100 };
-			rotation = { 0,180,0 };
+			rotation = { 0,0,0 };
 			ct = 250;
 			rotCount = 0;
 			attackFlag3 = 0;
@@ -298,10 +323,7 @@ void Enemy::Attack3Move()
 			}
 		}
 	}
-	boss->SetRotation(rotation);
-	boss->SetPosition(position);
 }
-
 
 void Enemy::RushHit()
 {
@@ -318,5 +340,17 @@ void Enemy::Death()
 	if (HP <= 0)
 	{
 		deathFlag = true;
+	}
+}
+
+void Enemy::NormalEnemyCreate()
+{
+	for (int i = 0; i < 2; i++)
+	{
+		NormalEnemy* enemy = new NormalEnemy();
+		enemy->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
+		enemy->Initialize(position);
+		addGameObjects.push_back(enemy);
+		enemy->Create(i);
 	}
 }
