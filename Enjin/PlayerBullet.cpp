@@ -14,14 +14,27 @@ void PlayerBullet::Initialize(XMFLOAT3 pos)
 	position = pos;
 	speed = 3;
 	objectMember = OBJECTMEMBER::PLAYERBULLET;
-	rotation = { 90,0,0 };
+	//rotation = { 90,0,0 };
 	model = Model::CreateModel(2);
 	//’e
 	bullet = Object3d::Create();
 	bullet->SetPosition(position);
 	bullet->SetModel(model);
-	bullet->SetScale({ 0.5,0.5,0.5 });
-	//bullet->SetColor({ 0, 1, 0,0 });
+	bullet->SetScale({ 0.7,0.7,1.5 });
+	XMFLOAT3 rPos{};
+	for (GameObject* gameobject : referenceGameObjects)
+	{
+		if (gameobject->GetObjectMember() == OBJECTMEMBER::ROCK)
+		{
+			rPos = gameobject->GetPosition();
+			radian_y = atan2f(position.x - rPos.x, position.z - rPos.z);
+			radian_x = atan2f(position.y - rPos.y, position.z - rPos.z);
+			rotation.x = radian_x * (180 / M_PI);
+			rotation.y = radian_y * (180 / M_PI);
+			break;
+		}
+	}
+	bullet->SetRotation(rotation);
 }
 
 void PlayerBullet::Update()
