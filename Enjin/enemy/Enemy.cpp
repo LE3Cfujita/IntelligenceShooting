@@ -69,7 +69,7 @@ void Enemy::Update()
 
 			if (createTime > 600 && attackFlag3 == 0)
 			{
-				NormalEnemyCreate();
+				//NormalEnemyCreate();
 				createTime = 0;
 			}
 
