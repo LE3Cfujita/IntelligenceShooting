@@ -6,6 +6,7 @@ Star::Star()
 
 Star::~Star()
 {
+	safe_delete(obj);
 }
 
 void Star::Initialize()

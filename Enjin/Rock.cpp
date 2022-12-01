@@ -6,7 +6,6 @@ Rock::Rock()
 
 Rock::~Rock()
 {
-	safe_delete(model);
 	safe_delete(rock);
 }
 
