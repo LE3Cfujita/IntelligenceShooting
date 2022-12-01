@@ -53,21 +53,21 @@ void Enemy::Update()
 	}
 	pPosition = player->GetPosition();
 
-	if (pPosition.x < -5)
-	{
-		Attack1();
-	}
-	else if (pPosition.x > 5)
-	{
-		Attack2();
-	}
-	else
-	{
-		if (enemy.ct == 0)
-		{
-			Attack3();
-		}
-	}
+	//if (pPosition.x < -5)
+	//{
+	//	Attack1();
+	//}
+	//else if (pPosition.x > 5)
+	//{
+	//	Attack2();
+	//}
+	//else
+	//{
+	//	if (enemy.ct == 0)
+	//	{
+	//		Attack3();
+	//	}
+	//}
 	Attack1Move();
 	Attack2Move();
 	Attack3Move();
