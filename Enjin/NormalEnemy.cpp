@@ -16,7 +16,7 @@ void NormalEnemy::Initialize(XMFLOAT3 pos)
 	HP = maxHP;
 	objectMember = OBJECTMEMBER::ENEMY;
 	//OBJからモデルデータを読み込む
-	model = Model::CreateModel(5);
+	model = Model::CreateModel(7);
 	//3Dオブジェクト生成
 	obj = Object3d::Create();
 	//オブジェクトにモデルを紐付ける
