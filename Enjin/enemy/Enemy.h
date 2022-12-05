@@ -2,7 +2,7 @@
 #include"GameObject.h"
 #include "EnemyBullet.h"
 #include "EnemyBarrage.h"
-#include"NormalEnemy.h"
+#include"rocket.h"
 
 class Enemy : public GameObject
 {

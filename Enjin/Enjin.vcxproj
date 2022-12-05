@@ -42,6 +42,7 @@
     <ClCompile Include="OptionKey.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="Rock.cpp" />
+    <ClCompile Include="rocket.cpp" />
     <ClCompile Include="Star.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +70,7 @@
     <ClInclude Include="OptionKey.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="Rock.h" />
+    <ClInclude Include="rocket.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />
   </ItemGroup>
