@@ -3,6 +3,7 @@
 #include "EnemyBullet.h"
 #include "EnemyBarrage.h"
 #include"rocket.h"
+#include"NormalEnemy.h"
 
 class Enemy : public GameObject
 {
@@ -38,6 +39,7 @@ public:
 	void Hit();
 
 	void Death();
+	void NormalEnemyCreate();
 
 private:
 

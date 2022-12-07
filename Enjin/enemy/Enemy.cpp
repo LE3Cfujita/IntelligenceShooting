@@ -7,7 +7,6 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-	safe_delete(modelBoss);
 	safe_delete(boss);
 
 }
