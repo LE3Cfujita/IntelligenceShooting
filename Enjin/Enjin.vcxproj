@@ -41,6 +41,7 @@
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="Rock.cpp" />
+    <ClCompile Include="rocket.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Star.cpp" />
   </ItemGroup>
@@ -68,6 +69,7 @@
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="player\Player.h" />
     <ClInclude Include="Rock.h" />
+    <ClInclude Include="rocket.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />

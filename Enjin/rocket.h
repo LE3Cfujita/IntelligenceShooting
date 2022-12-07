@@ -1,10 +1,13 @@
 #pragma once
 #include"GameObject.h"
-class NormalEnemy : public GameObject
+class rocket : public GameObject
 {
+
 public:
-	NormalEnemy();
-	~NormalEnemy();
+	rocket();
+	~rocket();
+
+	//初期化
 	void Initialize(XMFLOAT3 pos);
 
 	void Update();
@@ -13,15 +16,18 @@ public:
 
 	void Create(int move);
 
+	void Move();
+	void MoveLimit();
+
+	//プレイヤー弾ヒット
 	void Hit();
 
 	void Death();
-
-private:
-	void Move();
-	void MoveLimit();
 private:
 	Model* model = nullptr;
 	Object3d* obj = nullptr;
+
+	int moveCount = 0;
+
 };
 
