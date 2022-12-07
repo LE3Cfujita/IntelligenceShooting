@@ -12,7 +12,6 @@
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 #pragma region WindowsAPI初期化処理
-
 	srand((unsigned int)time(NULL));
 
 	//ポインタ置き場

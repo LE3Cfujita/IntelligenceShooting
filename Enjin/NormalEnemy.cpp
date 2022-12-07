@@ -16,8 +16,6 @@ void NormalEnemy::Initialize(XMFLOAT3 pos)
 	rotation = { 0,180,0 };
 	HP = 2;
 	radius = 2;
-
-
 	HP = 20;
 	speed = 0.5;
 	objectMember = OBJECTMEMBER::NORMALENEMY;
@@ -49,12 +47,10 @@ void NormalEnemy::Update()
 
 
 	Death();
- 
 }
 
 void NormalEnemy::Draw()
 {
-
 	obj->SetPosition(position);
 	obj->SetRotation(rotation);
 
@@ -64,7 +60,6 @@ void NormalEnemy::Draw()
 
 	obj->SetRotation(rotation);
 	obj->SetPosition(position);
- 
 	obj->SetRotation(rotation);
 	obj->SetPosition(position);
 	obj->Update();
@@ -176,7 +171,6 @@ void NormalEnemy::Hit()
 
 void NormalEnemy::Death()
 {
-
 
 	if (HP <= 0)
 	{
