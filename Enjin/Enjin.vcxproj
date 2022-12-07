@@ -19,9 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\enemy\Enemy.cpp" />
-    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\player\Player.cpp" />
-    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\scene\GameScene.cpp" />
     <ClCompile Include="2d\DebugText.cpp" />
     <ClCompile Include="2d\Sprite.cpp" />
     <ClCompile Include="3d\Material.cpp" />
@@ -34,6 +31,7 @@
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="EnemyBarrage.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="enemy\Enemy.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
@@ -41,13 +39,13 @@
     <ClCompile Include="NormalEnemy.cpp" />
     <ClCompile Include="OptionKey.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="Rock.cpp" />
+    <ClCompile Include="rocket.cpp" />
+    <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Star.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\enemy\Enemy.h" />
-    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\player\Player.h" />
-    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\scene\GameScene.h" />
     <ClInclude Include="2d\DebugText.h" />
     <ClInclude Include="2d\Sprite.h" />
     <ClInclude Include="3d\Material.h" />
@@ -61,6 +59,7 @@
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="EnemyBarrage.h" />
     <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="enemy\Enemy.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="input\Input.h" />
@@ -68,7 +67,10 @@
     <ClInclude Include="NormalEnemy.h" />
     <ClInclude Include="OptionKey.h" />
     <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="player\Player.h" />
     <ClInclude Include="Rock.h" />
+    <ClInclude Include="rocket.h" />
+    <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />
   </ItemGroup>

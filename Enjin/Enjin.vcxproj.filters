@@ -105,17 +105,20 @@
     <ClCompile Include="Star.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\enemy\Enemy.cpp">
-      <Filter>Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\player\Player.cpp">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\scene\GameScene.cpp">
-      <Filter>scene</Filter>
+    <ClCompile Include="rocket.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="NormalEnemy.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy\Enemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="player\Player.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\GameScene.cpp">
+      <Filter>scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,20 +185,23 @@
     <ClInclude Include="Star.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\enemy\Enemy.h">
-      <Filter>Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\player\Player.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\就職作品用ゲーム - コピー\IntelligenceShooting\Enjin\scene\GameScene.h">
-      <Filter>scene</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="rocket.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="NormalEnemy.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy\Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="player\Player.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\GameScene.h">
+      <Filter>scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

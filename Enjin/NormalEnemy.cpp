@@ -6,7 +6,7 @@ NormalEnemy::NormalEnemy()
 
 NormalEnemy::~NormalEnemy()
 {
-	//safe_delete(obj);
+	safe_delete(obj);
 }
 
 void NormalEnemy::Initialize(XMFLOAT3 pos)
