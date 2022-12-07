@@ -14,7 +14,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #pragma region WindowsAPI初期化処理
 	srand((unsigned int)time(NULL));
 		//ポインタ置き場
-		WinApp* winApp = nullptr;
+	WinApp* winApp = nullptr;
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
 	Mouse* mouse = nullptr;
@@ -79,8 +79,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 	gameScene->WriteFile();
 	safe_delete(gameScene);
+
 	//DirectXの解放
-	safe_delete(dxCommon);
+	//safe_delete(dxCommon);
 	// 音声データ解放
 	audio->SoundUnload();
 	// XAudio2解放

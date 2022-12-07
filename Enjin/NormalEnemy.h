@@ -11,11 +11,17 @@ public:
 
 	void Draw();
 
+	void Create(int move);
 
+	void Hit();
 
+	void Death();
+
+private:
+	void Move();
+	void MoveLimit();
 private:
 	Model* model = nullptr;
 	Object3d* obj = nullptr;
-	int maxHP = 50;
 };
 

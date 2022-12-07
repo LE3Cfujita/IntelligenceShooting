@@ -41,7 +41,7 @@ public:
 
 private:
 
-	void NormalEnemyCreate();
+	void Attack4();
 private://ƒƒ“ƒo•Ï”
 	Model* modelBoss = nullptr;
 	Object3d* boss = nullptr;

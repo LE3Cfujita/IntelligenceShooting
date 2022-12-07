@@ -96,7 +96,7 @@ void PlayerBullet::Create()
 
 void PlayerBullet::Hit()
 {
-	deathFlag = true;
+	//deathFlag = true;
 	homingCount = 0;
 	position.x = 1000;
 }

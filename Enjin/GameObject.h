@@ -100,7 +100,7 @@ public:
 
 	GameObject() {}
 	virtual ~GameObject() {
-		std::vector<GameObject*>().swap(addGameObjects);
+		//std::vector<GameObject*>().swap(addGameObjects);
 	}
 	void BaseInitialize(Input* input, Audio* audio, Mouse* mouse, Collision* collision, std::vector<GameObject*> referenceGameObjects)
 	{
