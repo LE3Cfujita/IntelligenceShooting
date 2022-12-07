@@ -81,7 +81,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	safe_delete(gameScene);
 
 	//DirectXの解放
-	//safe_delete(dxCommon);
+	safe_delete(dxCommon);
 	// 音声データ解放
 	audio->SoundUnload();
 	// XAudio2解放

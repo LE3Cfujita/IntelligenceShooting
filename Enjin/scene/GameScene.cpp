@@ -125,6 +125,7 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(3, "planet");
 	Model::AdvanceLoadModel(4, "player");
 	Model::AdvanceLoadModel(5, "enemy");
+	Model::AdvanceLoadModel(7, "normal");
 
 }
 
@@ -731,9 +732,14 @@ void GameScene::Text()
 	int HP = 0;
 	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
 	{
-		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER)continue;
-		HP = gameobject->GetHP();
-		break;
+		if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::PLAYER)
+		{
+			HP = gameobject->GetHP();
+		}
+		if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::ENEMY)
+		{
+			eHP = gameobject->GetHP();
+		}
 	}
 	sprintf_s(str, "HP = %d", HP);
 	debugText.Print(str, 0, 0, 1);

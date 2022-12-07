@@ -8,7 +8,6 @@ Enemy::Enemy()
 Enemy::~Enemy()
 {
 	safe_delete(boss);
-
 }
 
 void Enemy::Initialize()
@@ -37,7 +36,6 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	createTime++;
 	if (attackFlag3 == 0)
 	{
 		//Move();
@@ -49,10 +47,9 @@ void Enemy::Update()
 		pos = gameobject->GetPosition();
 		if (position.y <= 60)
 		{
-			Attack1();
 			if (pos.x < -7 || pos.x > 7)
 			{
-				Attack2();
+				//Attack2();
 			}
 			else
 			{
@@ -65,11 +62,28 @@ void Enemy::Update()
 					ct--;
 				}
 			}
-
-			if (createTime > 600 && attackFlag3 == 0)
+			/*if (attackCount == 0)
 			{
-				//NormalEnemyCreate();
-				createTime = 0;
+				Attack1();
+				attackCount = 1;
+			}
+			else
+			{
+				Attack4();
+			}*/
+
+			if (attackFlag3 == 0 && HP == maxHP / 2 && createCount == 0)
+			{
+				NormalEnemyCreate();
+			}
+			if (recovery != 0)
+			{
+				recoveryTime++;
+				if (recoveryTime >= 60)
+				{
+					HP++;
+					recoveryTime = 0;
+				}
 			}
 
 		}
@@ -344,12 +358,27 @@ void Enemy::Death()
 
 void Enemy::NormalEnemyCreate()
 {
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		NormalEnemy* enemy = new NormalEnemy();
 		enemy->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
 		enemy->Initialize(position);
 		addGameObjects.push_back(enemy);
 		enemy->Create(i);
+		recovery = 4;
 	}
+	createCount = 1;
+}
+
+void Enemy::Attack4()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		rocket* rket = new rocket();
+		rket->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
+		rket->Initialize(position);
+		addGameObjects.push_back(rket);
+		rket->Create(i);
+	}
+	attackCount = 0;
 }
