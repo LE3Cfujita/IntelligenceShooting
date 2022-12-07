@@ -431,13 +431,11 @@ void Model::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void Model::AdvanceLoadModel(int number, const std::string& modelname)
 {
-	//番号にモデルを保存する
 	texBuff[number] = LoadFormOBJ(modelname);
 }
 
 Model* Model::CreateModel(int number)
 {
-	//番号のモデルを読み込む
 	return texBuff[number];
 }
 
