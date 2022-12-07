@@ -374,11 +374,11 @@ void Enemy::Attack4()
 {
 	for (int i = 0; i < 4; i++)
 	{
-		rocket* rket = new rocket();
+		/*rocket* rket = new rocket();
 		rket->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
 		rket->Initialize(position);
 		addGameObjects.push_back(rket);
-		rket->Create(i);
+		rket->Create(i);*/
 	}
 	attackCount = 0;
 }
