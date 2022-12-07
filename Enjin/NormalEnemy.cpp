@@ -16,46 +16,59 @@ void NormalEnemy::Initialize(XMFLOAT3 pos)
 	rotation = { 0,180,0 };
 	HP = 2;
 	radius = 2;
-<<<<<<< HEAD
+
+
 	HP = 20;
 	speed = 0.5;
 	objectMember = OBJECTMEMBER::NORMALENEMY;
 	//OBJ���烂�f���f�[�^��ǂݍ���
 	model = Model::CreateModel(7);
 	//3D�I�u�W�F�N�g����
-=======
+
 	model = Model::CreateModel(5);
->>>>>>> parent of b914602 (ロケットモデル追加)
+	
+
+	model = Model::CreateModel(5);
+	
 	obj = Object3d::Create();
 	obj->SetModel(model);
-<<<<<<< HEAD
+
 	obj->SetScale({ 1.5,1.5,1.5 });
-=======
+
 	obj->SetPosition(position);
 	obj->SetRotation(rotation);
 	obj->SetScale({ 0.7,0.7,0.7 });
 	speed = 1;
->>>>>>> parent of b914602 (ロケットモデル追加)
+
+ 
+
+ 
 }
 
 void NormalEnemy::Update()
 {
 	Move();
-<<<<<<< HEAD
-=======
+
+
+
 	Death();
->>>>>>> parent of b914602 (ロケットモデル追加)
+ 
 }
 
 void NormalEnemy::Draw()
 {
-<<<<<<< HEAD
+
+
 	obj->SetPosition(position);
 	obj->SetRotation(rotation);
-=======
+
 	obj->SetRotation(rotation);
 	obj->SetPosition(position);
->>>>>>> parent of b914602 (ロケットモデル追加)
+ 
+
+	obj->SetRotation(rotation);
+	obj->SetPosition(position);
+ 
 	obj->Update();
 	obj->Draw();
 }
@@ -63,7 +76,8 @@ void NormalEnemy::Draw()
 void NormalEnemy::Create(int move)
 {
 	deathFlag == false;
-<<<<<<< HEAD
+
+
 	if (move == 0)
 	{
 		directionX = 1;
@@ -83,7 +97,9 @@ void NormalEnemy::Create(int move)
 	{
 		directionX = 2;
 		directionY = 2;
-=======
+	}
+
+ 
 	moveCount = move;
 }
 
@@ -153,7 +169,10 @@ void NormalEnemy::MoveLimit()
 	if (position.x < -90)
 	{
 		moveCount = 0;
->>>>>>> parent of b914602 (ロケットモデル追加)
+
+ 
+
+ 
 	}
 }
 
@@ -164,7 +183,8 @@ void NormalEnemy::Hit()
 
 void NormalEnemy::Death()
 {
-<<<<<<< HEAD
+
+
 	if (HP <= 0)
 	{
 		deathFlag = true;
@@ -223,10 +243,15 @@ void NormalEnemy::MoveLimit()
 	{
 		directionY = 2;
 	}
-=======
+
+
+ 
 	if (HP < 0)
 	{
 		deathFlag = true;
 	}
->>>>>>> parent of b914602 (ロケットモデル追加)
+
+ 
+
+ 
 }

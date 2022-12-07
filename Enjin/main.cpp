@@ -6,18 +6,18 @@
 #include "DebugText.h"
 #include"Audio.h"
 #include"GameScene.h"
+#include<chrono>
 
 //# Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 #pragma region WindowsAPI初期化処理
-<<<<<<< HEAD
+
+
 	srand((unsigned int)time(NULL));
-		//ポインタ置き場
-=======
 
 	//ポインタ置き場
->>>>>>> parent of b914602 (ロケットモデル追加)
+
 	WinApp* winApp = nullptr;
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
