@@ -16,6 +16,8 @@ public:
 
 	void Create(int move);
 
+	void Move();
+	void MoveLimit();
 
 
 	void Hit();
@@ -44,6 +46,13 @@ private:
 	void Move();
 	void MoveLimit();
 
+	//プレイヤー弾ヒット
+	void Hit();
+
+	void Death();
+private:
+	Model* model = nullptr;
+	Object3d* obj = nullptr;
 	//プレイヤー弾ヒット
 	void Hit();
 

@@ -30,6 +30,7 @@ void NormalEnemy::Initialize(XMFLOAT3 pos)
 
 	model = Model::CreateModel(5);
 	
+	model = Model::CreateModel(5);
 	obj = Object3d::Create();
 	obj->SetModel(model);
 
@@ -39,10 +40,6 @@ void NormalEnemy::Initialize(XMFLOAT3 pos)
 	obj->SetRotation(rotation);
 	obj->SetScale({ 0.7,0.7,0.7 });
 	speed = 1;
-
- 
-
- 
 }
 
 void NormalEnemy::Update()
@@ -58,7 +55,6 @@ void NormalEnemy::Update()
 void NormalEnemy::Draw()
 {
 
-
 	obj->SetPosition(position);
 	obj->SetRotation(rotation);
 
@@ -69,6 +65,8 @@ void NormalEnemy::Draw()
 	obj->SetRotation(rotation);
 	obj->SetPosition(position);
  
+	obj->SetRotation(rotation);
+	obj->SetPosition(position);
 	obj->Update();
 	obj->Draw();
 }
@@ -76,7 +74,6 @@ void NormalEnemy::Draw()
 void NormalEnemy::Create(int move)
 {
 	deathFlag == false;
-
 
 	if (move == 0)
 	{
@@ -169,10 +166,6 @@ void NormalEnemy::MoveLimit()
 	if (position.x < -90)
 	{
 		moveCount = 0;
-
- 
-
- 
 	}
 }
 
@@ -244,14 +237,8 @@ void NormalEnemy::MoveLimit()
 		directionY = 2;
 	}
 
-
- 
 	if (HP < 0)
 	{
 		deathFlag = true;
 	}
-
- 
-
- 
 }
