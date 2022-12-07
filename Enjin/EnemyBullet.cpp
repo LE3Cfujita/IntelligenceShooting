@@ -6,7 +6,6 @@ EnemyBullet::EnemyBullet()
 
 EnemyBullet::~EnemyBullet()
 {
-	safe_delete(model);
 	safe_delete(bullet);
 }
 

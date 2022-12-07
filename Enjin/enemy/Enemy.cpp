@@ -7,7 +7,6 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-	safe_delete(modelBoss);
 	safe_delete(boss);
 
 }
@@ -315,7 +314,7 @@ void Enemy::Hit()
 
 void Enemy::Death()
 {
-	if (HP <= 0)
+	if (HP == 0)
 	{
 		deathFlag = true;
 	}

@@ -6,7 +6,6 @@ Player::Player()
 
 Player::~Player()
 {
-	safe_delete(modelPlayer);
 	safe_delete(player);
 }
 

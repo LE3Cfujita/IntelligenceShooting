@@ -6,7 +6,6 @@ PlayerBullet::PlayerBullet()
 
 PlayerBullet::~PlayerBullet()
 {
-	safe_delete(model);
 	safe_delete(bullet);
 }
 

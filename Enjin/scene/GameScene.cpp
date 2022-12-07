@@ -746,10 +746,10 @@ void GameScene::SceneChange()
 		{
 			gameState = GameState::OVER;//ゲームオーバー
 		}
-		if (eHP <= 0)
-		{
-			gameState = GameState::CLEA;//ゲームクリア
-		}
+		//if (eHP <= 0)
+		//{
+		//	gameState = GameState::CLEA;//ゲームクリア
+		//}
 	}
 }
 
