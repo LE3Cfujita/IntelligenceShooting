@@ -2,9 +2,12 @@
 #include"GameObject.h"
 class NormalEnemy : public GameObject
 {
+
 public:
 	NormalEnemy();
 	~NormalEnemy();
+
+	//初期化
 	void Initialize(XMFLOAT3 pos);
 
 	void Update();
@@ -13,6 +16,7 @@ public:
 
 	void Create(int move);
 
+<<<<<<< HEAD
 	void Hit();
 
 	void Death();
@@ -23,5 +27,20 @@ private:
 private:
 	Model* model = nullptr;
 	Object3d* obj = nullptr;
+=======
+	void Move();
+	void MoveLimit();
+
+	//プレイヤー弾ヒット
+	void Hit();
+
+	void Death();
+private:
+	Model* model = nullptr;
+	Object3d* obj = nullptr;
+
+	int moveCount = 0;
+
+>>>>>>> parent of b914602 (繝ｭ繧ｱ繝�繝医Δ繝�繝ｫ霑ｽ蜉)
 };
 

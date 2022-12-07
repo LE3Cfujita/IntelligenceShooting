@@ -6,14 +6,18 @@
 #include "DebugText.h"
 #include"Audio.h"
 #include"GameScene.h"
-#include<chrono>
 
 //# Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 #pragma region WindowsAPI初期化処理
+<<<<<<< HEAD
 	srand((unsigned int)time(NULL));
 		//ポインタ置き場
+=======
+
+	//ポインタ置き場
+>>>>>>> parent of b914602 (ロケットモデル追加)
 	WinApp* winApp = nullptr;
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -28,7 +32,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//DirectXの初期化
 	dxCommon = new DirectXCommon();
 	dxCommon->Initislize(winApp);
-
+	
 	//入力の初期化
 	input = Input::GetInstance();
 	if (!input->Initialize(winApp->GetHInstance(), winApp->GetHwnd())) {
@@ -54,7 +58,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	gameScene = new GameScene();
-	gameScene->Initialize(dxCommon, audio, input, mouse);
+	gameScene->Initialize(dxCommon,audio,input,mouse);
 
 
 	while (input->TriggerKey(DIK_ESCAPE) == 0)  //ゲームループ
