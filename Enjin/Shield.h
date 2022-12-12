@@ -1,11 +1,10 @@
 #pragma once
 #include"GameObject.h"
-class rocket : public GameObject
+class Shield : public GameObject
 {
-
 public:
-	rocket();
-	~rocket();
+	Shield();
+	~Shield();
 
 	//èâä˙âª
 	void Initialize(XMFLOAT3 pos);
@@ -14,16 +13,8 @@ public:
 
 	void Draw();
 
-	void Create(int move);
-
-	void Move();
-	void Hit();
-
+	void Create();
 private:
 	Model* model = nullptr;
 	Object3d* obj = nullptr;
-
-	int moveCount = 0;
-
 };
-

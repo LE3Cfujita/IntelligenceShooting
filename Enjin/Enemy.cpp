@@ -62,19 +62,19 @@ void Enemy::Update()
 					ct--;
 				}
 			}
-			/*if (attackCount == 0)
+			if (attackCount == 0)
 			{
 				Attack1();
-				attackCount = 1;
 			}
 			else
 			{
 				Attack4();
-			}*/
+			}
 
 			if (attackFlag3 == 0 && HP == maxHP / 2 && createCount == 0)
 			{
 				NormalEnemyCreate();
+				ShieldCreate();
 			}
 			if (recovery != 0)
 			{
@@ -225,7 +225,7 @@ void Enemy::MoveLimit()
 
 void Enemy::Attack1()
 {
-	if (attackFlag == 0 && attackFlag3 == 0)
+	if (attackFlag == 0 && attackFlag3 == 0 && attackFlag4 == 0)
 	{
 		EnemyBullet* bullet = new EnemyBullet();
 		bullet->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
@@ -233,6 +233,7 @@ void Enemy::Attack1()
 		addGameObjects.push_back(bullet);
 		bullet->Create(position);
 		attackFlag = 1;
+		attackCount = 1;
 	}
 }
 
@@ -370,15 +371,28 @@ void Enemy::NormalEnemyCreate()
 	createCount = 1;
 }
 
+void Enemy::ShieldCreate()
+{
+	Shield* shield = new Shield;
+	shield->BaseInitialize();
+	shield->Initialize();
+	addGameObjects.push_back(shield);
+	shield->Create();
+}
+
 void Enemy::Attack4()
 {
-	for (int i = 0; i < 4; i++)
+	if (attackFlag == 0 && attackFlag3 == 0 && attackFlag4 == 0)
 	{
-		/*rocket* rket = new rocket();
-		rket->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
-		rket->Initialize(position);
-		addGameObjects.push_back(rket);
-		rket->Create(i);*/
+		for (int i = 0; i < 2; i++)
+		{
+			rocket* roket = new rocket();
+			roket->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
+			roket->Initialize(position);
+			addGameObjects.push_back(roket);
+			roket->Create(i);
+			attackFlag4 = 1;
+		}
+		attackCount = 0;
 	}
-	attackCount = 0;
 }

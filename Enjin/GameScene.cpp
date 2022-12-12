@@ -125,6 +125,7 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(3, "planet");
 	Model::AdvanceLoadModel(4, "player");
 	Model::AdvanceLoadModel(5, "enemy");
+	Model::AdvanceLoadModel(6, "rocket");
 	Model::AdvanceLoadModel(7, "normal");
 
 }

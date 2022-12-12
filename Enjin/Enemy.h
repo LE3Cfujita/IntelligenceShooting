@@ -1,8 +1,9 @@
 #pragma once
+#include"rocket.h"
+#include"Shield.h"
 #include"GameObject.h"
 #include "EnemyBullet.h"
 #include "EnemyBarrage.h"
-#include"rocket.h"
 #include"NormalEnemy.h"
 
 class Enemy : public GameObject
@@ -40,6 +41,8 @@ public:
 
 	void Death();
 	void NormalEnemyCreate();
+
+	void ShieldCreate();
 
 private:
 

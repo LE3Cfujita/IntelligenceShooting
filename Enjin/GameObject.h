@@ -27,6 +27,7 @@ public:
 		STAR,
 		ROCK,
 		OPTIONKEY,
+		SHIELD,
 		
 	};
 
@@ -66,6 +67,7 @@ protected:
 	int attackFlag;//狙って撃ってくる
 	int attackFlag2;//弾幕
 	int attackFlag3;//突進
+	int attackFlag4;//ロケット
 	int ct;//突進攻撃のクールタイム	
 	int barrageTime;
 	int rotCount;
@@ -151,6 +153,7 @@ public:
 		attackFlag = 0;//狙って撃ってくる
 		attackFlag2 = 0;//弾幕
 		attackFlag3 = 0;//突進
+		attackFlag4 = 0;
 
 		ct = 250;//突進攻撃のクールタイム	
 
@@ -212,7 +215,9 @@ public:
 
 	int GetAttackFlag3() { return attackFlag3; }
 	int GetAttackFlag() { return attackFlag; }
+	int GetAttackFlag4() { return attackFlag4; }
 	void SetAttackFlag(int a) { this->attackFlag = a; }
+	void SetAttackFlag4(int a) { this->attackFlag4 = a; }
 
 
 	int GetRushCount() { return rushCount; }

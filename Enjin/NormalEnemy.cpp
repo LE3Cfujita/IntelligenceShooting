@@ -13,7 +13,7 @@ void NormalEnemy::Initialize(XMFLOAT3 pos)
 {
 	position = pos;
 	radius = 2;
-	HP = 20;
+	HP = 10;
 	speed = 0.5;
 	objectMember = OBJECTMEMBER::NORMALENEMY;
 	//OBJからモデルデータを読み込む

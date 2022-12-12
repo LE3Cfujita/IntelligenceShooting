@@ -79,7 +79,7 @@ void EnemyBullet::Move()
 	position.z += (dz / L) * speed;
 
 
-	if (pos.z - 10 > position.z)
+	if (pos.z - 20 > position.z)
 	{
 		for (GameObject* gameobject : referenceGameObjects)
 		{

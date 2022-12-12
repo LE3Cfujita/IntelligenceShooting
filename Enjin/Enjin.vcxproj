@@ -29,20 +29,21 @@
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBarrage.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
-    <ClCompile Include="enemy\Enemy.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="input\Mouse.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NormalEnemy.cpp" />
     <ClCompile Include="OptionKey.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
-    <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="Rock.cpp" />
     <ClCompile Include="rocket.cpp" />
-    <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Star.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -57,20 +58,21 @@
     <ClInclude Include="base\SafeDelete.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Collision\Collision.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBarrage.h" />
     <ClInclude Include="EnemyBullet.h" />
-    <ClInclude Include="enemy\Enemy.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="input\Mouse.h" />
     <ClInclude Include="NormalEnemy.h" />
     <ClInclude Include="OptionKey.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBullet.h" />
-    <ClInclude Include="player\Player.h" />
     <ClInclude Include="Rock.h" />
     <ClInclude Include="rocket.h" />
-    <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="Shield.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />
   </ItemGroup>
