@@ -44,6 +44,7 @@ public:
 
 	void ShieldCreate();
 
+
 private:
 
 	void Attack4();
@@ -56,8 +57,6 @@ private://ƒƒ“ƒo•Ï”
 
 	int createCount = 0;
 	
-	int recovery = 0;
-	int recoveryTime = 0;
 
 };
 

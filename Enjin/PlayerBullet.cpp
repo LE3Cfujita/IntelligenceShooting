@@ -12,7 +12,7 @@ PlayerBullet::~PlayerBullet()
 void PlayerBullet::Initialize(XMFLOAT3 pos)
 {
 	position = pos;
-	speed = 3;
+	speed = 5;
 	objectMember = OBJECTMEMBER::PLAYERBULLET;
 	//rotation = { 90,0,0 };
 	model = Model::CreateModel(2);

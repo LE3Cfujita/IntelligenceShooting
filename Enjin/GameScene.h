@@ -34,6 +34,8 @@ public:
 		int attack;//攻撃ボタン
 		int sensi;//感度
 		int drawSensi;//表示用感度
+		int bgm;//bgm音量
+		int se;//se音量
 	}SaveData;
 
 
@@ -182,6 +184,7 @@ private:
 	int keyCount = 0;
 
 	float volumeSize = 0.01;
+
 
 	int left = 0;
 	int right = 0;

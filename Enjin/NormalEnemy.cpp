@@ -13,7 +13,7 @@ void NormalEnemy::Initialize(XMFLOAT3 pos)
 {
 	position = pos;
 	radius = 2;
-	HP = 10;
+	HP = 1;
 	speed = 0.5;
 	objectMember = OBJECTMEMBER::NORMALENEMY;
 	//OBJからモデルデータを読み込む
@@ -28,6 +28,7 @@ void NormalEnemy::Initialize(XMFLOAT3 pos)
 void NormalEnemy::Update()
 {
 	Move();
+	Death();
 }
 
 void NormalEnemy::Draw()
@@ -73,6 +74,13 @@ void NormalEnemy::Death()
 	if (HP <= 0)
 	{
 		deathFlag = true;
+		for (GameObject* gameobject : referenceGameObjects)
+		{
+			if (gameobject->GetObjectMember() != OBJECTMEMBER::ENEMY)continue;
+			int recovery = gameobject->GetRecovery();
+			gameobject->SetRecovery(recovery - 1);
+			break;
+		}
 	}
 }
 
@@ -90,7 +98,7 @@ void NormalEnemy::Move()
 	radian_x = -atan2(position.y - pos.y, position.z - pos.z);
 	rotation.x = radian_x * (180 / M_PI);
 	rotation.y = radian_y * (180 / M_PI);
-	
+
 	if (directionX == 1)
 	{
 		position.x -= speed;

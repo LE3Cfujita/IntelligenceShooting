@@ -96,6 +96,8 @@ protected:
 	double radian_x;
 	double radian_y;
 
+	int recovery;
+	int recoveryTime;
 
 	OBJECTMEMBER objectMember;
 public:
@@ -182,6 +184,8 @@ public:
 		attackDecimal = 0;
 
 
+		recovery = 0;
+		recoveryTime = 0;
 
 		
 		std::vector<GameObject*>().swap(addGameObjects);
@@ -254,6 +258,8 @@ public:
 	void SetDownDecimal(int down) { downDecimal = down; }
 	void SetAttackDecimal(int attack) { attackDecimal = attack; }
 
+	void SetRecovery(int recovery) { this->recovery = recovery; }
+	int GetRecovery() { return recovery; }
 
 	void SetSensi(int sensi, int drawSensi)
 	{

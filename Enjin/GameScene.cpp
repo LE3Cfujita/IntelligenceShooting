@@ -46,6 +46,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, 
 	skydome->SetScale({ 3,3,3 });
 	skydome->SetPosition({ 0,0,100 });
 
+
+	LoadFile();
 	audio->SoundLoadWave("Alarm01.wav", 0);//テスト
 	audio->SoundLoadWave("decisionSE.wav", 1);//テスト
 	audio->SoundVolume(0, bgmVolume * volumeSize);
@@ -54,8 +56,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, 
 
 
 
-
-	LoadFile();
 }
 
 void GameScene::SpriteCreate()
@@ -127,6 +127,7 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(5, "enemy");
 	Model::AdvanceLoadModel(6, "rocket");
 	Model::AdvanceLoadModel(7, "normal");
+	Model::AdvanceLoadModel(8, "shield");
 
 }
 
@@ -885,7 +886,7 @@ void GameScene::WriteFile()
 		drawSensi = gameobject->GetDrawSensi();
 		break;
 	}
-	SaveData Data = { left,right,up,down,attack,sensi,drawSensi, };
+	SaveData Data = { left,right,up,down,attack,sensi,drawSensi,bgmVolume,seVolume };
 	FILE* fp;
 	fopen_s(&fp, "save.pdf", "w");
 	fwrite(&Data, sizeof(Data), 2, fp);
@@ -907,6 +908,9 @@ void GameScene::LoadFile()
 		up = Data.up;
 		down = Data.down;
 		attack = Data.attack;
+
+		bgmVolume = Data.bgm;
+		seVolume = Data.se;
 
 		key->SetLeftDecimal(left);
 		key->SetRightDecimal(right);

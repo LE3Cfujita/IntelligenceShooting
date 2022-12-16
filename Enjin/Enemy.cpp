@@ -374,8 +374,8 @@ void Enemy::NormalEnemyCreate()
 void Enemy::ShieldCreate()
 {
 	Shield* shield = new Shield;
-	shield->BaseInitialize();
-	shield->Initialize();
+	shield->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
+	shield->Initialize(position);
 	addGameObjects.push_back(shield);
 	shield->Create();
 }
