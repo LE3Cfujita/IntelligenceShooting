@@ -75,12 +75,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		dxCommon->PreDraw();
 
 		gameScene->Draw();
-
 		dxCommon->PostDraw();
 	}
 	gameScene->WriteFile();
 	safe_delete(gameScene);
-
+	
 	//DirectXの解放
 	safe_delete(dxCommon);
 	// 音声データ解放

@@ -15,6 +15,7 @@ GameScene::~GameScene()
 	safe_delete(key);
 	safe_delete(collision);
 	safe_delete(sprite);
+	safe_delete(postEffect);
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, Mouse* mouse)
@@ -125,6 +126,13 @@ void GameScene::SpriteCreate()
 
 	over->LoadTexture(11, L"Resources/GameOver.png");
 	over = Sprite::Create(11, { 0.0f,0.0f });
+
+
+	white->LoadTexture(100, L"Resources/white1x1.png");
+	white = Sprite::Create(10, { 0.0f,0.0f });
+	postEffect = new PostEffect();
+	postEffect->CreateGraphicsPipelineState();
+	postEffect->Initialize();
 
 	Model::AdvanceLoadModel(1, "enemyBullet");
 	Model::AdvanceLoadModel(2, "bullet2");
@@ -644,11 +652,12 @@ void GameScene::Draw()
 	Object3d::PostDraw();
 
 	Sprite::PreDraw(cmdList);
-
+	postEffect->PreDrawScene(cmdList);
 	switch (gameState)
 	{
 	case GameState::TITLE://タイトル
 		sprite->Draw();
+		postEffect->Draw(cmdList);
 		yajirusi->Draw();
 		break;
 	case GameState::OPTION_SELECT:
@@ -691,6 +700,7 @@ void GameScene::Draw()
 	}
 	// デバッグテキストの描画
 	debugText.DrawAll(cmdList);
+	postEffect->PostDrawScene(cmdList);
 	Sprite::PostDraw();
 }
 

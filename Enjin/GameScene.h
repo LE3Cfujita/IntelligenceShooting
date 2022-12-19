@@ -9,6 +9,7 @@
 #include"GameManager.h"
 #include"Rock.h"
 #include"Star.h"
+#include"PostEffect.h"
 #pragma once
 
 class GameScene
@@ -132,7 +133,8 @@ private:
 	Sprite* opsion_sensi = nullptr;
 	Sprite* clear = nullptr;
 	Sprite* over = nullptr;
-
+	PostEffect* postEffect = nullptr;
+	Sprite* white = nullptr;
 
 	Model* dome = nullptr;
 	Object3d* skydome = nullptr;
