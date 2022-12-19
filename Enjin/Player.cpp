@@ -49,6 +49,7 @@ void Player::Draw()
 
 void Player::Move()
 {
+
 	if (input->PushKey(moveLeft) == true)
 	{
 		if (position.x >= -20)

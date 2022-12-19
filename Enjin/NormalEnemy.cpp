@@ -12,7 +12,7 @@ NormalEnemy::~NormalEnemy()
 void NormalEnemy::Initialize(XMFLOAT3 pos)
 {
 	position = pos;
-	radius = 2;
+	radius = 3;
 	HP = 1;
 	speed = 0.5;
 	objectMember = OBJECTMEMBER::NORMALENEMY;

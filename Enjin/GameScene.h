@@ -130,6 +130,8 @@ private:
 	Sprite* opsion_bgmse = nullptr;
 	Sprite* opsion_key = nullptr;
 	Sprite* opsion_sensi = nullptr;
+	Sprite* clear = nullptr;
+	Sprite* over = nullptr;
 
 
 	Model* dome = nullptr;
@@ -137,7 +139,7 @@ private:
 	XMFLOAT3 skyrot = { 0,0,0 };
 
 
-	XMFLOAT2 yajirusiPos = { 445.0f,465.0f };
+	XMFLOAT2 yajirusiPos = { 315.0f,465.0f };
 
 	Sprite* opsion_Select = nullptr;
 

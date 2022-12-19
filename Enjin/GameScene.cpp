@@ -120,6 +120,12 @@ void GameScene::SpriteCreate()
 		spriteSENSINumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 	}
 
+	clear->LoadTexture(10, L"Resources/GameClear.png");
+	clear = Sprite::Create(10, { 0.0f,0.0f });
+
+	over->LoadTexture(11, L"Resources/GameOver.png");
+	over = Sprite::Create(11, { 0.0f,0.0f });
+
 	Model::AdvanceLoadModel(1, "enemyBullet");
 	Model::AdvanceLoadModel(2, "bullet2");
 	Model::AdvanceLoadModel(3, "planet");
@@ -197,11 +203,11 @@ void GameScene::Update(WinApp* winApp)
 
 void GameScene::Title()
 {
-	if (mousePos.x >= 480 && mousePos.x <= 800)
+	if (mousePos.x >= 380 && mousePos.x <= 880)
 	{
 		if (mousePos.y >= 400.0f && mousePos.y <= 500.0f)
 		{
-			yajirusiPos.y = 465.0f;
+			yajirusiPos.y = 435.0f;
 			if (mouse->TriggerMouseLeft())
 			{
 				enemy = new Enemy();
@@ -213,9 +219,9 @@ void GameScene::Title()
 				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
-		if (mousePos.y >= 550.0f && mousePos.y <= 650.0f)
+		if (mousePos.y >= 550.0f && mousePos.y <= 640.0f)
 		{
-			yajirusiPos.y = 600.0f;
+			yajirusiPos.y = 570.0f;
 			if (mouse->TriggerMouseLeft())
 			{
 				gameState = GameState::OPTION_SELECT;
@@ -630,10 +636,8 @@ void GameScene::Draw()
 		break;
 	case GameState::OVER://ゲームオーバー
 		break;
-
 	case GameState::CLEA://ゲームクリア
 		break;
-
 	}
 
 	//3Dオブジェクト描画後処理
@@ -678,9 +682,10 @@ void GameScene::Draw()
 	case GameState::PLAY://ゲームシーン
 		break;
 	case GameState::OVER://ゲームオーバー
+		over->Draw();
 		break;
-
 	case GameState::CLEA://ゲームクリア
+		clear->Draw();
 		break;
 
 	}
@@ -867,7 +872,6 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 		key->SettingKey();
 		keyCount = key->GetKeyCount();
 		player->GetKey();
-		gameObjectManager->AddGameObject(player);
 		left = key->GetLeftDecimal();
 		right = key->GetRightDecimal();
 		up = key->GetUpDecimaly();

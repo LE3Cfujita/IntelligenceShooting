@@ -11,7 +11,6 @@ Mouse* Mouse::GetInstance()
 bool Mouse::Initialize(HINSTANCE hInstance, HWND hwnd)
 {
 	HRESULT result = S_FALSE;
-
 	assert(!dinput);
 
 	// DirectInputオブジェクトの生成	

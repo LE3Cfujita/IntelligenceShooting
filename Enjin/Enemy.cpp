@@ -346,6 +346,7 @@ void Enemy::RushHit()
 
 void Enemy::Hit()
 {
+	if (recovery != 0)return;
 	HP -= 1;
 }
 

@@ -70,6 +70,7 @@ public: // メンバ関数
 	float GetMouseVelocityX();
 	float GetMouseVelocityY();
 
+
 	void ScreenToClient();//ウィンドウ上の座標に変換
 
 private://メンバ変数
