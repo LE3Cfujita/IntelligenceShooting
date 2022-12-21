@@ -13,7 +13,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	objectMember = GameObject::PLAYER;
-	HP = 50;
+	HP = 20;
 	radius = 2;
 	position = { 0,0,0 };
 	rotation = { 0,-90,0 };

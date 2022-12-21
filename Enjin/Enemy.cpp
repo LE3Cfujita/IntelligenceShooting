@@ -49,13 +49,13 @@ void Enemy::Update()
 		{
 			if (pos.x < -7 || pos.x > 7)
 			{
-				//Attack2();
+				Attack2();
 			}
 			else
 			{
 				if (ct == 0)
 				{
-					//Attack3();
+					Attack3();
 				}
 				if (ct > 0 && position.z == 100)
 				{

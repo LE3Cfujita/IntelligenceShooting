@@ -183,7 +183,6 @@ void GameScene::Update(WinApp* winApp)
 		Option_Sensi();
 		break;
 	case GameState::PLAY://ゲームシーン
-		ShowCursor(FALSE);
 		ObjCollision();
 		SceneChange();
 
@@ -193,9 +192,35 @@ void GameScene::Update(WinApp* winApp)
 		gameObjectManager->Update();
 		break;
 	case GameState::OVER://ゲームオーバー
+		if (mousePos.x >= 440 &&
+			mousePos.x <= 840 &&
+			mousePos.y >= 470 &&
+			mousePos.y <= 550)
+		{
+			if (mouse->TriggerMouseLeft())
+			{
+				Initialize(dxCommon, audio, input, mouse);
+				gameState = GameState::TITLE;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
 		break;
 
 	case GameState::CLEA://ゲームクリア
+		if (mousePos.x >= 440 &&
+			mousePos.x <= 840 &&
+			mousePos.y >= 470 &&
+			mousePos.y <= 550)
+		{
+			if (mouse->TriggerMouseLeft())
+			{
+				Initialize(dxCommon, audio, input, mouse);
+				gameState = GameState::TITLE;
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
+			}
+		}
 		break;
 	}
 	mouse->Update();
@@ -217,6 +242,7 @@ void GameScene::Title()
 				gameObjectManager->AddGameObject(enemy);
 				gameState = GameState::PLAY;
 				audio->SoundPlayWave("decisionSE.wav", false);
+				ShowCursor(FALSE);
 			}
 		}
 		if (mousePos.y >= 550.0f && mousePos.y <= 640.0f)
@@ -260,12 +286,12 @@ void GameScene::ObjCollision()
 		for (GameObject* gameobject2 : gameObjectManager->GetGameObjects())
 		{
 			if (gameobject2->GetObjectMember() != GameObject::OBJECTMEMBER::ENEMY && gameobject2->GetObjectMember() != GameObject::OBJECTMEMBER::NORMALENEMY)continue;
-				if (collision->ballToball(gameobject->GetPosition(), gameobject2->GetPosition(), gameobject2->GetRadius(), gameobject2->GetRadius()))
-				{
-					gameobject->Hit();
-					gameobject2->Hit();
-				}
-				eHP = enemy->GetHP();
+			if (collision->ballToball(gameobject->GetPosition(), gameobject2->GetPosition(), gameobject2->GetRadius(), gameobject2->GetRadius()))
+			{
+				gameobject->Hit();
+				gameobject2->Hit();
+			}
+			eHP = enemy->GetHP();
 		}
 	}
 }
@@ -748,9 +774,9 @@ void GameScene::Text()
 			eHP = gameobject->GetHP();
 		}
 	}
-	sprintf_s(str, "HP = %d", HP);
+	sprintf_s(str, "x = %f", mousePos.x);
 	debugText.Print(str, 0, 0, 1);
-	sprintf_s(str2, "EnemyHP = %d", eHP);
+	sprintf_s(str2, "y = %f", mousePos.y);
 	debugText.Print(str2, 0, 20, 1);
 }
 
@@ -761,10 +787,12 @@ void GameScene::SceneChange()
 	{
 		if (pHP <= 0)
 		{
+			ShowCursor(TRUE);
 			gameState = GameState::OVER;//ゲームオーバー
 		}
 		if (eHP <= 0)
 		{
+			ShowCursor(TRUE);
 			gameState = GameState::CLEA;//ゲームクリア
 		}
 	}

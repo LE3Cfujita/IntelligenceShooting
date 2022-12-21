@@ -139,7 +139,7 @@ private:
 	XMFLOAT3 skyrot = { 0,0,0 };
 
 
-	XMFLOAT2 yajirusiPos = { 315.0f,465.0f };
+	XMFLOAT2 yajirusiPos = { 315.0f,435.0f };
 
 	Sprite* opsion_Select = nullptr;
 
