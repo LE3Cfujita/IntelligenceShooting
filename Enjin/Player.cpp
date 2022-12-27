@@ -126,7 +126,7 @@ void Player::Hit()
 void Player::RushHit()
 {
 	rushCount = 1;
-	HP -= 10;
+	HP -= 5;
 }
 
 

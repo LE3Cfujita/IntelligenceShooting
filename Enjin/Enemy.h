@@ -51,11 +51,13 @@ private:
 private://ƒƒ“ƒo•Ï”
 	Model* modelBoss = nullptr;
 	Object3d* boss = nullptr;
-	int maxHP = 60;
+	int maxHP = 50;
 
 	int attackCount = 0;;
 
 	int createCount = 0;
+
+	bool attack = true;
 	
 
 };

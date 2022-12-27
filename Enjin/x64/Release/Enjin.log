@@ -1,67 +1,16 @@
-﻿  compilation object save succeeded; see C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\x64\Release\BasicPS.cso
-  compilation object save succeeded; see C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\x64\Release\BasicVS.cso
-  compilation object save succeeded; see C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\x64\Release\OBJPixelShader.cso
-  compilation object save succeeded; see C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\x64\Release\OBJVertexShader.cso
-  compilation object save succeeded; see C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\x64\Release\SpritePS.cso
-  compilation object save succeeded; see C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\x64\Release\SpriteVS.cso
-  DebugText.cpp
-  Sprite.cpp
-  Material.cpp
-  Mesh.cpp
-  Model.cpp
-  Object3d.cpp
-  Audio.cpp
-  DirectXCommon.cpp
-  WinApp.cpp
-  Collision.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Collision\Collision.cpp(50,10): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-  Enemy.cpp
+﻿  Enemy.cpp
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(33,22): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(34,22): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(106,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(107,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(152,15): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(197,16): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(202,16): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(209,17): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(215,16): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-  EnemyBarrage.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\EnemyBarrage.cpp(22,34): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  EnemyBullet.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\EnemyBullet.cpp(24,34): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-  GameManager.cpp
+C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(114,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(115,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(160,15): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
+C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(205,16): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
+C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(210,16): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
+C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(217,17): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
+C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Enemy.cpp(223,16): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
   GameScene.cpp
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\GameScene.h(188,19): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\GameScene.cpp(476,18): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
-  Input.cpp
-  Mouse.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\input\Mouse.cpp(128,19): warning C4244: 'return': 'LONG' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\input\Mouse.cpp(133,19): warning C4244: 'return': 'LONG' から 'float' への変換です。データが失われる可能性があります。
-  main.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\GameScene.h(188,19): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-  NormalEnemy.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\NormalEnemy.cpp(44,12): warning C4553: '==': 式の結果が使用されていません。'=' を意図していますか?
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\NormalEnemy.cpp(99,24): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\NormalEnemy.cpp(100,24): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  OptionKey.cpp
-  コンパイル中...
-  Player.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Player.cpp(29,34): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Player.cpp(57,21): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Player.cpp(65,21): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Player.cpp(77,21): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Player.cpp(84,21): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-  PlayerBullet.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\PlayerBullet.cpp(23,34): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\PlayerBullet.cpp(32,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\PlayerBullet.cpp(33,26): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  Rock.cpp
-  rocket.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\rocket.cpp(22,27): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\rocket.cpp(41,12): warning C4553: '==': 式の結果が使用されていません。'=' を意図していますか?
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\rocket.cpp(66,16): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\rocket.cpp(69,25): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\rocket.cpp(70,25): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
   Shield.cpp
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Shield.cpp(22,31): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Shield.cpp(58,17): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
@@ -70,23 +19,11 @@ C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\S
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Shield.cpp(65,17): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Shield.cpp(66,17): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
 C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Shield.cpp(67,17): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-  Star.cpp
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(49,31): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(53,31): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(59,32): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(61,37): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(67,32): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(69,37): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(72,25): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(73,25): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(74,25): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(75,29): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(76,29): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(77,31): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(78,31): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\Star.cpp(79,31): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  main.cpp
+C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\GameScene.h(188,19): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
   コード生成しています。
-  Previous IPDB not found, fall back to full compilation.
-  All 2110 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  6 of 2111 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Enjin.vcxproj -> C:\Users\K020J1172\Desktop\就職作品用ゲーム\IntelligenceShooting\Enjin\x64\Release\Enjin.exe

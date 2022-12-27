@@ -53,7 +53,7 @@ void Shield::Create()
 
 void Shield::Motion()
 {
-	if (scale.x < 7 && scale.y < 7 && scale.z < 10 && recovery != 0)
+	if (scale.x < 15 && scale.y < 15 && scale.z < 15 && recovery != 0)
 	{
 		scale.x += 0.1;
 		scale.y += 0.1;

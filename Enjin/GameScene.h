@@ -132,6 +132,8 @@ private:
 	Sprite* opsion_sensi = nullptr;
 	Sprite* clear = nullptr;
 	Sprite* over = nullptr;
+	Sprite* HPback = nullptr;
+	Sprite* HPber = nullptr;
 
 
 	Model* dome = nullptr;
@@ -155,6 +157,8 @@ private:
 	XMFLOAT2 sensiNumberPos = { 670,255 };
 
 	XMFLOAT2 indPos = { 640,120 };
+
+	XMFLOAT2 hpsize = { 250,25 };
 
 	//デバックテキスト用
 	char str[100];
@@ -201,5 +205,7 @@ private:
 	//float se = 1.0f;//SE音量
 
 	LPCSTR hwnd;
+
+	bool cursorCount = false;
 };
 

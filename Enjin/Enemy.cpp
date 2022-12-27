@@ -36,9 +36,9 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	if (attackFlag3 == 0)
+	if (attackFlag3 == 0 && attack == true)
 	{
-		//Move();
+		Move();
 	}
 	for (GameObject* gameobject : referenceGameObjects)
 	{
@@ -47,34 +47,38 @@ void Enemy::Update()
 		pos = gameobject->GetPosition();
 		if (position.y <= 60)
 		{
-			if (pos.x < -7 || pos.x > 7)
+			if (attack == true)
 			{
-				Attack2();
-			}
-			else
-			{
-				if (ct == 0)
+				if (pos.x < -7 || pos.x > 7)
 				{
-					Attack3();
+					Attack2();
 				}
-				if (ct > 0 && position.z == 100)
+				else
 				{
-					ct--;
+					if (ct == 0)
+					{
+						Attack3();
+					}
+					if (ct > 0 && position.z == 100)
+					{
+						ct--;
+					}
 				}
-			}
-			if (attackCount == 0)
-			{
-				Attack1();
-			}
-			else
-			{
-				Attack4();
+				if (attackCount == 0)
+				{
+					Attack1();
+				}
+				else
+				{
+					Attack4();
+				}
 			}
 
 			if (attackFlag3 == 0 && HP == maxHP / 2 && createCount == 0)
 			{
 				NormalEnemyCreate();
 				ShieldCreate();
+				attack = false;
 			}
 			if (recovery != 0)
 			{
@@ -84,6 +88,10 @@ void Enemy::Update()
 					HP++;
 					recoveryTime = 0;
 				}
+			}
+			else
+			{
+				attack = true;
 			}
 
 		}

@@ -165,8 +165,8 @@ public:
 		speed = 1;
 		rushCount = 0;
 
-		sensi = 50;
-		drawSensi = 50;
+		/*sensi = 50;
+		drawSensi = 50;*/
 
 		left = 0;
 		right = 0;

@@ -126,6 +126,15 @@ void GameScene::SpriteCreate()
 	over->LoadTexture(11, L"Resources/GameOver.png");
 	over = Sprite::Create(11, { 0.0f,0.0f });
 
+	HPback->LoadTexture(12, L"Resources/HPback.png");
+	HPback = Sprite::Create(12, {0,0}, {1.0f,1.0f,1.0f,1.0f});
+	HPback->SetSize({ 270,35 });
+
+	HPber->LoadTexture(13, L"Resources/HP.png");
+	HPber = Sprite::Create(13, { 5,5 }, { 1.0f,1.0f,1.0f,1.0f });
+	HPber->SetSize(hpsize);
+	HPber->SetPosition({ 10,5 });
+
 	Model::AdvanceLoadModel(1, "enemyBullet");
 	Model::AdvanceLoadModel(2, "bullet2");
 	Model::AdvanceLoadModel(3, "planet");
@@ -162,7 +171,7 @@ void GameScene::Update(WinApp* winApp)
 	winApp->GetHwnd();
 
 	Setting(winApp);
-	Text();
+	//Text();
 
 
 	switch (gameState)
@@ -199,10 +208,11 @@ void GameScene::Update(WinApp* winApp)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				Initialize(dxCommon, audio, input, mouse);
+				gameObjectManager->Initialize(input, audio, mouse, collision);
 				gameState = GameState::TITLE;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
+				cursorCount = false;
 			}
 		}
 		break;
@@ -215,10 +225,11 @@ void GameScene::Update(WinApp* winApp)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				Initialize(dxCommon, audio, input, mouse);
+				gameObjectManager->Initialize(input, audio, mouse, collision);
 				gameState = GameState::TITLE;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
+				cursorCount = false;
 			}
 		}
 		break;
@@ -270,13 +281,14 @@ void GameScene::ObjCollision()
 				{
 					player->Hit();
 					gameobject->Hit();
-
+					hpsize.x -= 10;
 				}
 				else
 				{
 					if (gameobject->GetAttackFlag3() == 1 && player->GetRushCount() == 0)
 					{
 						player->RushHit();
+						hpsize.x -= 50;
 					}
 				}
 				pHP = player->GetHP();
@@ -706,6 +718,9 @@ void GameScene::Draw()
 		DrawSensiPercent();
 		break;
 	case GameState::PLAY://ゲームシーン
+		HPback->Draw();
+		HPber->SetSize(hpsize);
+		HPber->Draw();
 		break;
 	case GameState::OVER://ゲームオーバー
 		over->Draw();
@@ -783,18 +798,24 @@ void GameScene::Text()
 
 void GameScene::SceneChange()
 {
-	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
+
+	if (pHP <= 0)
 	{
-		if (pHP <= 0)
+		if (cursorCount == false)
 		{
 			ShowCursor(TRUE);
-			gameState = GameState::OVER;//ゲームオーバー
+			cursorCount = true;
 		}
-		if (eHP <= 0)
+		gameState = GameState::OVER;//ゲームオーバー
+	}
+	if (eHP <= 0)
+	{
+		if (cursorCount == false)
 		{
 			ShowCursor(TRUE);
-			gameState = GameState::CLEA;//ゲームクリア
+			cursorCount = true;
 		}
+		gameState = GameState::CLEA;//ゲームクリア
 	}
 }
 

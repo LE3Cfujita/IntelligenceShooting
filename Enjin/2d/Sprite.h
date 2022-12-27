@@ -170,7 +170,7 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-
+	void SetColor(XMFLOAT4 color);
 private: // メンバ変数
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
