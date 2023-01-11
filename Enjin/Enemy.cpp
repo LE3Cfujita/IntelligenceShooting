@@ -79,6 +79,7 @@ void Enemy::Update()
 				NormalEnemyCreate();
 				ShieldCreate();
 				attack = false;
+				getTime = 0;
 			}
 			if (recovery != 0)
 			{

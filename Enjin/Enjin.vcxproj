@@ -29,6 +29,7 @@
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
+    <ClCompile Include="Efect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBarrage.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="base\SafeDelete.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Collision\Collision.h" />
+    <ClInclude Include="Efect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBarrage.h" />
     <ClInclude Include="EnemyBullet.h" />

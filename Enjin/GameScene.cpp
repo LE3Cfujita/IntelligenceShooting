@@ -143,6 +143,7 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(6, "rocket");
 	Model::AdvanceLoadModel(7, "normal");
 	Model::AdvanceLoadModel(8, "shield");
+	Model::AdvanceLoadModel(9, "efect");
 
 }
 
@@ -208,7 +209,6 @@ void GameScene::Update(WinApp* winApp)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				gameObjectManager->Initialize(input, audio, mouse, collision);
 				gameState = GameState::TITLE;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
@@ -225,7 +225,6 @@ void GameScene::Update(WinApp* winApp)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				gameObjectManager->Initialize(input, audio, mouse, collision);
 				gameState = GameState::TITLE;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
@@ -273,7 +272,7 @@ void GameScene::ObjCollision()
 {
 	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
 	{
-		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER && gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYERBULLET)
+		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYER && gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::PLAYERBULLET && gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::EFECT)
 		{
 			if (collision->ballToball(player->GetPosition(), gameobject->GetPosition(), player->GetRadius(), gameobject->GetRadius()))
 			{
@@ -282,6 +281,7 @@ void GameScene::ObjCollision()
 					player->Hit();
 					gameobject->Hit();
 					hpsize.x -= 10;
+					HitEfect(player->GetPosition());
 				}
 				else
 				{
@@ -289,6 +289,7 @@ void GameScene::ObjCollision()
 					{
 						player->RushHit();
 						hpsize.x -= 50;
+						HitEfect(player->GetPosition());
 					}
 				}
 				pHP = player->GetHP();
@@ -302,6 +303,7 @@ void GameScene::ObjCollision()
 			{
 				gameobject->Hit();
 				gameobject2->Hit();
+				HitEfect(gameobject2->GetPosition());
 			}
 			eHP = enemy->GetHP();
 		}
@@ -980,5 +982,17 @@ void GameScene::LoadFile()
 		}
 		sensi = Data.sensi;
 		drawSensi = Data.drawSensi;
+	}
+}
+
+void GameScene::HitEfect(XMFLOAT3 pos)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		Efect* efect = new Efect();
+		efect->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+		efect->Initialize(pos);
+		efect->Create(i);
+		gameObjectManager->AddGameObject(efect);
 	}
 }

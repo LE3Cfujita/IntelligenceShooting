@@ -9,6 +9,7 @@
 #include"GameManager.h"
 #include"Rock.h"
 #include"Star.h"
+#include"Efect.h"
 #pragma once
 
 class GameScene
@@ -92,6 +93,8 @@ public:
 
 	void WriteFile();
 	void LoadFile();
+
+	void HitEfect(XMFLOAT3 pos);
 
 	//マウス座標取得
 	POINT mouse_pos;
@@ -198,7 +201,7 @@ private:
 	int down = 0;
 	int attack = 0;
 
-	int sensi = 0;
+	int sensi = 5;
 	int drawSensi = 70;
 
 	//float bgm = 1.0f;//BGM音量

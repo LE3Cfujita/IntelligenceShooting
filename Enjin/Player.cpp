@@ -92,7 +92,7 @@ void Player::Death()
 {
 	if (HP <= 0)
 	{
-		deathFlag = true;
+		//deathFlag = true;
 	}
 }
 

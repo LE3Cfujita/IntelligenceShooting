@@ -14,7 +14,7 @@ void Rock::Initialize()
 {
 
 	objectMember = OBJECTMEMBER::ROCK;
-	position = { 0, 0,80 };
+	position = { 0.0f, 0.0f,80.0f };
 	rotation = { 0,90,0 };
 	model = Model::LoadFormOBJ("aim");
 

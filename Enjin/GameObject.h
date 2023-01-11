@@ -28,7 +28,7 @@ public:
 		ROCK,
 		OPTIONKEY,
 		SHIELD,
-		
+		EFECT
 	};
 
 protected:
@@ -165,8 +165,6 @@ public:
 		speed = 1;
 		rushCount = 0;
 
-		/*sensi = 50;
-		drawSensi = 50;*/
 
 		left = 0;
 		right = 0;
@@ -183,7 +181,6 @@ public:
 		downDecimal = 0;
 		attackDecimal = 0;
 
-
 		recovery = 0;
 		recoveryTime = 0;
 
@@ -199,6 +196,8 @@ public:
 	virtual void Draw() {}
 	virtual void Hit() {}
 
+	void DEATHFlag() { deathFlag = true; }
+
 	XMFLOAT3 GetVelocity() { return velocity; }
 	void SetVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 
@@ -206,7 +205,6 @@ public:
 	float GetRadius(float radius) { this->radius = radius; }
 
 	bool GetDeathFlag() { return deathFlag; }
-
 	XMFLOAT3 GetPosition() { return position; };
 
 	void SetPos(XMFLOAT3 pos) { this->position = pos; }
