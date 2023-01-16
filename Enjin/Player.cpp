@@ -6,14 +6,13 @@ Player::Player()
 
 Player::~Player()
 {
-	safe_delete(modelPlayer);
 	safe_delete(player);
 }
 
 void Player::Initialize()
 {
 	objectMember = GameObject::PLAYER;
-	HP = 20;
+	HP = 250;
 	radius = 2;
 	position = { 0,0,0 };
 	rotation = { 0,-90,0 };
@@ -37,13 +36,16 @@ void Player::Update()
 {
 	Move();
 	Attack();
-	Death();
+	Efect();
 }
 
 void Player::Draw()
 {
 
+	player->SetPosition(position);
+	player->SetRotation(rotation);
 	player->Update();
+	if (efectFlag != false)return;
 	player->Draw();
 }
 
@@ -84,17 +86,8 @@ void Player::Move()
 			position.y -= 0.3;
 		}
 	}
-	player->SetPosition(position);
-	player->SetRotation(rotation);
 }
 
-void Player::Death()
-{
-	if (HP <= 0)
-	{
-		//deathFlag = true;
-	}
-}
 
 void Player::Attack()
 {
@@ -120,13 +113,25 @@ void Player::Attack()
 
 void Player::Hit()
 {
-	HP -= 1;
+	if (efectFlag != false)return;
+	HP -= 15;
+	if (efectTime < 0)
+	{
+		efectTime = 30;
+	}
+	efectFlag = true;
 }
 
 void Player::RushHit()
 {
+	if (efectFlag != false)return;
+	if (efectTime < 0)
+	{
+		efectTime = 30;
+	}
+	efectFlag = true;
 	rushCount = 1;
-	HP -= 5;
+	HP -= 50;
 }
 
 
@@ -140,5 +145,18 @@ void Player::GetKey()
 		moveUp = gameobject->GetUpKey();
 		moveDown = gameobject->GetDownKey();
 		attackKey = gameobject->GetAttackKey();
+	}
+}
+
+void Player::Efect()
+{
+	efectTime--;
+	if (efectTime > 20 || efectTime < 30 && efectTime > 20 || efectTime < 20 && efectTime > 10 || efectTime < 10 && efectTime > 0)
+	{
+		efectFlag = true;
+	}
+	else
+	{
+		efectFlag = false;
 	}
 }

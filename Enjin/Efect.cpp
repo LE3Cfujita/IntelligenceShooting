@@ -40,9 +40,7 @@ void Efect::Create(int count)
 {
 	deathFlag = false;
 	this->count = count;
-	time = maxTime;
-	speed = 0;
-	pos = (rand() % 5 + 1) * 0.1;
+	pos = (rand() % 51) * 0.01;
 }
 
 void Efect::Move()
@@ -50,26 +48,17 @@ void Efect::Move()
 	if (count == 0)
 	{
 		position.x -= pos;
-	}
-	else if (count == 1)
-	{
-		position.x += pos;
-	}
-	time -= 1;
-	if (time >= maxTime / 2)
-	{
 		position.y += 0.3;
 		rotation.x += 30;
 		rotation.z += 30;
 	}
 	else
 	{
-		speed += 0.1;
-		position.y -= speed;
+		position.x += pos;
+		position.y += 0.3;
 		rotation.x += 30;
 		rotation.z += 30;
 	}
-
 	if (position.y <= -100)
 	{
 		deathFlag = true;

@@ -17,19 +17,22 @@ public:
 
 	void Move();
 
-	void Death();
-
 	void Attack();
 	//“G‚ÌUŒ‚‚ª“–‚½‚Á‚½
 	void Hit();
 	//“G‚Ì“ËiUŒ‚‚ª“–‚½‚Á‚½
 	void RushHit();
 	void GetKey();
+	
+	void Efect();
 
 private://ƒƒ“ƒo•Ï”
 
 
 	Model* modelPlayer = nullptr;
 	Object3d* player = nullptr;
+
+	int efectFlag = false;
+	int efectTime = 0;
 };
 

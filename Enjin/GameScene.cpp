@@ -30,7 +30,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, 
 
 
 	SpriteCreate();
+	player = new Player();
+	player->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+	player->Initialize();
+	pHP = player->GetHP();
+	gameObjectManager->AddGameObject(player);
 	ObjInitialize();
+
+
 
 
 
@@ -127,7 +134,7 @@ void GameScene::SpriteCreate()
 	over = Sprite::Create(11, { 0.0f,0.0f });
 
 	HPback->LoadTexture(12, L"Resources/HPback.png");
-	HPback = Sprite::Create(12, {0,0}, {1.0f,1.0f,1.0f,1.0f});
+	HPback = Sprite::Create(12, { 0,0 }, { 1.0f,1.0f,1.0f,1.0f });
 	HPback->SetSize({ 270,35 });
 
 	HPber->LoadTexture(13, L"Resources/HP.png");
@@ -149,13 +156,9 @@ void GameScene::SpriteCreate()
 
 void GameScene::ObjInitialize()
 {
-	player = new Player();
-	player->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
-	player->Initialize();
-	pHP = player->GetHP();
-	gameObjectManager->AddGameObject(player);
 
-	Rock* rock = new Rock();
+
+	rock = new Rock();
 	rock->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 	rock->Initialize();
 	gameObjectManager->AddGameObject(rock);
@@ -164,7 +167,6 @@ void GameScene::ObjInitialize()
 	key->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 	key->Initialize();
 	gameObjectManager->AddGameObject(key);
-
 }
 
 void GameScene::Update(WinApp* winApp)
@@ -199,6 +201,7 @@ void GameScene::Update(WinApp* winApp)
 		CreateStars();
 
 		SetCursorPos(690, 360);
+
 		gameObjectManager->Update();
 		break;
 	case GameState::OVER://ゲームオーバー
@@ -209,10 +212,24 @@ void GameScene::Update(WinApp* winApp)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
+				for (GameObject* gameobject : gameObjectManager->GetGameObjects())
+				{
+					if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::OPTIONKEY && gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)
+					{
+						gameobject->DEATHFlag();
+					}
+				}
+				player = new Player();
+				player->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+				player->Initialize();
+				pHP = player->GetHP();
+				gameObjectManager->AddGameObject(player);
+
 				gameState = GameState::TITLE;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
 				cursorCount = false;
+				gameObjectManager->Update();
 			}
 		}
 		break;
@@ -225,12 +242,26 @@ void GameScene::Update(WinApp* winApp)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
+				for (GameObject* gameobject : gameObjectManager->GetGameObjects())
+				{
+					if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::OPTIONKEY)continue;
+					gameobject->DEATHFlag();
+				}
+				player = new Player();
+				player->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+				player->Initialize();
+				pHP = player->GetHP();
+				gameObjectManager->AddGameObject(player);
+
 				gameState = GameState::TITLE;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
 				cursorCount = false;
+				gameObjectManager->Update();
 			}
 		}
+		break;
+	case GameState::SCENECHANGE://シーン切り替え
 		break;
 	}
 	mouse->Update();
@@ -280,7 +311,6 @@ void GameScene::ObjCollision()
 				{
 					player->Hit();
 					gameobject->Hit();
-					hpsize.x -= 10;
 					HitEfect(player->GetPosition());
 				}
 				else
@@ -288,7 +318,6 @@ void GameScene::ObjCollision()
 					if (gameobject->GetAttackFlag3() == 1 && player->GetRushCount() == 0)
 					{
 						player->RushHit();
-						hpsize.x -= 50;
 						HitEfect(player->GetPosition());
 					}
 				}
@@ -587,65 +616,59 @@ void GameScene::DrawSensiPercent()
 {
 
 	char eachSensiNumber[3] = {};//各桁の値	
-	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
+	int sensiNumber = rock->GetDrawSensi();//表示する数字
+	if (rock->GetDrawSensi() == 100)
 	{
-		if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::ROCK)
+		int keta = 100;//最初の桁
+		for (int i = 0; i < 3; i++)
 		{
-			int sensiNumber = gameobject->GetDrawSensi();//表示する数字
-			if (gameobject->GetDrawSensi() == 100)
-			{
-				int keta = 100;//最初の桁
-				for (int i = 0; i < 3; i++)
-				{
-					eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
-					sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
-					keta = keta / 10;//桁を進める
-				}
+			eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
+			sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
 
-				for (int i = 0; i < 3; i++)
-				{
-					spriteSENSINumber[i]->SetSize({ 32,48 });
-					spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
-					spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + i * 32.0f, sensiNumberPos.y });
-					spriteSENSINumber[i]->Draw();
-				}
-			}
-			else if (gameobject->GetDrawSensi() == 1)
-			{
-				int keta = 1;
-				for (int i = 0; i < 1; i++)
-				{
-					eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
-					sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
-					keta = keta / 10;//桁を進める
-				}
+		for (int i = 0; i < 3; i++)
+		{
+			spriteSENSINumber[i]->SetSize({ 32,48 });
+			spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
+			spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + i * 32.0f, sensiNumberPos.y });
+			spriteSENSINumber[i]->Draw();
+		}
+	}
+	else if (rock->GetDrawSensi() == 1)
+	{
+		int keta = 1;
+		for (int i = 0; i < 1; i++)
+		{
+			eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
+			sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
 
-				for (int i = 0; i < 1; i++)
-				{
-					spriteSENSINumber[i]->SetSize({ 32,48 });
-					spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
-					spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + 64 + i * 32.0f, sensiNumberPos.y });
-					spriteSENSINumber[i]->Draw();
-				}
-			}
-			else
-			{
-				int keta = 10;
-				for (int i = 0; i < 2; i++)
-				{
-					eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
-					sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
-					keta = keta / 10;//桁を進める
-				}
+		for (int i = 0; i < 1; i++)
+		{
+			spriteSENSINumber[i]->SetSize({ 32,48 });
+			spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
+			spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + 64 + i * 32.0f, sensiNumberPos.y });
+			spriteSENSINumber[i]->Draw();
+		}
+	}
+	else
+	{
+		int keta = 10;
+		for (int i = 0; i < 2; i++)
+		{
+			eachSensiNumber[i] = sensiNumber / keta;//今の桁の値を求める
+			sensiNumber = sensiNumber % keta;//次の桁以下の値を取り出す
+			keta = keta / 10;//桁を進める
+		}
 
-				for (int i = 0; i < 2; i++)
-				{
-					spriteSENSINumber[i]->SetSize({ 32,48 });
-					spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
-					spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + 32 + i * 32.0f, sensiNumberPos.y });
-					spriteSENSINumber[i]->Draw();
-				}
-			}
+		for (int i = 0; i < 2; i++)
+		{
+			spriteSENSINumber[i]->SetSize({ 32,48 });
+			spriteSENSINumber[i]->SetTextureRect({ (float)(32 * eachSensiNumber[i]), 0, }, { 32,32 });
+			spriteSENSINumber[i]->SetPosition(XMFLOAT2{ sensiNumberPos.x + 32 + i * 32.0f, sensiNumberPos.y });
+			spriteSENSINumber[i]->Draw();
 		}
 	}
 }
@@ -721,6 +744,7 @@ void GameScene::Draw()
 		break;
 	case GameState::PLAY://ゲームシーン
 		HPback->Draw();
+		hpsize.x = player->GetHP();
 		HPber->SetSize(hpsize);
 		HPber->Draw();
 		break;
@@ -745,15 +769,9 @@ void GameScene::Option_Sensi()
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				for (GameObject* gameobject : gameObjectManager->GetGameObjects())
-				{
-					if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::ROCK)
-					{
-						gameobject->SetSensi(gameobject->GetSensi() + 10, gameobject->GetDrawSensi() - 10);
-						audio->SoundStop("decisionSE.wav");
-						audio->SoundPlayWave("decisionSE.wav", false);
-					}
-				}
+				rock->SetSensi(rock->GetSensi() + 10, rock->GetDrawSensi() - 10);
+				audio->SoundStop("decisionSE.wav");
+				audio->SoundPlayWave("decisionSE.wav", false);
 			}
 		}
 	}
@@ -934,13 +952,8 @@ void GameScene::Option_KEY_Collision(XMFLOAT2 pos)
 
 void GameScene::WriteFile()
 {
-	for (GameObject* gameobject : gameObjectManager->GetGameObjects())
-	{
-		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)continue;
-		sensi = gameobject->GetSensi();
-		drawSensi = gameobject->GetDrawSensi();
-		break;
-	}
+	sensi = rock->GetSensi();
+	drawSensi = rock->GetDrawSensi();
 	SaveData Data = { left,right,up,down,attack,sensi,drawSensi,bgmVolume,seVolume };
 	FILE* fp;
 	fopen_s(&fp, "save.pdf", "w");
@@ -974,12 +987,7 @@ void GameScene::LoadFile()
 		key->SetAttackDecimal(attack);
 		player->referenceGameObjects = gameObjectManager->GetGameObjects();
 		player->GetKey();
-		for (GameObject* gameobject : gameObjectManager->GetGameObjects())
-		{
-			if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)continue;
-			gameobject->SetSensi(Data.sensi, Data.drawSensi);
-			break;
-		}
+		rock->SetSensi(Data.sensi, Data.drawSensi);
 		sensi = Data.sensi;
 		drawSensi = Data.drawSensi;
 	}

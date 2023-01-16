@@ -33,8 +33,6 @@ void Rock::Update()
 
 	position.x += mouseM.x / sensi;
 	position.y -= mouseM.y / sensi;
-
-
 	rock->SetPosition(position);
 }
 

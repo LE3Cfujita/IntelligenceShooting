@@ -49,6 +49,14 @@ void Enemy::Update()
 		{
 			if (attack == true)
 			{
+				if (attackCount == 0)
+				{
+					Attack1();
+				}
+				else
+				{
+					Attack4();
+				}
 				if (pos.x < -7 || pos.x > 7)
 				{
 					Attack2();
@@ -64,14 +72,7 @@ void Enemy::Update()
 						ct--;
 					}
 				}
-				if (attackCount == 0)
-				{
-					Attack1();
-				}
-				else
-				{
-					Attack4();
-				}
+			
 			}
 
 			if (attackFlag3 == 0 && HP == maxHP / 2 && createCount == 0)

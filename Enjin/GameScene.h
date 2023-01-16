@@ -24,7 +24,8 @@ public:
 		OPTION_SENSI,
 		PLAY,
 		CLEA,
-		OVER
+		OVER,
+		SCENECHANGE
 	};
 	//セーブデータ
 	typedef struct {
@@ -107,7 +108,6 @@ public:
 	XMFLOAT2 cursor_pos = { 0,0 };
 
 
-
 private:
 	GameManager* gameObjectManager = nullptr;
 
@@ -137,7 +137,7 @@ private:
 	Sprite* over = nullptr;
 	Sprite* HPback = nullptr;
 	Sprite* HPber = nullptr;
-
+	Rock* rock = nullptr;
 
 	Model* dome = nullptr;
 	Object3d* skydome = nullptr;

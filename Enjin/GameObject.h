@@ -72,8 +72,6 @@ protected:
 	int barrageTime;
 	int rotCount;
 	int rushCount;
-	int sensi;
-	int drawSensi;
 	int getTime;
 
 	int left;
@@ -115,7 +113,7 @@ public:
 		this->collision = collision;
 
 		deathFlag = false;
-		
+
 		radius = 1;
 		attackCT = 0;
 		number = 0;
@@ -174,6 +172,8 @@ public:
 
 		count = 0;
 
+		
+
 		//10êiêîï\é¶
 		leftDecimal = 0;
 		rightDecimal = 0;
@@ -184,7 +184,7 @@ public:
 		recovery = 0;
 		recoveryTime = 0;
 
-		
+
 		std::vector<GameObject*>().swap(addGameObjects);
 		this->referenceGameObjects = referenceGameObjects;
 	}
@@ -231,8 +231,6 @@ public:
 	OBJECTMEMBER GetObjectMember() { return objectMember; }
 
 
-	int GetSensi() { return sensi; }
-	int GetDrawSensi() { return drawSensi; }
 
 
 	int GetLeftKey() { return left; }
@@ -259,20 +257,6 @@ public:
 	void SetRecovery(int recovery) { this->recovery = recovery; }
 	int GetRecovery() { return recovery; }
 
-	void SetSensi(int sensi, int drawSensi)
-	{
-		if (sensi > 100)
-		{
-			sensi = 10;
-			drawSensi = 100;
-		}
-		else if (sensi == 100)
-		{
-			drawSensi = 1;
-		}
-		this->sensi = sensi;
-		this->drawSensi = drawSensi;
-	}
-
+	
 };
 
