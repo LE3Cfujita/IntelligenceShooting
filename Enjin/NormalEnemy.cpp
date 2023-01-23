@@ -29,6 +29,7 @@ void NormalEnemy::Update()
 {
 	Move();
 	Death();
+	Attack();
 }
 
 void NormalEnemy::Draw()
@@ -140,7 +141,7 @@ void NormalEnemy::MoveLimit()
 
 void NormalEnemy::Attack()
 {
-	/*if (attackFlag == 0)
+	if (attackFlag == 0)
 	{
 		EnemyBullet* bullet = new EnemyBullet();
 		bullet->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
@@ -148,5 +149,14 @@ void NormalEnemy::Attack()
 		addGameObjects.push_back(bullet);
 		bullet->Create(position);
 		attackFlag = 1;
-	}*/
+	}
+	else
+	{
+		attackTime++;
+		if (attackTime >= 120)
+		{
+			attackTime = 0;
+			attackFlag = 0;
+		}
+	}
 }

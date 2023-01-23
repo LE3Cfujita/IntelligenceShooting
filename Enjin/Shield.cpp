@@ -34,7 +34,7 @@ void Shield::Update()
 	}
 
 	Motion();
-	position = { pos.x,pos.y,pos.z - 10 };
+	position = { pos.x,pos.y,pos.z - 30 };
 }
 
 void Shield::Draw()

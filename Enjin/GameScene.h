@@ -25,7 +25,11 @@ public:
 		PLAY,
 		CLEA,
 		OVER,
-		SCENECHANGE
+		SCENECHANGE,
+		SCENECHANGEOVER,
+		SCENECHANGECLEA,
+		OPERATION,
+		RULE
 	};
 	//セーブデータ
 	typedef struct {
@@ -96,6 +100,8 @@ public:
 	void LoadFile();
 
 	void HitEfect(XMFLOAT3 pos);
+
+	void ChangeScene(int count);
 
 	//マウス座標取得
 	POINT mouse_pos;
@@ -220,5 +226,7 @@ private:
 
 	bool hitFlag = false;
 	int flagTime = 0;
+
+	int sceneCount = 0;
 };
 

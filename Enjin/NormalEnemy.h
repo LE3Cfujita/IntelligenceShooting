@@ -1,5 +1,6 @@
 #pragma once
 #include"GameObject.h"
+#include "EnemyBullet.h"
 class NormalEnemy : public GameObject
 {
 public:
@@ -24,5 +25,7 @@ private:
 private:
 	Model* model = nullptr;
 	Object3d* obj = nullptr;
+
+	int attackTime = 0;
 };
 

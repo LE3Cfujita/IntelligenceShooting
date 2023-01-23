@@ -18,6 +18,7 @@ private:
 	Model* model = nullptr;
 	Object3d* efect = nullptr;
 
+	int time = 0;
 	float pos = 0;
 };
 

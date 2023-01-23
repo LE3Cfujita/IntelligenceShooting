@@ -59,8 +59,10 @@ void Efect::Move()
 		rotation.x += 30;
 		rotation.z += 30;
 	}
-	if (position.y <= -100)
+	time++;
+	if (time >= 180)
 	{
 		deathFlag = true;
+		time = 0;
 	}
 }

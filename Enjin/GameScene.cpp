@@ -156,6 +156,7 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(7, "normal");
 	Model::AdvanceLoadModel(8, "shield");
 	Model::AdvanceLoadModel(9, "efect");
+	Model::AdvanceLoadModel(10, "enemyBullet");
 }
 
 void GameScene::ObjInitialize()
@@ -207,9 +208,10 @@ void GameScene::Update(WinApp* winApp)
 		if (hitFlag == true)
 		{
 			flagTime++;
-			if (flagTime >= 60)
+			if (flagTime >= 120)
 			{
 				hitFlag = false;
+				flagTime = 0;
 			}
 		}
 
@@ -225,24 +227,13 @@ void GameScene::Update(WinApp* winApp)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				for (GameObject* gameobject : gameObjectManager->GetGameObjects())
-				{
-					if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::OPTIONKEY && gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)
-					{
-						gameobject->DEATHFlag();
-					}
-				}
-				player = new Player();
-				player->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
-				player->Initialize();
-				pHP = player->GetHP();
-				gameObjectManager->AddGameObject(player);
 
-				gameState = GameState::TITLE;
+				sceneCount = 2;
+				gameState = GameState::SCENECHANGEOVER;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
 				cursorCount = false;
-				gameObjectManager->Update();
+				sceneChangeFlag = false;
 			}
 		}
 		break;
@@ -255,51 +246,24 @@ void GameScene::Update(WinApp* winApp)
 		{
 			if (mouse->TriggerMouseLeft())
 			{
-				for (GameObject* gameobject : gameObjectManager->GetGameObjects())
-				{
-					if (gameobject->GetObjectMember() == GameObject::OBJECTMEMBER::OPTIONKEY)continue;
-					gameobject->DEATHFlag();
-				}
-				player = new Player();
-				player->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
-				player->Initialize();
-				pHP = player->GetHP();
-				gameObjectManager->AddGameObject(player);
 
-				gameState = GameState::TITLE;
+				sceneCount = 3;
+				gameState = GameState::SCENECHANGECLEA;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
 				cursorCount = false;
-				gameObjectManager->Update();
+				sceneChangeFlag = false;
 			}
 		}
 		break;
 	case GameState::SCENECHANGE://シーン切り替え
-
-		if (sceneSize.x >= 1280 && sceneSize.y >= 720)
-		{
-			sceneChangeFlag = true;
-			enemy = new Enemy();
-			enemy->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
-			enemy->Initialize();
-			eHP = enemy->GetHP();
-			gameObjectManager->AddGameObject(enemy);
-		}
-		if (sceneChangeFlag == false)
-		{
-			sceneSize.x += 10;
-			sceneSize.y += 4.5;
-		}
-		else
-		{
-			sceneSize.x -= 10;
-			sceneSize.y -= 4.5;
-			if (sceneSize.x < 0 && sceneSize.y < 0)
-			{
-				gameState = GameState::PLAY;
-			}
-		}
-
+		ChangeScene(sceneCount);
+		break;
+	case GameState::SCENECHANGEOVER://シーン切り替え
+		ChangeScene(sceneCount);
+		break;
+	case GameState::SCENECHANGECLEA://シーン切り替え
+		ChangeScene(sceneCount);
 		break;
 	}
 	mouse->Update();
@@ -318,6 +282,7 @@ void GameScene::Title()
 				audio->SoundPlayWave("decisionSE.wav", false);
 				ShowCursor(FALSE);
 				sceneChangeFlag = false;
+				sceneCount = 1;
 			}
 		}
 		if (mousePos.y >= 550.0f && mousePos.y <= 640.0f)
@@ -732,7 +697,9 @@ void GameScene::Draw()
 	case GameState::OPTION_KEY://操作説明など
 		break;
 	case GameState::PLAY://ゲームシーン
-	//3Dオブジェクトの描画
+		//3Dオブジェクトの描画
+		skydome->SetRotation(skyrot);
+		skydome->Update();
 		skydome->Draw();
 		gameObjectManager->Draw();
 		break;
@@ -814,6 +781,34 @@ void GameScene::Draw()
 			hpsize.x = player->GetHP();
 			HPber->SetSize(hpsize);
 			HPber->Draw();
+		}
+		sceneSprite->SetSize(sceneSize);
+		sceneSprite->Draw();
+		break;
+	case GameState::SCENECHANGEOVER:
+
+		if (sceneChangeFlag == true)
+		{
+			sprite->Draw();
+			yajirusi->Draw();
+		}
+		else
+		{
+			over->Draw();
+		}
+		sceneSprite->SetSize(sceneSize);
+		sceneSprite->Draw();
+		break;
+	case GameState::SCENECHANGECLEA:
+
+		if (sceneChangeFlag == true)
+		{
+			sprite->Draw();
+			yajirusi->Draw();
+		}
+		else
+		{
+			clear->Draw();
 		}
 		sceneSprite->SetSize(sceneSize);
 		sceneSprite->Draw();
@@ -1065,5 +1060,70 @@ void GameScene::HitEfect(XMFLOAT3 pos)
 		efect->Initialize(pos);
 		efect->Create(i);
 		gameObjectManager->AddGameObject(efect);
+	}
+}
+
+void GameScene::ChangeScene(int count)
+{
+	if (count == 1)
+	{
+		if (sceneSize.x >= 1280 && sceneSize.y >= 720)
+		{
+			sceneChangeFlag = true;
+			enemy = new Enemy();
+			enemy->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+			enemy->Initialize();
+			eHP = enemy->GetHP();
+			gameObjectManager->AddGameObject(enemy);
+		}
+		if (sceneChangeFlag == false)
+		{
+			sceneSize.x += 10;
+			sceneSize.y += 4.5;
+		}
+		else
+		{
+			sceneSize.x -= 10;
+			sceneSize.y -= 4.5;
+			if (sceneSize.x < 0 && sceneSize.y < 0)
+			{
+				gameState = GameState::PLAY;
+			}
+		}
+	}
+	else
+	{
+
+		if (sceneSize.x >= 1280 && sceneSize.y >= 720)
+		{
+			for (GameObject* gameobject : gameObjectManager->GetGameObjects())
+			{
+				if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::OPTIONKEY && gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)
+				{
+					gameobject->DEATHFlag();
+				}
+			}
+			player = new Player();
+			player->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+			player->Initialize();
+			pHP = player->GetHP();
+			gameObjectManager->AddGameObject(player);
+			gameObjectManager->Update();
+			sceneChangeFlag = true;
+		}
+		if (sceneChangeFlag == false)
+		{
+			sceneSize.x += 10;
+			sceneSize.y += 4.5;
+		}
+		else
+		{
+			sceneSize.x -= 10;
+			sceneSize.y -= 4.5;
+			if (sceneSize.x < 0 && sceneSize.y < 0)
+			{
+				gameState = GameState::TITLE;
+			}
+		}
 	}
 }

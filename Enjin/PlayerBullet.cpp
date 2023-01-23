@@ -14,7 +14,7 @@ void PlayerBullet::Initialize(XMFLOAT3 pos)
 	position = pos;
 	speed = 5;
 	objectMember = OBJECTMEMBER::PLAYERBULLET;
-	//rotation = { 90,0,0 };
+
 	model = Model::CreateModel(2);
 	//’e
 	bullet = Object3d::Create();

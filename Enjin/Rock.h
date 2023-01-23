@@ -34,7 +34,7 @@ public:
 private:
 	Model* model= nullptr;
 	Object3d* rock = nullptr;
-	int sensi = 1;
+	int sensi = 10;
 	int drawSensi;
 };
 

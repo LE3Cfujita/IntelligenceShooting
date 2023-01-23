@@ -16,7 +16,7 @@ void EnemyBullet::Initialize()
 	position = { 100,100,100 };
 	rotation = { 0,90,0 };
 	radius = 1;
-	model = Model::LoadFormOBJ("enemyBullet");
+	model= Model::CreateModel(10);
 	bullet = Object3d::Create();
 	bullet->SetModel(model);
 	bullet->SetPosition(position);
@@ -101,7 +101,7 @@ void EnemyBullet::Hit()
 	bullet->SetPosition(position);
 	for (GameObject* gameobject : referenceGameObjects)
 	{
-		if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ENEMY)continue;
+		if (gameobject->GetObjectMember() != OBJECTMEMBER::ENEMY)continue;
 		gameobject->SetAttackFlag(0);
 	}
 
