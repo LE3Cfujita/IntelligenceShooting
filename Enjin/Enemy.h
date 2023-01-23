@@ -58,6 +58,8 @@ private://ƒƒ“ƒo•Ï”
 	int createCount = 0;
 
 	bool attack = true;
+
+	bool moveFlag = false;
 	
 
 };

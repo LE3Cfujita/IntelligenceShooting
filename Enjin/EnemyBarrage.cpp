@@ -121,3 +121,4 @@ void EnemyBarrage::Move()
 	bullet->SetPosition(position);
 	bullet->SetRotation(rotation);
 }
+

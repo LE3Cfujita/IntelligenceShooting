@@ -137,3 +137,16 @@ void NormalEnemy::MoveLimit()
 		directionY = 2;
 	}
 }
+
+void NormalEnemy::Attack()
+{
+	/*if (attackFlag == 0)
+	{
+		EnemyBullet* bullet = new EnemyBullet();
+		bullet->BaseInitialize(input, audio, mouse, collision, referenceGameObjects);
+		bullet->Initialize();
+		addGameObjects.push_back(bullet);
+		bullet->Create(position);
+		attackFlag = 1;
+	}*/
+}

@@ -13,7 +13,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	position = { 0,0,100 };
+	position = { 0,100,100 };
 	rotation = { 0,0,0 };
 	radius = 10;
 	HP = maxHP;
@@ -36,6 +36,13 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
+	if (moveFlag == false)
+	{
+		if (position.y <= 60)
+		{
+			moveFlag = true;
+		}
+	}
 	if (attackFlag3 == 0 && attack == true)
 	{
 		Move();
@@ -72,7 +79,7 @@ void Enemy::Update()
 						ct--;
 					}
 				}
-			
+
 			}
 
 			if (attackFlag3 == 0 && HP == maxHP / 2 && createCount == 0)
@@ -160,21 +167,24 @@ void Enemy::Move()
 	}
 	if (L >= 15)return;
 	speed -= 0.02;
-	if (dx < 0)
+	if (moveFlag == true)
 	{
-		position.x -= speed;
-	}
-	else
-	{
-		position.x += speed;
-	}
-	if (dy < 0)
-	{
-		position.y -= speed;
-	}
-	else
-	{
-		position.y += speed;
+		if (dx < 0)
+		{
+			position.x -= speed;
+		}
+		else
+		{
+			position.x += speed;
+		}
+		if (dy < 0)
+		{
+			position.y -= speed;
+		}
+		else
+		{
+			position.y += speed;
+		}
 	}
 }
 
@@ -330,6 +340,7 @@ void Enemy::Attack3Move()
 		}
 		if (pos.z - 30 >= position.z)
 		{
+			moveFlag = false;
 			position = { 0,120,100 };
 			rotation = { 0,0,0 };
 			ct = 250;

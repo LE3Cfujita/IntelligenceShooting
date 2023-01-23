@@ -20,6 +20,7 @@ public:
 private:
 	void Move();
 	void MoveLimit();
+	void Attack();
 private:
 	Model* model = nullptr;
 	Object3d* obj = nullptr;

@@ -142,6 +142,11 @@ void GameScene::SpriteCreate()
 	HPber->SetSize(hpsize);
 	HPber->SetPosition({ 10,5 });
 
+	sceneSprite->LoadTexture(14, L"Resources/Scene.png");
+	sceneSprite = Sprite::Create(14, scenePos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+	sceneSprite->SetSize(sceneSize);
+	sceneSprite->SetPosition(scenePos);
+
 	Model::AdvanceLoadModel(1, "enemyBullet");
 	Model::AdvanceLoadModel(2, "bullet2");
 	Model::AdvanceLoadModel(3, "planet");
@@ -151,7 +156,6 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(7, "normal");
 	Model::AdvanceLoadModel(8, "shield");
 	Model::AdvanceLoadModel(9, "efect");
-
 }
 
 void GameScene::ObjInitialize()
@@ -199,6 +203,15 @@ void GameScene::Update(WinApp* winApp)
 		SceneChange();
 
 		CreateStars();
+
+		if (hitFlag == true)
+		{
+			flagTime++;
+			if (flagTime >= 60)
+			{
+				hitFlag = false;
+			}
+		}
 
 		SetCursorPos(690, 360);
 
@@ -262,6 +275,31 @@ void GameScene::Update(WinApp* winApp)
 		}
 		break;
 	case GameState::SCENECHANGE://シーン切り替え
+
+		if (sceneSize.x >= 1280 && sceneSize.y >= 720)
+		{
+			sceneChangeFlag = true;
+			enemy = new Enemy();
+			enemy->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
+			enemy->Initialize();
+			eHP = enemy->GetHP();
+			gameObjectManager->AddGameObject(enemy);
+		}
+		if (sceneChangeFlag == false)
+		{
+			sceneSize.x += 10;
+			sceneSize.y += 4.5;
+		}
+		else
+		{
+			sceneSize.x -= 10;
+			sceneSize.y -= 4.5;
+			if (sceneSize.x < 0 && sceneSize.y < 0)
+			{
+				gameState = GameState::PLAY;
+			}
+		}
+
 		break;
 	}
 	mouse->Update();
@@ -276,14 +314,10 @@ void GameScene::Title()
 			yajirusiPos.y = 435.0f;
 			if (mouse->TriggerMouseLeft())
 			{
-				enemy = new Enemy();
-				enemy->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
-				enemy->Initialize();
-				eHP = enemy->GetHP();
-				gameObjectManager->AddGameObject(enemy);
-				gameState = GameState::PLAY;
+				gameState = GameState::SCENECHANGE;
 				audio->SoundPlayWave("decisionSE.wav", false);
 				ShowCursor(FALSE);
+				sceneChangeFlag = false;
 			}
 		}
 		if (mousePos.y >= 550.0f && mousePos.y <= 640.0f)
@@ -296,6 +330,9 @@ void GameScene::Title()
 			}
 		}
 	}
+
+	skydome->SetRotation(skyrot);
+	skydome->Update();
 	yajirusi->SetPosition(yajirusiPos);
 }
 
@@ -332,7 +369,11 @@ void GameScene::ObjCollision()
 			{
 				gameobject->Hit();
 				gameobject2->Hit();
-				HitEfect(gameobject2->GetPosition());
+				if (hitFlag == false)
+				{
+					HitEfect(gameobject2->GetPosition());
+					hitFlag = true;
+				}
 			}
 			eHP = enemy->GetHP();
 		}
@@ -517,8 +558,6 @@ void GameScene::CreateStars()
 		}
 	}
 	skyrot.y += 0.05;
-	skydome->SetRotation(skyrot);
-	skydome->Update();
 }
 
 void GameScene::DrawVolumePercent()
@@ -701,6 +740,15 @@ void GameScene::Draw()
 		break;
 	case GameState::CLEA://ゲームクリア
 		break;
+	case GameState::SCENECHANGE:
+	{
+		if (sceneChangeFlag == true)
+		{
+			skydome->Draw();
+			gameObjectManager->Draw();
+		}
+		break;
+	}
 	}
 
 	//3Dオブジェクト描画後処理
@@ -754,7 +802,22 @@ void GameScene::Draw()
 	case GameState::CLEA://ゲームクリア
 		clear->Draw();
 		break;
-
+	case GameState::SCENECHANGE:
+		if (sceneChangeFlag == false)
+		{
+			sprite->Draw();
+			yajirusi->Draw();
+		}
+		else
+		{
+			HPback->Draw();
+			hpsize.x = player->GetHP();
+			HPber->SetSize(hpsize);
+			HPber->Draw();
+		}
+		sceneSprite->SetSize(sceneSize);
+		sceneSprite->Draw();
+		break;
 	}
 	// デバッグテキストの描画
 	debugText.DrawAll(cmdList);

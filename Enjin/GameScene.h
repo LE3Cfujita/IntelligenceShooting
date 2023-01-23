@@ -137,6 +137,7 @@ private:
 	Sprite* over = nullptr;
 	Sprite* HPback = nullptr;
 	Sprite* HPber = nullptr;
+	Sprite* sceneSprite = nullptr;
 	Rock* rock = nullptr;
 
 	Model* dome = nullptr;
@@ -162,6 +163,9 @@ private:
 	XMFLOAT2 indPos = { 640,120 };
 
 	XMFLOAT2 hpsize = { 250,25 };
+
+	XMFLOAT2 scenePos = { 640.0f,360.0f };
+	XMFLOAT2 sceneSize = { 0.1f,0.1f };
 
 	//デバックテキスト用
 	char str[100];
@@ -204,11 +208,17 @@ private:
 	int sensi = 5;
 	int drawSensi = 70;
 
+	int sceneChangeFlag = false;
+
 	//float bgm = 1.0f;//BGM音量
 	//float se = 1.0f;//SE音量
 
 	LPCSTR hwnd;
 
+
 	bool cursorCount = false;
+
+	bool hitFlag = false;
+	int flagTime = 0;
 };
 
