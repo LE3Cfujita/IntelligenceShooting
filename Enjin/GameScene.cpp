@@ -788,6 +788,10 @@ void GameScene::Draw()
 				sprite->Draw();
 				yajirusi->Draw();
 			}
+			else if (sceneCount == 4)
+			{
+				operation->Draw();
+			}
 		}
 		else
 		{
@@ -802,13 +806,14 @@ void GameScene::Draw()
 			{
 				operation->Draw();
 			}
+			else if (sceneCount == 4)
+			{
+				sprite->Draw();
+				yajirusi->Draw();
+			}
 		}
 		sceneSprite->SetSize(sceneSize);
 		sceneSprite->Draw();
-		if (input->TriggerKey(DIK_A))
-		{
-			int a = 0;
-		}
 		break;
 	case GameState::SCENECHANGEOVER:
 
@@ -823,10 +828,6 @@ void GameScene::Draw()
 		}
 		sceneSprite->SetSize(sceneSize);
 		sceneSprite->Draw();
-		if (input->TriggerKey(DIK_A))
-		{
-			int a = 0;
-		}
 		break;
 	case GameState::SCENECHANGECLEA:
 
@@ -841,12 +842,9 @@ void GameScene::Draw()
 		}
 		sceneSprite->SetSize(sceneSize);
 		sceneSprite->Draw();
-		if (input->TriggerKey(DIK_A))
-		{
-			int a = 0;
-		}
 		break;
 	case GameState::OPERATION:
+
 		operation->SetPosition(operationPos);
 		rule->SetPosition(rulePos);
 		operation->Draw();
@@ -860,10 +858,6 @@ void GameScene::Draw()
 			sceneSprite->Draw();
 		}
 		break;
-		if (input->TriggerKey(DIK_A))
-		{
-			int a = 0;
-		}
 	case GameState::RULE:
 		operation->SetPosition(operationPos);
 		rule->SetPosition(rulePos);
@@ -1161,7 +1155,7 @@ void GameScene::ChangeScene(int count)
 			}
 		}
 	}
-	else if (count == 2)
+	else if (count == 2|| count == 4)
 	{
 
 		if (sceneSize.x >= 1280 && sceneSize.y >= 720)
@@ -1240,6 +1234,14 @@ void GameScene::PlaySprite()
 
 void GameScene::OperationChange()
 {
+	if (mouse->TriggerMouseRight())
+	{
+		gameState = GameState::SCENECHANGE;
+		audio->SoundPlayWave("decisionSE.wav", false);
+		sceneChangeFlag = false;
+		sceneCount = 4;
+	}
+
 	if (mouse->TriggerMouseLeft())
 	{
 		operationCount = true;

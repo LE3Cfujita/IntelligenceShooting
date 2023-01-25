@@ -140,7 +140,7 @@ void Enemy::Move()
 
 	if (getTime == 0)
 	{
-		XMFLOAT3 pos;
+		XMFLOAT3 pos{};
 		for (GameObject* gameobject : referenceGameObjects)
 		{
 			if (gameobject->GetObjectMember() != GameObject::OBJECTMEMBER::ROCK)continue;
@@ -167,24 +167,22 @@ void Enemy::Move()
 	}
 	if (L >= 10)return;
 	speed -= 0.02;
-	if (moveFlag == true)
+	if (moveFlag != true)return;
+	if (dx < 0)
 	{
-		if (dx < 0)
-		{
-			position.x -= speed;
-		}
-		else
-		{
-			position.x += speed;
-		}
-		if (dy < 0)
-		{
-			position.y -= speed;
-		}
-		else
-		{
-			position.y += speed;
-		}
+		position.x -= speed;
+	}
+	else
+	{
+		position.x += speed;
+	}
+	if (dy < 0)
+	{
+		position.y -= speed;
+	}
+	else
+	{
+		position.y += speed;
 	}
 }
 
@@ -240,6 +238,7 @@ void Enemy::MoveLimit()
 		directionX = 0;
 		directionY = 0;
 		speed = 1;
+		moveFlag = false;
 	}
 }
 
