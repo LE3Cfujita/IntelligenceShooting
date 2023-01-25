@@ -165,7 +165,7 @@ void Enemy::Move()
 			getTime = 0;
 		}
 	}
-	if (L >= 15)return;
+	if (L >= 10)return;
 	speed -= 0.02;
 	if (moveFlag == true)
 	{

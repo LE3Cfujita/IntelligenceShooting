@@ -103,6 +103,11 @@ public:
 
 	void ChangeScene(int count);
 
+	void PlaySprite();
+
+	void OperationChange();
+	void ruleChange();
+
 	//マウス座標取得
 	POINT mouse_pos;
 
@@ -144,8 +149,11 @@ private:
 	Sprite* HPback = nullptr;
 	Sprite* HPber = nullptr;
 	Sprite* sceneSprite = nullptr;
-	Rock* rock = nullptr;
+	Sprite* operation = nullptr;
+	Sprite* rule = nullptr;
 
+
+	Rock* rock = nullptr;
 	Model* dome = nullptr;
 	Object3d* skydome = nullptr;
 	XMFLOAT3 skyrot = { 0,0,0 };
@@ -172,6 +180,9 @@ private:
 
 	XMFLOAT2 scenePos = { 640.0f,360.0f };
 	XMFLOAT2 sceneSize = { 0.1f,0.1f };
+
+	XMFLOAT2 operationPos = { 0,0 };
+	XMFLOAT2 rulePos = { 1280,0 };
 
 	//デバックテキスト用
 	char str[100];
@@ -216,9 +227,6 @@ private:
 
 	int sceneChangeFlag = false;
 
-	//float bgm = 1.0f;//BGM音量
-	//float se = 1.0f;//SE音量
-
 	LPCSTR hwnd;
 
 
@@ -228,5 +236,9 @@ private:
 	int flagTime = 0;
 
 	int sceneCount = 0;
+
+	bool spriteCount = false;
+
+	bool operationCount = false;
 };
 

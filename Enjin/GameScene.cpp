@@ -47,11 +47,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Audio* audio, Input* input, 
 	down = key->GetDownDecimal();
 	attack = key->GetAttackDecimal();
 
-	dome = Model::LoadFormOBJ("skydome");
-	skydome = Object3d::Create();
-	skydome->SetModel(dome);
-	skydome->SetScale({ 3,3,3 });
-	skydome->SetPosition({ 0,0,100 });
+
 
 
 	LoadFile();
@@ -127,25 +123,19 @@ void GameScene::SpriteCreate()
 		spriteSENSINumber[i] = Sprite::Create(5, { (float)(i * 26 + 300),370 });
 	}
 
-	clear->LoadTexture(10, L"Resources/GameClear.png");
-	clear = Sprite::Create(10, { 0.0f,0.0f });
 
-	over->LoadTexture(11, L"Resources/GameOver.png");
-	over = Sprite::Create(11, { 0.0f,0.0f });
-
-	HPback->LoadTexture(12, L"Resources/HPback.png");
-	HPback = Sprite::Create(12, { 0,0 }, { 1.0f,1.0f,1.0f,1.0f });
-	HPback->SetSize({ 270,35 });
-
-	HPber->LoadTexture(13, L"Resources/HP.png");
-	HPber = Sprite::Create(13, { 5,5 }, { 1.0f,1.0f,1.0f,1.0f });
-	HPber->SetSize(hpsize);
-	HPber->SetPosition({ 10,5 });
 
 	sceneSprite->LoadTexture(14, L"Resources/Scene.png");
 	sceneSprite = Sprite::Create(14, scenePos, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
 	sceneSprite->SetSize(sceneSize);
 	sceneSprite->SetPosition(scenePos);
+
+	operation->LoadTexture(15, L"Resources/operation.png");
+	operation = Sprite::Create(15, { 0.0f,0.0f });
+	operation->SetPosition({ 0,0 });
+	rule->LoadTexture(16, L"Resources/rule.png");
+	rule = Sprite::Create(16, { 0.0f,0.0f });
+	rule->SetPosition({ 1280,0 });
 
 	Model::AdvanceLoadModel(1, "enemyBullet");
 	Model::AdvanceLoadModel(2, "bullet2");
@@ -157,12 +147,11 @@ void GameScene::SpriteCreate()
 	Model::AdvanceLoadModel(8, "shield");
 	Model::AdvanceLoadModel(9, "efect");
 	Model::AdvanceLoadModel(10, "enemyBullet");
+	Model::AdvanceLoadModel(11, "skydome");
 }
 
 void GameScene::ObjInitialize()
 {
-
-
 	rock = new Rock();
 	rock->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 	rock->Initialize();
@@ -172,6 +161,12 @@ void GameScene::ObjInitialize()
 	key->BaseInitialize(input, audio, mouse, collision, gameObjectManager->GetGameObjects());
 	key->Initialize();
 	gameObjectManager->AddGameObject(key);
+
+	dome = Model::CreateModel(11);
+	skydome = Object3d::Create();
+	skydome->SetModel(dome);
+	skydome->SetScale({ 3,3,3 });
+	skydome->SetPosition({ 0,0,100 });
 }
 
 void GameScene::Update(WinApp* winApp)
@@ -247,7 +242,7 @@ void GameScene::Update(WinApp* winApp)
 			if (mouse->TriggerMouseLeft())
 			{
 
-				sceneCount = 3;
+				sceneCount = 2;
 				gameState = GameState::SCENECHANGECLEA;
 				audio->SoundStop("decisionSE.wav");
 				audio->SoundPlayWave("decisionSE.wav", false);
@@ -265,7 +260,15 @@ void GameScene::Update(WinApp* winApp)
 	case GameState::SCENECHANGECLEA://シーン切り替え
 		ChangeScene(sceneCount);
 		break;
+	case GameState::OPERATION:
+		OperationChange();
+		break;
+	case GameState::RULE:
+		ruleChange();
+		break;
 	}
+	skydome->SetRotation(skyrot);
+	skydome->Update();
 	mouse->Update();
 }
 
@@ -278,11 +281,13 @@ void GameScene::Title()
 			yajirusiPos.y = 435.0f;
 			if (mouse->TriggerMouseLeft())
 			{
-				gameState = GameState::SCENECHANGE;
 				audio->SoundPlayWave("decisionSE.wav", false);
 				ShowCursor(FALSE);
 				sceneChangeFlag = false;
-				sceneCount = 1;
+				sceneCount = 3;
+				operationPos = { 0,0 };
+				rulePos = { 1280,0 };
+				gameState = GameState::SCENECHANGE;
 			}
 		}
 		if (mousePos.y >= 550.0f && mousePos.y <= 640.0f)
@@ -295,9 +300,6 @@ void GameScene::Title()
 			}
 		}
 	}
-
-	skydome->SetRotation(skyrot);
-	skydome->Update();
 	yajirusi->SetPosition(yajirusiPos);
 }
 
@@ -711,8 +713,11 @@ void GameScene::Draw()
 	{
 		if (sceneChangeFlag == true)
 		{
-			skydome->Draw();
-			gameObjectManager->Draw();
+			if (sceneCount == 1)
+			{
+				skydome->Draw();
+				gameObjectManager->Draw();
+			}
 		}
 		break;
 	}
@@ -770,20 +775,40 @@ void GameScene::Draw()
 		clear->Draw();
 		break;
 	case GameState::SCENECHANGE:
+		operation->SetPosition(operationPos);
+		rule->SetPosition(rulePos);
 		if (sceneChangeFlag == false)
 		{
-			sprite->Draw();
-			yajirusi->Draw();
+			if (sceneCount == 1)
+			{
+				rule->Draw();
+			}
+			else if (sceneCount == 3)
+			{
+				sprite->Draw();
+				yajirusi->Draw();
+			}
 		}
 		else
 		{
-			HPback->Draw();
-			hpsize.x = player->GetHP();
-			HPber->SetSize(hpsize);
-			HPber->Draw();
+			if (sceneCount == 1)
+			{
+				HPback->Draw();
+				hpsize.x = player->GetHP();
+				HPber->SetSize(hpsize);
+				HPber->Draw();
+			}
+			if (sceneCount == 3)
+			{
+				operation->Draw();
+			}
 		}
 		sceneSprite->SetSize(sceneSize);
 		sceneSprite->Draw();
+		if (input->TriggerKey(DIK_A))
+		{
+			int a = 0;
+		}
 		break;
 	case GameState::SCENECHANGEOVER:
 
@@ -798,6 +823,10 @@ void GameScene::Draw()
 		}
 		sceneSprite->SetSize(sceneSize);
 		sceneSprite->Draw();
+		if (input->TriggerKey(DIK_A))
+		{
+			int a = 0;
+		}
 		break;
 	case GameState::SCENECHANGECLEA:
 
@@ -812,6 +841,42 @@ void GameScene::Draw()
 		}
 		sceneSprite->SetSize(sceneSize);
 		sceneSprite->Draw();
+		if (input->TriggerKey(DIK_A))
+		{
+			int a = 0;
+		}
+		break;
+	case GameState::OPERATION:
+		operation->SetPosition(operationPos);
+		rule->SetPosition(rulePos);
+		operation->Draw();
+		if (operationCount == true)
+		{
+			rule->Draw();
+		}
+		sceneSprite->SetSize(sceneSize);
+		if (sceneSize.x > 0 && sceneSize.y > 0)
+		{
+			sceneSprite->Draw();
+		}
+		break;
+		if (input->TriggerKey(DIK_A))
+		{
+			int a = 0;
+		}
+	case GameState::RULE:
+		operation->SetPosition(operationPos);
+		rule->SetPosition(rulePos);
+		if (operationCount == true)
+		{
+			operation->Draw();
+		}
+		rule->Draw();
+		sceneSprite->SetSize(sceneSize);
+		if (sceneSize.x > 0 && sceneSize.y > 0)
+		{
+			sceneSprite->Draw();
+		}
 		break;
 	}
 	// デバッグテキストの描画
@@ -1075,15 +1140,20 @@ void GameScene::ChangeScene(int count)
 			enemy->Initialize();
 			eHP = enemy->GetHP();
 			gameObjectManager->AddGameObject(enemy);
+
+			if (spriteCount == false)
+			{
+				PlaySprite();
+			}
 		}
 		if (sceneChangeFlag == false)
 		{
-			sceneSize.x += 10;
+			sceneSize.x += 8;
 			sceneSize.y += 4.5;
 		}
 		else
 		{
-			sceneSize.x -= 10;
+			sceneSize.x -= 8;
 			sceneSize.y -= 4.5;
 			if (sceneSize.x < 0 && sceneSize.y < 0)
 			{
@@ -1091,7 +1161,7 @@ void GameScene::ChangeScene(int count)
 			}
 		}
 	}
-	else
+	else if (count == 2)
 	{
 
 		if (sceneSize.x >= 1280 && sceneSize.y >= 720)
@@ -1113,17 +1183,100 @@ void GameScene::ChangeScene(int count)
 		}
 		if (sceneChangeFlag == false)
 		{
-			sceneSize.x += 10;
+			sceneSize.x += 8;
 			sceneSize.y += 4.5;
 		}
 		else
 		{
-			sceneSize.x -= 10;
+			sceneSize.x -= 8;
 			sceneSize.y -= 4.5;
 			if (sceneSize.x < 0 && sceneSize.y < 0)
 			{
 				gameState = GameState::TITLE;
 			}
+		}
+	}
+	else
+	{
+		if (sceneSize.x >= 1280 && sceneSize.y >= 720)
+		{
+			sceneChangeFlag = true;
+		}
+		if (sceneChangeFlag == false)
+		{
+			sceneSize.x += 8;
+			sceneSize.y += 4.5;
+		}
+		else
+		{
+			sceneSize.x -= 8;
+			sceneSize.y -= 4.5;
+			if (sceneSize.x < 0 && sceneSize.y < 0)
+			{
+				gameState = GameState::OPERATION;
+			}
+		}
+	}
+}
+
+void GameScene::PlaySprite()
+{
+	clear->LoadTexture(10, L"Resources/GameClear.png");
+	clear = Sprite::Create(10, { 0.0f,0.0f });
+
+	over->LoadTexture(11, L"Resources/GameOver.png");
+	over = Sprite::Create(11, { 0.0f,0.0f });
+
+	HPback->LoadTexture(12, L"Resources/HPback.png");
+	HPback = Sprite::Create(12, { 0,0 }, { 1.0f,1.0f,1.0f,1.0f });
+	HPback->SetSize({ 270,35 });
+
+	HPber->LoadTexture(13, L"Resources/HP.png");
+	HPber = Sprite::Create(13, { 5,5 }, { 1.0f,1.0f,1.0f,1.0f });
+	HPber->SetSize(hpsize);
+	HPber->SetPosition({ 10,5 });
+	spriteCount = true;
+}
+
+void GameScene::OperationChange()
+{
+	if (mouse->TriggerMouseLeft())
+	{
+		operationCount = true;
+	}
+	if (operationCount == true)
+	{
+		operationPos.x -= 20;
+		rulePos.x -= 20;
+		if (operationPos.x <= -1280)
+		{
+			operationCount = false;
+			gameState = GameState::RULE;
+		}
+	}
+}
+
+void GameScene::ruleChange()
+{
+	if (mouse->TriggerMouseLeft())
+	{
+		gameState = GameState::SCENECHANGE;
+		audio->SoundPlayWave("decisionSE.wav", false);
+		sceneChangeFlag = false;
+		sceneCount = 1;
+	}
+	if (mouse->TriggerMouseRight())
+	{
+		operationCount = true;
+	}
+	if (operationCount == true)
+	{
+		operationPos.x += 20;
+		rulePos.x += 20;
+		if (rulePos.x >= 1280)
+		{
+			operationCount = false;
+			gameState = GameState::OPERATION;
 		}
 	}
 }
