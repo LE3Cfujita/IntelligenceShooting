@@ -282,7 +282,6 @@ void GameScene::Title()
 			if (mouse->TriggerMouseLeft())
 			{
 				audio->SoundPlayWave("decisionSE.wav", false);
-				ShowCursor(FALSE);
 				sceneChangeFlag = false;
 				sceneCount = 3;
 				operationPos = { 0,0 };
@@ -1151,6 +1150,7 @@ void GameScene::ChangeScene(int count)
 			sceneSize.y -= 4.5;
 			if (sceneSize.x < 0 && sceneSize.y < 0)
 			{
+				ShowCursor(FALSE);
 				gameState = GameState::PLAY;
 			}
 		}
@@ -1186,6 +1186,8 @@ void GameScene::ChangeScene(int count)
 			sceneSize.y -= 4.5;
 			if (sceneSize.x < 0 && sceneSize.y < 0)
 			{
+
+				ShowCursor(TRUE);
 				gameState = GameState::TITLE;
 			}
 		}
