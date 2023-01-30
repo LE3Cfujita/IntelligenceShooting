@@ -1155,7 +1155,7 @@ void GameScene::ChangeScene(int count)
 			}
 		}
 	}
-	else if (count == 2|| count == 4)
+	else if (count == 2 || count == 4)
 	{
 
 		if (sceneSize.x >= 1280 && sceneSize.y >= 720)
@@ -1238,10 +1238,13 @@ void GameScene::OperationChange()
 {
 	if (mouse->TriggerMouseRight())
 	{
-		gameState = GameState::SCENECHANGE;
-		audio->SoundPlayWave("decisionSE.wav", false);
-		sceneChangeFlag = false;
-		sceneCount = 4;
+		if (operationCount == false)
+		{
+			gameState = GameState::SCENECHANGE;
+			audio->SoundPlayWave("decisionSE.wav", false);
+			sceneChangeFlag = false;
+			sceneCount = 4;
+		}
 	}
 
 	if (mouse->TriggerMouseLeft())
@@ -1264,14 +1267,20 @@ void GameScene::ruleChange()
 {
 	if (mouse->TriggerMouseLeft())
 	{
-		gameState = GameState::SCENECHANGE;
-		audio->SoundPlayWave("decisionSE.wav", false);
-		sceneChangeFlag = false;
-		sceneCount = 1;
+		if (operationCount == false)
+		{
+			gameState = GameState::SCENECHANGE;
+			audio->SoundPlayWave("decisionSE.wav", false);
+			sceneChangeFlag = false;
+			sceneCount = 1;
+		}
 	}
-	if (mouse->TriggerMouseRight())
+	if (sceneChangeFlag == true)
 	{
-		operationCount = true;
+		if (mouse->TriggerMouseRight())
+		{
+			operationCount = true;
+		}
 	}
 	if (operationCount == true)
 	{
